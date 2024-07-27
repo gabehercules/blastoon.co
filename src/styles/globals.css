@@ -16,14 +16,14 @@
   }
 }
 
-body {
-  color: rgb(var(--foreground-rgb));
-  background: linear-gradient(
-      to bottom,
-      transparent,
-      rgb(var(--background-end-rgb))
-    )
-    rgb(var(--background-start-rgb));
+body.page-layout {
+  height: 100dvh;
+  background: #010101;
+  color: #ffffff;
+  display: grid;
+  grid-template-columns: 1fr;
+  grid-template-rows: 5dvh 1fr 5dvh;
+  overflow: hidden;
 }
 
 @layer utilities {
