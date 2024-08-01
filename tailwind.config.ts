@@ -11,6 +11,9 @@ const config: Config = {
       colors: {
         "yellow-blast": "#D8B410",
       },
+      fontFamily: {
+        rowdies: ["var(--font-rowdies)"],
+      },
       backgroundImage: {
         "gradient-radial": "radial-gradient(var(--tw-gradient-stops))",
         "gradient-conic":

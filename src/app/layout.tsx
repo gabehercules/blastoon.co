@@ -4,6 +4,7 @@ import "../styles/globals.css";
 import Header from "@/components/interface/header";
 import Footer from "@/components/interface/footer";
 import ThirdwebProviderWrapper from "@/contexts/thirdweb-provider";
+import { rowdies } from "@/fonts";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -20,7 +21,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <ThirdwebProviderWrapper>
-        <body className={`${inter.className} page-layout`}>
+        <body className={`${inter.className} ${rowdies.variable} page-layout`}>
           <Header />
           <main className="main-layout">{children}</main>
           <Footer />

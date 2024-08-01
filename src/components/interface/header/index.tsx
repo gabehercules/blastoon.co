@@ -10,6 +10,7 @@ import { blast } from "thirdweb/chains";
 
 import { useActiveAccount, useWalletBalance } from "thirdweb/react";
 import ConnectButton from "@/components/elements/connect-button";
+import Link from "next/link";
 
 export default function Header() {
   const account = useActiveAccount();
@@ -37,14 +38,14 @@ export default function Header() {
         </li>
       </ul>
 
-      <div>
+      {/* <div>
         <div>
           <p>Wallet address: {account?.address}</p>
           <p>
             Wallet balance: {balance?.displayValue} {balance?.symbol}
           </p>
         </div>
-      </div>
+      </div> */}
 
       <div>
         {/* <ConnectButton
@@ -66,7 +67,16 @@ export default function Header() {
           }}
           chain={blast}
         /> */}
-        <ConnectButton>Connect Wallet</ConnectButton>
+        {!account ? (
+          <ConnectButton>Connect Wallet</ConnectButton>
+        ) : (
+          <Link
+            href="/dashboard"
+            className="bg-gradient-to-b from-yellow-blast to-yellow-300 border-b-2 border-t border-yellow-200 rounded-lg px-5 py-[6px] text-yellow-950 text-sm font-semibold"
+          >
+            Dashboard
+          </Link>
+        )}
       </div>
     </div>
   );
