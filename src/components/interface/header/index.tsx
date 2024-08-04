@@ -4,12 +4,14 @@ import Logo from "@/components/elements/logo";
 
 import { BsTwitterX } from "react-icons/bs";
 import { BsDiscord } from "react-icons/bs";
-// import { ConnectButton } from "thirdweb/react";
+import { ConnectButton } from "thirdweb/react";
 import { client } from "@/thirdweb";
 import { blast } from "thirdweb/chains";
 
+import { inAppWallet } from "thirdweb/wallets";
+
 import { useActiveAccount, useWalletBalance } from "thirdweb/react";
-import ConnectButton from "@/components/elements/connect-button";
+// import ConnectButton from "@/components/elements/connect-button";
 import Link from "next/link";
 
 export default function Header() {
@@ -19,6 +21,7 @@ export default function Header() {
     chain: blast,
     address: account?.address,
   });
+
   return (
     <div className="header flex items-center justify-between px-6 border-b border-white/10">
       <div className="flex items-center gap-8">
@@ -48,7 +51,7 @@ export default function Header() {
       </div> */}
 
       <div>
-        {/* <ConnectButton
+        <ConnectButton
           client={client}
           detailsButton={{
             style: {
@@ -66,8 +69,8 @@ export default function Header() {
               "BlastToon Co. Where you can collect cards, and earn rewards.",
           }}
           chain={blast}
-        /> */}
-        {!account ? (
+        />
+        {/* {!account ? (
           <ConnectButton>Connect Wallet</ConnectButton>
         ) : (
           <Link
@@ -76,7 +79,7 @@ export default function Header() {
           >
             Dashboard
           </Link>
-        )}
+        )} */}
       </div>
     </div>
   );

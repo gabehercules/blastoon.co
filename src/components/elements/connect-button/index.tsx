@@ -18,17 +18,6 @@ export default function ConnectButton({ children }: ConnectButtonProps) {
     console.log("connected to", wallet);
   }
 
-  //   const handleConnect = () => {
-  //     connect(async () => {
-  //       // create a wallet instance
-  //       const metamask = createWallet("io.metamask");
-
-  //       await metamask.connect({ client });
-
-  //       return metamask;
-  //     });
-  //   };
-
   return (
     <button
       onClick={handleConnect}

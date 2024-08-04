@@ -20,13 +20,13 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <ThirdwebProviderWrapper>
-        <body className={`${inter.className} ${rowdies.variable} page-layout`}>
+      <body className={`${inter.className} ${rowdies.variable} page-layout`}>
+        <ThirdwebProviderWrapper>
           <Header />
           <main className="main-layout">{children}</main>
           <Footer />
-        </body>
-      </ThirdwebProviderWrapper>
+        </ThirdwebProviderWrapper>
+      </body>
     </html>
   );
 }
