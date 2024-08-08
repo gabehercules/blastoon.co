@@ -23,7 +23,7 @@ export default function RootLayout({
       <body className={`${inter.className} ${rowdies.variable} page-layout`}>
         <ThirdwebProviderWrapper>
           <Header />
-          <main className="main-layout">{children}</main>
+          <main className="main-layout overflow-hidden">{children}</main>
           <Footer />
         </ThirdwebProviderWrapper>
       </body>

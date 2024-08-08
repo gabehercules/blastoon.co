@@ -13,6 +13,8 @@ import { inAppWallet } from "thirdweb/wallets";
 import { useActiveAccount, useWalletBalance } from "thirdweb/react";
 // import ConnectButton from "@/components/elements/connect-button";
 import Link from "next/link";
+import UserWidget from "@/components/elements/user/user-widget";
+import { getAddress } from "thirdweb";
 
 export default function Header() {
   const account = useActiveAccount();
@@ -69,16 +71,24 @@ export default function Header() {
               "BlastToon Co. Where you can collect cards, and earn rewards.",
           }}
           chain={blast}
+          // auth={{
+          //   getLoginPayload({address, chainId});
+          //   doLogin: async () => {},
+          // }}
+          connectModal={{ size: "compact" }}
+          onConnect={async ({ getAccount }) =>
+            console.log(
+              "Connected account",
+              await getAccount()?.signMessage({
+                message: "Sign in with Ethereum",
+              })
+            )
+          }
         />
         {/* {!account ? (
           <ConnectButton>Connect Wallet</ConnectButton>
         ) : (
-          <Link
-            href="/dashboard"
-            className="bg-gradient-to-b from-yellow-blast to-yellow-300 border-b-2 border-t border-yellow-200 rounded-lg px-5 py-[6px] text-yellow-950 text-sm font-semibold"
-          >
-            Dashboard
-          </Link>
+          <UserWidget />
         )} */}
       </div>
     </div>
