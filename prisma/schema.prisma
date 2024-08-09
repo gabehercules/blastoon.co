@@ -14,7 +14,27 @@ datasource db {
 }
 
 model User {
-  id        Int      @id @default(autoincrement())
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  id          Int          @id @default(autoincrement())
+  createdAt   DateTime     @default(now())
+  address     String       @unique
+  ens_domain  String?      @unique
+  signature   String       @unique
+  slug        String?      @unique
+  username    String?      @unique
+  user_cheese User_Cheese?
+}
+
+model User_Cheese {
+  id            Int   @id @default(autoincrement())
+  address_id    Int   @unique
+  cheese_amount Int
+  user          User? @relation(fields: [address_id], references: [id])
+}
+
+model User_Cheese_Transaction {
+  id            Int      @id @default(autoincrement())
+  address_id    Int
+  operation     Int
+  cheese_amount Int
+  timestamp     DateTime
 }

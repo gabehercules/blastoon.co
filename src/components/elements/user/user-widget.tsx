@@ -15,6 +15,10 @@ export default function UserWidget() {
   const { disconnect } = useDisconnect();
   const wallet = useActiveWallet();
 
+  const address = wallet?.getAccount()?.address;
+
+  const shortAddress = address?.slice(0, 3) + "..." + address?.slice(-4);
+
   const handleDisconnect = () => {
     if (!wallet) return;
     disconnect(wallet);
@@ -24,7 +28,7 @@ export default function UserWidget() {
     <Popover className="relative">
       <PopoverButton className="flex items-center gap-3 text-sm px-4 py-2 border rounded-lg border-white/10">
         <span className="size-6 flex rounded-full bg-white/30"></span>
-        <div>0x97A3d</div>
+        <div>{shortAddress}</div>
         <BiChevronDown />
       </PopoverButton>
       {/* Panel */}

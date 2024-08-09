@@ -4,17 +4,18 @@ import Logo from "@/components/elements/logo";
 
 import { BsTwitterX } from "react-icons/bs";
 import { BsDiscord } from "react-icons/bs";
-import { ConnectButton } from "thirdweb/react";
+import { ConnectButton, useWalletInfo } from "thirdweb/react";
 import { client } from "@/thirdweb";
 import { blast } from "thirdweb/chains";
 
-import { inAppWallet } from "thirdweb/wallets";
+import { inAppWallet, Wallet } from "thirdweb/wallets";
 
 import { useActiveAccount, useWalletBalance } from "thirdweb/react";
 // import ConnectButton from "@/components/elements/connect-button";
 import Link from "next/link";
 import UserWidget from "@/components/elements/user/user-widget";
 import { getAddress } from "thirdweb";
+import { createUser } from "@/database/create/create-user";
 
 export default function Header() {
   const account = useActiveAccount();
@@ -23,6 +24,10 @@ export default function Header() {
     chain: blast,
     address: account?.address,
   });
+
+  const handleOnConnect = async (wallet: Wallet) => {
+    console.log("Connected wallet", wallet);
+  };
 
   return (
     <div className="header flex items-center justify-between px-6 border-b border-white/10">
@@ -71,19 +76,7 @@ export default function Header() {
               "BlastToon Co. Where you can collect cards, and earn rewards.",
           }}
           chain={blast}
-          // auth={{
-          //   getLoginPayload({address, chainId});
-          //   doLogin: async () => {},
-          // }}
-          connectModal={{ size: "compact" }}
-          onConnect={async ({ getAccount }) =>
-            console.log(
-              "Connected account",
-              await getAccount()?.signMessage({
-                message: "Sign in with Ethereum",
-              })
-            )
-          }
+          onConnect={handleOnConnect}
         />
         {/* {!account ? (
           <ConnectButton>Connect Wallet</ConnectButton>

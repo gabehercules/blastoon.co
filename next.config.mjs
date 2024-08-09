@@ -7,6 +7,12 @@ const nextConfig = {
                 hostname: '**.ipfs.4everland.io',
                 port: '',
                 pathname: '/**',
+            },
+            {
+                protocol: 'https',
+                hostname: 'api.multiavatar.com',
+                port: '',
+                pathname: '/**',
             }
         ]
     }
