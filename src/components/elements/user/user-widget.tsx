@@ -39,20 +39,11 @@ export default function UserWidget() {
       >
         <ul className="text-sm divide-y divide-white/10">
           <li>
-            <Link href={"#"} className="flex p-2 hover:bg-white/5">
-              Profile
+            <Link href={"/dashboard"} className="flex p-2 hover:bg-white/5">
+              Dashboard
             </Link>
           </li>
-          <li>
-            <Link href={"#"} className="flex p-2 hover:bg-white/5">
-              Account
-            </Link>
-          </li>
-          <li>
-            <Link href={"#"} className="flex p-2 hover:bg-white/5">
-              Settings
-            </Link>
-          </li>
+
           <li>
             <button
               onClick={handleDisconnect}

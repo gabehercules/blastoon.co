@@ -2,13 +2,11 @@
 
 import Logo from "@/components/elements/logo";
 
-import { BsTwitterX } from "react-icons/bs";
-import { BsDiscord } from "react-icons/bs";
 import { ConnectButton, useWalletInfo } from "thirdweb/react";
 import { client } from "@/thirdweb";
 import { blast } from "thirdweb/chains";
 
-import { inAppWallet, Wallet } from "thirdweb/wallets";
+import { Wallet } from "thirdweb/wallets";
 
 import { useActiveAccount, useWalletBalance } from "thirdweb/react";
 // import ConnectButton from "@/components/elements/connect-button";
@@ -35,54 +33,32 @@ export default function Header() {
         <Logo />
       </div>
 
-      <ul className="flex items-center gap-4">
-        <li>
-          <a href="https://discord.gg/dUwBkgh2RS" target="_blank">
-            <BsDiscord size={16} />
-          </a>
-        </li>
-        <li>
-          <a href="https://x.com/BlastToonCo" target="_blank">
-            <BsTwitterX size={14} />
-          </a>
-        </li>
-      </ul>
-
-      {/* <div>
-        <div>
-          <p>Wallet address: {account?.address}</p>
-          <p>
-            Wallet balance: {balance?.displayValue} {balance?.symbol}
-          </p>
-        </div>
-      </div> */}
-
       <div>
-        <ConnectButton
-          client={client}
-          detailsButton={{
-            style: {
-              backgroundColor: "#000",
-              color: "#fff",
-              padding: "0.2rem 1.5rem",
-              borderRadius: "5px",
-              fontSize: "0.875rem",
-              fontWeight: 500,
-            },
-          }}
-          appMetadata={{
-            name: "BlastToon Co.",
-            description:
-              "BlastToon Co. Where you can collect cards, and earn rewards.",
-          }}
-          chain={blast}
-          onConnect={handleOnConnect}
-        />
-        {/* {!account ? (
-          <ConnectButton>Connect Wallet</ConnectButton>
+        {!account ? (
+          // <ConnectButton>Connect Wallet</ConnectButton>
+          <ConnectButton
+            client={client}
+            detailsButton={{
+              style: {
+                backgroundColor: "#000",
+                color: "#fff",
+                padding: "0.2rem 1.5rem",
+                borderRadius: "5px",
+                fontSize: "0.875rem",
+                fontWeight: 500,
+              },
+            }}
+            appMetadata={{
+              name: "BlastToon Co.",
+              description:
+                "BlastToon Co. Where you can collect cards, and earn rewards.",
+            }}
+            chain={blast}
+            onConnect={handleOnConnect}
+          />
         ) : (
           <UserWidget />
-        )} */}
+        )}
       </div>
     </div>
   );
