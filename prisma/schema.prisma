@@ -14,14 +14,16 @@ datasource db {
 }
 
 model User {
-  id          Int          @id @default(autoincrement())
-  createdAt   DateTime     @default(now())
-  address     String       @unique
-  ens_domain  String?      @unique
-  signature   String       @unique
-  slug        String?      @unique
-  username    String?      @unique
-  user_cheese User_Cheese?
+  id           Int          @id @default(autoincrement())
+  createdAt    DateTime     @default(now())
+  address      String       @unique
+  ens_domain   String?      @unique
+  signature    String?      @unique
+  slug         String?      @unique
+  username     String?      @unique
+  holdingNFTS  Int          @default(0)
+  upgradedNFTs Int          @default(0)
+  user_cheese  User_Cheese?
 }
 
 model User_Cheese {

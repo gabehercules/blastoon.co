@@ -9,7 +9,7 @@ const config: Config = {
   theme: {
     extend: {
       colors: {
-        "yellow-blast": "#D8B410",
+        "brand-yellow": "#ffd71f",
       },
       fontFamily: {
         rowdies: ["var(--font-rowdies)"],

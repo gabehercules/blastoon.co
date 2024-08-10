@@ -8,15 +8,18 @@ import Image from "next/image";
 import UserAvatar from "@/components/elements/user/user-avatar";
 import { getNFTsByAddress } from "@/utils/get-nfts-by-address";
 import UserNFTsSection from "@/components/interface/user-nfts-section";
-import { getWalletInfo } from "thirdweb/wallets";
 import { useActiveAccount } from "thirdweb/react";
 import { useEffect, useState } from "react";
+import { getUserCheese } from "@/database/read/get-user-cheese";
 
 export default function Dashboard() {
   const [nftsList, setNftsList] = useState([]);
+  const [cheese, setCheese] = useState(0);
 
   const activeAccount = useActiveAccount();
   const address = activeAccount?.address;
+
+  console.log("Active account", address);
 
   useEffect(() => {
     if (!address) return;
@@ -25,6 +28,13 @@ export default function Dashboard() {
       const { data: blastToon } = await getNFTsByAddress(address);
       const { content: nfts } = blastToon;
       setNftsList(nfts);
+
+      console.log("Fetching cheese points for", address);
+      const cheesePoints = await getUserCheese(address);
+
+      console.log("Cheese points", cheesePoints);
+
+      setCheese(cheesePoints as number);
     })();
   }, [address]);
 
@@ -55,8 +65,8 @@ export default function Dashboard() {
             </div>
             {/* --- */}
             <div className="w-[20%] max-w-52 bg-white/10">
-              <span>$CHEESE 56.500</span>
-              <button>Buy $CHEESE</button>
+              <span>$CHEESE {cheese}</span>
+              {/* <button>Buy $CHEESE</button> */}
             </div>
           </div>
         </div>

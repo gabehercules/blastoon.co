@@ -39,6 +39,10 @@ body.page-layout {
 
   .cheese-btn {
     box-shadow: inset 0px -2px 4px 0px #ffdd40a1;
-    @apply font-rowdies flex gap-2 items-center justify-center rounded-lg text-xl py-2 px-4 border-t-2 border-[#ffdd40a1] bg-yellow-blast text-yellow-950 hover:bg-yellow-400 transition-all duration-200;
+    @apply font-rowdies flex gap-2 items-center justify-center rounded-lg text-xl py-2 px-4 border-t-2 border-[#ffdd40a1] bg-brand-yellow text-yellow-950 hover:bg-yellow-400 transition-all duration-200;
+  }
+
+  .connect-btn {
+    @apply font-rowdies flex gap-2 items-center justify-center rounded-lg text-xl py-2 px-4 border-t-2 border-[#ffdd40a1] bg-brand-yellow text-yellow-950 hover:bg-yellow-400 transition-all duration-200;
   }
 }

@@ -2,7 +2,7 @@
 
 import prisma from "../prisma";
 
-export async function createUser(address: string, signature: any) {
+export async function createUser(address: string, signature?: any) {
   try {
     const result = await prisma.user.create({
       data: {
