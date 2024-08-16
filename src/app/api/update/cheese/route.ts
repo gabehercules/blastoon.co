@@ -1,12 +1,17 @@
 import prisma from "@/database/prisma";
 import { NextRequest, NextResponse } from "next/server";
 
-export async function GET(req: NextRequest, res: NextResponse) {
-  // todo: add authentication to this endpoint to prevent users run it by calling the
-  // endpoint directly on the browser
-  // maybe just a secret key to be present in the header
+export async function POST(req: NextRequest, res: NextResponse) {
+  // Authorization:
+  const headers = req.headers;
+  const secretKey = headers.get("secret-key");
 
-  // const { id, address } = await req.json(); // get the id and address from the request body (IF it's a POST request)
+  if (secretKey !== process.env.CRON_SECRET_KEY) {
+    return NextResponse.json(
+      { Message: "Unauthorized", Description: "Invalid secret key" },
+      { status: 401 }
+    );
+  }
 
   const users = await prisma.user.findMany({
     select: {
@@ -21,10 +26,7 @@ export async function GET(req: NextRequest, res: NextResponse) {
   });
 
   for (const user of users) {
-    if (!user.user_cheese) {
-      continue;
-    }
-    let userCheese = user.user_cheese.cheeseAmount;
+    let userCheese = user.user_cheese?.cheeseAmount || 0;
 
     const updatedCheese = Math.abs(userCheese + user.holdingNFTs * 1000);
     console.log(updatedCheese);
