@@ -1,3 +1,4 @@
+import { BLASTTOON_LAUNCH_DATE } from "@/constants";
 import prisma from "@/database/prisma";
 import { authOptions } from "@/lib/auth";
 import { getNFTsByAddress } from "@/utils/get-nfts-by-address";
@@ -27,14 +28,24 @@ export async function POST(req: NextRequest, res: NextResponse) {
     const nfts = data.content;
 
     // return from the response only the tokenId and the timestamp when the user owned the NFT
-    const nftsWithIdAndOwnershipTime = nfts.map((nft: any, i: number) => {
+    const nftsWithIdAndOwnershipTime = nfts.map((nft: any) => {
+      // if the user owned the NFT before the launch date, set the ownership timestamp to the launch date
+      // this is because the Blast Toon collection had a first launch then it has been paused and relaunched
+      // the maximum timestamp we can have is the "2nd" launch date
+      let adjustedTimestamp = nft.own_timestamp;
+      if (nft.own_timestamp > BLASTTOON_LAUNCH_DATE) {
+        adjustedTimestamp = BLASTTOON_LAUNCH_DATE;
+      }
       return {
         tokenId: nft.token_id,
-        ownerSince: nft.own_timestamp,
+        ownerSince: adjustedTimestamp,
       };
     });
 
-    // console.log("NFTs with ID and ownership time", nftsWithIdAndOwnershipTime);
+    console.log(
+      "NFTS WITH ID AND OWNERSHIP TIMESTAMP",
+      nftsWithIdAndOwnershipTime
+    );
 
     for (const nft of nftsWithIdAndOwnershipTime) {
       await prisma.nfts.upsert({

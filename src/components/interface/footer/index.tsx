@@ -27,7 +27,7 @@ export default function Footer() {
 
       <div>
         <p className="text-sm text-zinc-500">
-          Copyright © {new Date().getFullYear()}. A part of Blast Toon Co.
+          {new Date().getFullYear()} Part of Blast Toon Co.
         </p>
       </div>
 

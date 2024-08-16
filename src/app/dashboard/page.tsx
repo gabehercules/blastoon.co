@@ -1,24 +1,17 @@
 import "@/styles/dashboard.css";
 
-import blastoonTemp from "/public/blastoon-760_temp.webp";
 import cheeseCoin from "/public/cheese-coin.png";
 import Image from "next/image";
 
 import UserAvatar from "@/components/elements/user/user-avatar";
-import {
-  getNFTsByAddress,
-  getNFTsByUserId,
-  verifyNFTOwnership,
-} from "@/utils/get-nfts-by-address";
+import { getNFTsByUserId } from "@/utils/get-nfts-by-address";
 import UserNFTsList from "@/components/interface/user-nfts-section";
 import { getUserCheese } from "@/database/read/get-user-cheese";
 
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 import VerifyCheese from "@/components/elements/verify-cheese";
-import prisma from "@/database/prisma";
 import { firstVerify } from "@/utils/first-verify";
-import { calculateCheese, updateCheese } from "@/utils/cheese";
 
 export default async function Dashboard() {
   const session = await getServerSession(authOptions);
@@ -76,21 +69,8 @@ export default async function Dashboard() {
                 <span className="text-xl font-rowdies font-bold">
                   {Number(cheese)}
                 </span>
+                <VerifyCheese address={session.user.address} />
               </div>
-            </div>
-            {/* --- */}
-            <div className="w-[20%] max-w-52 pl-5">
-              {/* <div className="flex items-center gap-3">
-                <Image
-                  src={cheeseCoin}
-                  height={32}
-                  width={32}
-                  alt="Cheese Coins"
-                />
-                <span className="text-xl font-rowdies font-bold">
-                  {Number(cheese)}
-                </span>
-              </div> */}
             </div>
           </div>
         </div>

@@ -1,34 +1,42 @@
 "use client";
 
-import {
-  getNFTsByAddress,
-  verifyNFTOwnership,
-} from "@/utils/get-nfts-by-address";
+import { getNFTsByAddress } from "@/utils/get-nfts-by-address";
 
 export default function VerifyCheese({ address }: { address: string }) {
-  const verifyCheese = async () => {
-    console.log("Verifying $CHEESE");
-    const cheese = await getNFTsByAddress(address);
+  const verifyNfts = async () => {
+    console.log("Verifying NFTs");
+    const nfts = await getNFTsByAddress(address);
+
+    console.log("NFTS FOUND", nfts);
   };
 
   const verifyOwnership = async () => {
-    console.log("Verifying NFTs ownership");
-    const nftsOkayla = await verifyNFTOwnership(21, "0x1234567890");
+    console.log("VERIFYING NFT OWNERSHIP -------------");
+    await fetch("http://localhost:3000/api/update/nfts", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        id: 38,
+        address,
+      }),
+    });
   };
 
   return (
     <>
       <button
-        onClick={verifyCheese}
+        onClick={verifyNfts}
         className="bg-brand-yellow px-3 py-2 rounded-lg font-rowdies text-yellow-950"
       >
-        Verify your $CHEESE
+        Verify your NFTs
       </button>
       <button
         onClick={verifyOwnership}
         className="bg-orange-400 px-3 py-2 rounded-lg font-rowdies text-yellow-950"
       >
-        Verify ownership
+        Verify and Update NFTs
       </button>
     </>
   );

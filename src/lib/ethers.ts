@@ -73,30 +73,3 @@ export async function getAccount() {
     return null;
   }
 }
-
-export async function verifyNFTOwnership(
-  contractAddress: string,
-  tokenId: string,
-  ownerAddress: string
-) {
-  const provider = await getProvider();
-
-  if (!provider) {
-    return;
-  }
-
-  const contract = new ethers.Contract(contractAddress, [
-    "function ownerOf(uint256) view returns (address)",
-  ]);
-  const isERC721 = contract.interface;
-
-  console.log("IS ERC721", isERC721);
-
-  const owner = await contract.ownerOf(tokenId);
-
-  if (owner === ownerAddress) {
-    return true;
-  }
-
-  return false;
-}
