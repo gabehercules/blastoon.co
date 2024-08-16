@@ -10,7 +10,6 @@ import { getUserCheese } from "@/database/read/get-user-cheese";
 
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
-import VerifyCheese from "@/components/elements/verify-cheese";
 import { firstVerify } from "@/utils/first-verify";
 
 export default async function Dashboard() {
@@ -69,7 +68,6 @@ export default async function Dashboard() {
                 <span className="text-xl font-rowdies font-bold">
                   {Number(cheese)}
                 </span>
-                <VerifyCheese address={session.user.address} />
               </div>
             </div>
           </div>
