@@ -3,8 +3,8 @@ import { Inter } from "next/font/google";
 import "../styles/globals.css";
 import Header from "@/components/interface/header";
 import Footer from "@/components/interface/footer";
-import ThirdwebProviderWrapper from "@/contexts/thirdweb-provider";
 import { rowdies } from "@/fonts";
+import AuthProvider from "@/contexts/auth-provider";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -19,14 +19,14 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
-      <ThirdwebProviderWrapper>
+    <AuthProvider>
+      <html lang="en">
         <body className={`${inter.className} ${rowdies.variable} page-layout`}>
           <Header />
           <main className="main-layout overflow-hidden">{children}</main>
           <Footer />
         </body>
-      </ThirdwebProviderWrapper>
-    </html>
+      </html>
+    </AuthProvider>
   );
 }

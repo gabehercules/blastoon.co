@@ -1,0 +1,60 @@
+import prisma from "@/database/prisma";
+import { authOptions } from "@/lib/auth";
+import { getNFTsByAddress } from "@/utils/get-nfts-by-address";
+import { getServerSession } from "next-auth";
+import { NextRequest, NextResponse } from "next/server";
+
+export async function POST(req: NextRequest, res: NextResponse) {
+  // this endpoint
+
+  const { id, address } = await req.json();
+
+  console.log("ID and address in request body", id, address);
+  console.log("ID and address in request body", typeof id, typeof address);
+
+  if (!id || !address) {
+    return NextResponse.json({
+      status: "Error",
+      type: "Authentication Error",
+      message: "Unauthorized access",
+    });
+  }
+
+  try {
+    // get all NFTs from the given address in NFT Scan API
+    const { data } = await getNFTsByAddress(address);
+
+    const nfts = data.content;
+
+    // return from the response only the tokenId and the timestamp when the user owned the NFT
+    const nftsWithIdAndOwnershipTime = nfts.map((nft: any, i: number) => {
+      return {
+        tokenId: nft.token_id,
+        ownerSince: nft.own_timestamp,
+      };
+    });
+
+    // console.log("NFTs with ID and ownership time", nftsWithIdAndOwnershipTime);
+
+    for (const nft of nftsWithIdAndOwnershipTime) {
+      await prisma.nfts.upsert({
+        create: {
+          tokenId: Number(nft.tokenId),
+          userId: Number(id),
+          ownerSince: nft.ownerSince,
+        },
+        update: {
+          userId: Number(id),
+          ownerSince: nft.ownerSince,
+        },
+        where: {
+          tokenId: Number(nft.tokenId),
+        },
+      });
+    }
+
+    return NextResponse.json({ message: "Success" });
+  } catch (error) {
+    return NextResponse.json({ message: "Failed to update NFTs", error });
+  }
+}

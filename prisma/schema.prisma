@@ -14,29 +14,50 @@ datasource db {
 }
 
 model User {
-  id           Int          @id @default(autoincrement())
-  createdAt    DateTime     @default(now())
-  address      String       @unique
-  ens_domain   String?      @unique
-  signature    String?      @unique
-  slug         String?      @unique
-  username     String?      @unique
-  holdingNFTS  Int          @default(0)
-  upgradedNFTs Int          @default(0)
-  user_cheese  User_Cheese?
+  id            Int          @id @default(autoincrement())
+  createdAt     DateTime     @default(now()) @map("created_at")
+  address       String       @unique
+  ensDomain     String?      @unique @map("ens_domain")
+  signature     String?      @unique
+  slug          String?      @unique
+  username      String?      @unique
+  holdingNFTs   Int          @default(0) @map("holding_NFTs")
+  upgradedNFTs  Int          @default(0) @map("upgraded_NFTs")
+  firstVerified Boolean      @default(false) @map("first_verified")
+  user_cheese   User_Cheese?
+
+  nfts Nfts[]
 }
 
 model User_Cheese {
-  id            Int   @id @default(autoincrement())
-  address_id    Int   @unique
-  cheese_amount Int
-  user          User? @relation(fields: [address_id], references: [id])
+  id           Int  @id @default(autoincrement())
+  addressId    Int  @unique @map("address_id")
+  cheeseAmount Int  @map("cheese_amount")
+  user         User @relation(fields: [addressId], references: [id], onDelete: Cascade)
 }
 
 model User_Cheese_Transaction {
-  id            Int      @id @default(autoincrement())
-  address_id    Int
-  operation     Int
-  cheese_amount Int
-  timestamp     DateTime
+  id           Int      @id @default(autoincrement())
+  addressId    Int      @map("address_id")
+  operation    Int
+  cheeseAmount Int      @map("cheese_amount")
+  timestamp    DateTime
 }
+
+model Nfts {
+  tokenId        Int     @id @map("token_id")
+  imageUri       String? @map("image_uri")
+  userId         Int?    @map("user_id")
+  ownerSince     BigInt? @map("owner_since")
+  upgraded       Boolean @default(false)
+  lastUpgradedBy String? @map("last_upgraded_by")
+  owner          User?   @relation(fields: [userId], references: [id], onDelete: SetNull)
+}
+
+// model User_NFTs {
+//   id        Int   @id @default(autoincrement())
+//   addressId Int   @map("address_id")
+//   tokenId   Int   @map("token_id")
+//   user      User @relation(fields: [addressId], references: [id])
+//   nft       NFTs @relation(fields: [tokenId], references: [tokenId])
+// }

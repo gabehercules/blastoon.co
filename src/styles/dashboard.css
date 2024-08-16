@@ -16,3 +16,24 @@
 .dashboard-sidebar {
   grid-area: sidebar;
 }
+
+/* Estilo para a barra de rolagem */
+::-webkit-scrollbar {
+  width: 7px; /* Largura da scrollbar */
+}
+
+/* Estilo para o "polegar" (parte que você arrasta) */
+::-webkit-scrollbar-thumb {
+  background-color: #333; /* Cor do polegar */
+  border-radius: 7px; /* Bordas arredondadas */
+}
+
+/* Estilo para a "trilha" (área de fundo da scrollbar) */
+::-webkit-scrollbar-track {
+  background-color: #00000000; /* Cor de fundo */
+}
+
+/* Opcional: Estilo ao passar o mouse sobre o polegar */
+::-webkit-scrollbar-thumb:hover {
+  background-color: #555; /* Cor do polegar ao passar o mouse */
+}

@@ -2,121 +2,55 @@
 
 import Logo from "@/components/elements/logo";
 
-import { ConnectButton, useWalletInfo } from "thirdweb/react";
-import { client } from "@/lib/thirdweb";
-import { blast } from "thirdweb/chains";
-
-import { Wallet } from "thirdweb/wallets";
-
-import { useActiveAccount, useWalletBalance } from "thirdweb/react";
-// import ConnectButton from "@/components/elements/connect-button";
-import Link from "next/link";
+import ConnectButton from "@/components/elements/connect-button";
+import SignoutButton from "@/components/elements/signout-button";
+import { useSession } from "next-auth/react";
 import UserWidget from "@/components/elements/user/user-widget";
-import { getAddress } from "thirdweb";
-import { createUser } from "@/database/create/create-user";
-import { getUser } from "@/database/read/get-user";
-import { verifySignature } from "thirdweb/auth";
+import CheeseBalance from "@/components/elements/user/cheese-balance";
+import Link from "next/link";
 
-import { generatePayload, isLoggedIn, login, logout } from "@/actions/login";
+interface ExtendedUser {
+  address: string;
+}
 
 export default function Header() {
-  const account = useActiveAccount();
-  const { data: balance, isLoading } = useWalletBalance({
-    client,
-    chain: blast,
-    address: account?.address,
-  });
+  const { data: session, status } = useSession();
 
-  const message = {
-    message: "Sign in to BlastToon Co.",
-    chain: blast,
-    chainId: blast.id,
-    tos: "https://blasttoon.co/tos",
-  };
+  console.log("Session", session);
+  console.log("Status", status);
 
-  const handleOnConnect = async (wallet: Wallet) => {
-    console.log("Connected wallet", wallet);
-
-    if (!account || !account.address) return;
-
-    // verifica se a conta existe no banco de dados
-    const user = await getUser(account.address);
-
-    console.log("USER", user);
-
-    const signature = await account.signMessage({
-      message: "Signing",
-    });
-
-    console.log("SIGNATURE", signature);
-
-    if (!user) {
-      const user = await createUser(account.address, signature);
-      console.log("USER CREATED", user);
-    }
-
-    const isValidSignature = await verifySignature({
-      message: "Signing",
-      signature: signature,
-      address: account.address,
-      client: client,
-    });
-
-    if (!isValidSignature) return console.log("Invalid signature");
-  };
+  // @ts-ignore
+  const address = session?.user.address;
 
   return (
-    <div className="header flex items-center justify-between px-6 border-b border-white/10">
+    <div className="header flex items-center justify-between gap-6 px-6 border-b border-white/10">
       <div className="flex items-center gap-8">
         <Logo />
       </div>
 
-      <div>
-        <ConnectButton
-          client={client}
-          connectButton={{
-            style: {
-              backgroundColor: "#ffd71f",
-              color: "#221805",
-              padding: "0.5rem 1rem",
-              borderRadius: "7px",
-              fontSize: ".9rem",
-              fontWeight: 600,
-            },
-          }}
-          detailsButton={{
-            style: {
-              backgroundColor: "#000",
-              color: "#fff",
-              padding: "0.2rem 1rem",
-              borderRadius: "5px",
-              fontSize: "0.875rem",
-              fontWeight: 500,
-            },
-          }}
-          appMetadata={{
-            name: "BlastToon Co.",
-            description:
-              "BlastToon Co. Where you can collect cards, and earn rewards.",
-          }}
-          chain={blast}
-          // onConnect={handleOnConnect}
-          auth={{
-            isLoggedIn: async (address) => {
-              return await isLoggedIn();
-            },
-            doLogin: async (params) => {
-              await login(params);
-            },
-            getLoginPayload: async ({ address }) => {
-              return generatePayload({ address });
-            },
-            doLogout: async () => {
-              await logout();
-            },
-          }}
-        />
-        {/* <ConnectButton>Connect</ConnectButton> */}
+      <div className="flex">
+        <ul className="flex items-center gap-3">
+          <li>
+            <Link href="/packs">Card Packs</Link>
+          </li>
+          <li>
+            <Link href="/" className="pointer-events-none opacity-50">
+              Marketplace
+              <span className="text-xs ml-1 -pt-2">Soon</span>
+            </Link>
+          </li>
+        </ul>
+      </div>
+
+      <div className="flex-1 flex items-center justify-end gap-4">
+        {status !== "authenticated" ? (
+          <ConnectButton>Connect</ConnectButton>
+        ) : (
+          <>
+            <CheeseBalance address={address} />
+            <UserWidget />
+          </>
+        )}
       </div>
     </div>
   );

@@ -34,7 +34,7 @@ body.page-layout {
 
 @layer components {
   .btn {
-    @apply flex gap-2 items-center justify-center rounded-lg py-2 px-4 border border-white/10 hover:bg-white/5 transition-all duration-200;
+    @apply font-rowdies flex gap-2 items-center justify-center rounded-lg text-xl py-2 px-4 opacity-50 cursor-not-allowed;
   }
 
   .cheese-btn {
@@ -42,7 +42,19 @@ body.page-layout {
     @apply font-rowdies flex gap-2 items-center justify-center rounded-lg text-xl py-2 px-4 border-t-2 border-[#ffdd40a1] bg-brand-yellow text-yellow-950 hover:bg-yellow-400 transition-all duration-200;
   }
 
+  .cheese-common-btn {
+    @apply font-rowdies flex gap-2 items-center justify-center rounded-xl text-xl py-2 px-4 border-t-2 border-[#768ba1] bg-[#a2b1c5] text-white hover:bg-[#7e8c9f] transition-all duration-200;
+  }
+
+  .cheese-rare-btn {
+    @apply font-rowdies flex gap-2 items-center justify-center rounded-xl text-xl py-2 px-4 border-t-2 border-[#2e7ce8] bg-[#67a6fe] text-white hover:bg-[#5d96e6] transition-all duration-200;
+  }
+
+  .cheese-epic-btn {
+    @apply font-rowdies flex gap-2 items-center justify-center rounded-xl text-xl py-2 px-4 border-t-2 border-[#9025d2] bg-[#ba50ff] text-white hover:bg-[#a949e9] transition-all duration-200;
+  }
+
   .connect-btn {
-    @apply font-rowdies flex gap-2 items-center justify-center rounded-lg text-xl py-2 px-4 border-t-2 border-[#ffdd40a1] bg-brand-yellow text-yellow-950 hover:bg-yellow-400 transition-all duration-200;
+    @apply font-rowdies flex gap-2 items-center justify-center rounded-xl text-xl py-2 px-4 border-t-2 border-[#ffdd40a1] bg-brand-yellow text-yellow-950 hover:bg-yellow-400 transition-all duration-200;
   }
 }

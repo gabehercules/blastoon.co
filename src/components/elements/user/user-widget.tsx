@@ -6,28 +6,41 @@ import {
   PopoverButton,
   PopoverPanel,
 } from "@headlessui/react";
-import { tree } from "next/dist/build/templates/app-page";
+import { signOut, useSession } from "next-auth/react";
+import Image from "next/image";
 import Link from "next/link";
 import { BiChevronDown } from "react-icons/bi";
-import { useDisconnect, useActiveWallet } from "thirdweb/react";
+
+interface ExtendedUser {
+  address: string;
+}
 
 export default function UserWidget() {
-  const { disconnect } = useDisconnect();
-  const wallet = useActiveWallet();
+  const { data: session, status } = useSession();
 
-  const address = wallet?.getAccount()?.address;
+  if (!session || !session.user) return;
 
-  const shortAddress = address?.slice(0, 3) + "..." + address?.slice(-4);
+  const user = session.user as ExtendedUser;
+
+  const shortAddress =
+    user.address?.slice(0, 3) + "..." + user.address?.slice(-4);
 
   const handleDisconnect = () => {
-    if (!wallet) return;
-    disconnect(wallet);
+    signOut({
+      redirect: true,
+    });
   };
 
   return (
     <Popover className="relative">
       <PopoverButton className="flex items-center gap-3 text-sm px-4 py-2 border rounded-lg border-white/10">
-        <span className="size-6 flex rounded-full bg-white/30"></span>
+        <Image
+          src={`https://avatar.vercel.sh/${user.address}.svg`}
+          width={20}
+          height={20}
+          alt={`Avatar for ${user.address}`}
+          className="rounded-full"
+        />
         <div>{shortAddress}</div>
         <BiChevronDown />
       </PopoverButton>

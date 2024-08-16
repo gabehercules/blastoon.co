@@ -13,15 +13,15 @@ export async function getUserCheese(address: string): Promise<Number | Error> {
       },
     });
 
-    console.log("User", user);
+    // console.log("User", user);
 
     if (!user) throw Error("No user found");
 
     if (!user.user_cheese) return 0;
 
-    const cheese = user.user_cheese.cheese_amount;
+    const cheese = user.user_cheese.cheeseAmount;
 
-    console.log("Cheese amount", cheese);
+    // console.log("Cheese amount", cheese);
 
     return cheese;
   } catch (error) {

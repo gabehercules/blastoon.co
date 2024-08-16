@@ -1,0 +1,2 @@
+-- AlterTable
+ALTER TABLE "NFTs" ALTER COLUMN "owner_since" SET DATA TYPE BIGINT;
