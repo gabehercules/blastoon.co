@@ -32,13 +32,13 @@ export async function POST(req: NextRequest, res: NextResponse) {
       // if the user owned the NFT before the launch date, set the ownership timestamp to the launch date
       // this is because the Blast Toon collection had a first launch then it has been paused and relaunched
       // the maximum timestamp we can have is the "2nd" launch date
-      let adjustedTimestamp = nft.own_timestamp;
-      if (nft.own_timestamp > BLASTTOON_LAUNCH_DATE) {
-        adjustedTimestamp = BLASTTOON_LAUNCH_DATE;
+      let ownTimestamp = nft.own_timestamp;
+      if (ownTimestamp < BLASTTOON_LAUNCH_DATE) {
+        ownTimestamp = BLASTTOON_LAUNCH_DATE;
       }
       return {
         tokenId: nft.token_id,
-        ownerSince: adjustedTimestamp,
+        ownerSince: ownTimestamp,
       };
     });
 
