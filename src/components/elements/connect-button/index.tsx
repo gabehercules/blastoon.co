@@ -39,10 +39,10 @@ export default function ConnectButton({ children }: ConnectButtonProps) {
 
     await signIn("credentials", {
       address,
-      redirect: false,
+      callbackUrl: "/dashboard",
     });
     setLoading(false);
-    router.push("/dashboard");
+    // router.push("/dashboard");
   };
 
   return (

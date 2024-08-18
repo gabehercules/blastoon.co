@@ -78,6 +78,21 @@ export const authOptions = {
           // IDEA: maybe create a helper function to create the user and return it
           if (!user) {
             console.log("USER NOT FOUND IN DATABASE, CREATING...");
+
+            // ================================================================== //
+            // =========================            ============================= //
+            // ========================= IMPORTANTE ============================= //
+            // =========================            ============================= //
+            // ================================================================== //
+            // === QUALQUER MERDA QUE RETORNE **NULL** OU LANCE UM ERRO AQUI ==== //
+            // === NO AUTHORIZE, VAI CAIR NO CATCH E O SISTEMA DE LOGIN VAI ===== //
+            // === FALHAR MISERAVELMENTE TORNANDO MINHA VIDA UMA COMPLETA ======= //
+            // === MERDA ======================================================== //
+            // ================================================================== //
+            // ================================================================== //
+
+            // essa porra ja deu merda, criar um helper function para criar o usuário e retonar mensagens
+            // adequadas para cada situação de erro
             user = await prisma.user.create({
               data: {
                 address: accountAddress,
@@ -142,7 +157,7 @@ export const authOptions = {
             address, // Pensar em padronizar depois para 'username' como no strapi
           } as User;
         } catch (error) {
-          // console.log("ERROR DO STRAPI", error);
+          console.log("SOMETHING RETURNED NULL OR THROWN AN ERROR", error);
           return null;
         }
       },
