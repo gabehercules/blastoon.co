@@ -3,9 +3,8 @@ import { Inter } from "next/font/google";
 import "../styles/globals.css";
 import Header from "@/components/interface/header";
 import Footer from "@/components/interface/footer";
-import { rowdies } from "@/fonts";
+import { acme, barlowCondensed, niceSugar, rowdies } from "@/fonts";
 import AuthProvider from "@/contexts/auth-provider";
-
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
@@ -21,7 +20,9 @@ export default function RootLayout({
   return (
     <AuthProvider>
       <html lang="en">
-        <body className={`${inter.className} ${rowdies.variable} page-layout`}>
+        <body
+          className={`${inter.className} ${barlowCondensed.variable} ${rowdies.variable} ${acme.variable} ${niceSugar.variable} page-layout`}
+        >
           <Header />
           <main className="main-layout overflow-hidden">{children}</main>
           <Footer />

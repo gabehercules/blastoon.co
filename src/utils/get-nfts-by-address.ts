@@ -29,7 +29,7 @@ export async function getNFTsByAddress(address: string) {
 
 export async function getNFTsByUserId(userId: number) {
   try {
-    const nfts = await prisma.nfts.findMany({
+    const nfts = await prisma.blastToonNfts.findMany({
       where: {
         userId: userId,
       },

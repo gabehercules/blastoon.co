@@ -3,6 +3,7 @@ import type { Awaitable, NextAuthOptions, User } from "next-auth";
 import { getUser } from "@/database/read/get-user";
 import prisma from "@/database/prisma";
 import { getNFTsByAddress } from "@/utils/get-nfts-by-address";
+import { createUserSuperCheese } from "@/utils/superCheese";
 // import Discord from "next-auth/providers/discord";
 
 const actualDateInSeconds = Math.floor(Date.now() / 1000);
@@ -65,14 +66,17 @@ export const authOptions = {
               },
             });
 
-            // create a user_cheese record for the user and set to 0 (initialize)
+            // create a cheeseCoin record for the user and set to 0 (initialize)
             console.log("CREATING CHEESE RECORD FOR THE USER...");
-            await prisma.user_Cheese.create({
+            await prisma.userCheese.create({
               data: {
                 addressId: user.id,
-                cheeseAmount: 0,
+                amount: 0,
               },
             });
+
+            // create a superCheese record for the user and set to 0 (initialize)
+            await createUserSuperCheese(user.id);
 
             console.log(
               "USER CREATED AFTER VALIDATE ITS ABSCENSE IN DATABASE",

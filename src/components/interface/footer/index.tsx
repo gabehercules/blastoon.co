@@ -17,10 +17,10 @@ export default function Footer() {
         >
           <Image
             src={blastrLogo}
-            width={50}
+            width={40}
             height={20}
             alt="Blastr Logo; All Rights Reseved to them."
-            className="rounded"
+            className="w-auto rounded"
           />
         </Link>
       </div>

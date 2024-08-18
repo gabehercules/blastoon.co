@@ -17,26 +17,26 @@ export async function POST(req: NextRequest, res: NextResponse) {
     select: {
       id: true,
       holdingNFTs: true,
-      user_cheese: {
+      cheeseCoin: {
         select: {
-          cheeseAmount: true,
+          amount: true,
         },
       },
     },
   });
 
   for (const user of users) {
-    let userCheese = user.user_cheese?.cheeseAmount || 0;
+    let cheeseCoin = user.cheeseCoin?.amount || 0;
 
-    const updatedCheese = Math.abs(userCheese + user.holdingNFTs * 1000);
+    const updatedCheese = Math.abs(cheeseCoin + user.holdingNFTs * 1000);
     console.log(updatedCheese);
 
-    await prisma.user_Cheese.update({
+    await prisma.userCheese.update({
       where: {
         addressId: user.id,
       },
       data: {
-        cheeseAmount: updatedCheese,
+        amount: updatedCheese,
       },
     });
   }

@@ -9,10 +9,10 @@ export async function createUser(address: string, signature?: any) {
         address: address,
         signature: signature,
 
-        // create a new user_cheese record starting with 0 cheese
-        user_cheese: {
+        // create a new cheeseCoin record starting with 0 cheese
+        cheeseCoin: {
           create: {
-            cheeseAmount: 0,
+            amount: 0,
           },
         },
       },

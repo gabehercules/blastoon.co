@@ -9,7 +9,7 @@ export async function getUserCheese(address: string): Promise<Number | Error> {
         address: address,
       },
       include: {
-        user_cheese: true,
+        cheeseCoin: true,
       },
     });
 
@@ -17,9 +17,9 @@ export async function getUserCheese(address: string): Promise<Number | Error> {
 
     if (!user) throw Error("No user found");
 
-    if (!user.user_cheese) return 0;
+    if (!user.cheeseCoin) return 0;
 
-    const cheese = user.user_cheese.cheeseAmount;
+    const cheese = user.cheeseCoin.amount;
 
     // console.log("Cheese amount", cheese);
 

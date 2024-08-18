@@ -5,7 +5,7 @@ import prisma from "@/database/prisma";
 export async function calculateCheese(id: number) {
   // console.log(id, address);
 
-  const nfts = await prisma.nfts.findMany({
+  const nfts = await prisma.blastToonNfts.findMany({
     where: {
       userId: id,
     },
@@ -35,13 +35,13 @@ export async function calculateCheese(id: number) {
   return totalPoints;
 }
 
-export async function updateCheese(id: number, cheeseAmount: number) {
-  const updateCheese = await prisma.user_Cheese.update({
+export async function updateCheese(id: number, amount: number) {
+  const updateCheese = await prisma.userCheese.update({
     where: {
       addressId: id,
     },
     data: {
-      cheeseAmount: cheeseAmount,
+      amount: amount,
     },
   });
 

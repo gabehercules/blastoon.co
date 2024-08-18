@@ -19,8 +19,8 @@ export async function getProvider() {
   }
   const provider = new ethers.BrowserProvider(window.ethereum, "any");
 
-  console.log("CURRENT NETWORK", await provider.getNetwork());
-  console.log("PROVIDER", provider);
+  // console.log("CURRENT NETWORK", await provider.getNetwork());
+  // console.log("PROVIDER", provider);
 
   return provider;
 }
@@ -29,17 +29,17 @@ export async function getAccount() {
   try {
     const provider = await getProvider();
 
-    console.log("PROVIDER", provider);
+    // console.log("PROVIDER", provider);
     if (!provider) {
       console.log("NO PROVIDER FOUND");
       throw new Error("No provider found. Please install a wallet");
     }
-    console.log("REQ ACCOUNTS", await provider.send("eth_requestAccounts", []));
+    // console.log("REQ ACCOUNTS", await provider.send("eth_requestAccounts", []));
 
     const accounts = await provider.send("eth_requestAccounts", []);
 
     if (!accounts || !accounts.length) {
-      console.log("1 ----- No accounts found or user denied account access");
+      console.log("No accounts found or user denied account access");
       return null;
       // throw new Error("No accounts found or user denied account access");
     }
@@ -56,17 +56,6 @@ export async function getAccount() {
     }
 
     const address = accounts[0];
-    // console.log("ADDRESS", address);
-
-    // const contractAddress = "0x36af682901Dcb86D9Cff0D0e602857E3e07aA80D";
-
-    // const contract = new ethers.Contract(contractAddress, [
-    //   "function ownerOf(uint256) view returns (address)",
-    // ]);
-    // const isERC721 = contract.interface;
-
-    // console.log("IS ERC721", isERC721);
-    // console.log("CONTRACT", contract);
     return address;
   } catch (error) {
     console.log("ERROR - User denied account access", { error });

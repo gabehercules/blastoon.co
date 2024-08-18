@@ -14,37 +14,74 @@ datasource db {
 }
 
 model User {
-  id            Int          @id @default(autoincrement())
-  createdAt     DateTime     @default(now()) @map("created_at")
-  address       String       @unique
-  ensDomain     String?      @unique @map("ens_domain")
-  signature     String?      @unique
-  slug          String?      @unique
-  username      String?      @unique
-  holdingNFTs   Int          @default(0) @map("holding_NFTs")
-  upgradedNFTs  Int          @default(0) @map("upgraded_NFTs")
-  firstVerified Boolean      @default(false) @map("first_verified")
-  user_cheese   User_Cheese?
+  id            Int              @id @default(autoincrement())
+  createdAt     DateTime         @default(now()) @map("created_at")
+  address       String           @unique
+  ensDomain     String?          @unique @map("ens_domain")
+  signature     String?          @unique
+  slug          String?          @unique
+  username      String?          @unique
+  holdingNFTs   Int              @default(0) @map("holding_NFTs")
+  upgradedNFTs  Int              @default(0) @map("upgraded_NFTs")
+  firstVerified Boolean          @default(false) @map("first_verified")
+  cheeseCoin    userCheese?
+  superCheese   userSuperCheese?
 
-  nfts Nfts[]
+  nfts         blastToonNfts[]
+  cardPacks    userCardPacks[]
+  userCheeseTx userCheeseTx[]
 }
 
-model User_Cheese {
-  id           Int  @id @default(autoincrement())
-  addressId    Int  @unique @map("address_id")
-  cheeseAmount Int  @map("cheese_amount")
-  user         User @relation(fields: [addressId], references: [id], onDelete: Cascade)
+model userCheese {
+  id        Int    @id @default(autoincrement())
+  typeName  String @default("$CHEESE Points") @map("type_name")
+  addressId Int    @unique @map("address_id")
+  amount    Int    @default(0)
+  user      User   @relation(fields: [addressId], references: [id], onDelete: Cascade)
+
+  @@map("User_Cheese")
 }
 
-model User_Cheese_Transaction {
+model userSuperCheese {
+  id        Int    @id @default(autoincrement())
+  typeName  String @default("Super $CHEESE") @map("type_name")
+  addressId Int    @unique @map("address_id")
+  amount    Int    @default(0)
+  user      User   @relation(fields: [addressId], references: [id], onDelete: Cascade)
+
+  @@map("User_Super_Cheese")
+}
+
+enum PackType {
+  commom
+  rare
+  epic
+}
+
+model userCardPacks {
+  id        Int      @id @default(autoincrement())
+  addressId Int      @map("address_id")
+  packId    Int      @map("pack_id")
+  packType  PackType
+  user      User     @relation(fields: [addressId], references: [id])
+
+  @@map("User_Card_Packs")
+}
+
+model userCheeseTx {
   id           Int      @id @default(autoincrement())
   addressId    Int      @map("address_id")
-  operation    Int
+  operation    Int // 0: recieved, 1: spent
   cheeseAmount Int      @map("cheese_amount")
-  timestamp    DateTime
+  cheeseType   String   @map("cheese_type")
+  timestamp    DateTime @default(now())
+
+  user User @relation(fields: [addressId], references: [id])
+
+  @@map("User_Cheese_Tx")
 }
 
-model Nfts {
+model blastToonNfts {
   tokenId        Int     @id @map("token_id")
   imageUri       String? @map("image_uri")
   userId         Int?    @map("user_id")
@@ -52,12 +89,6 @@ model Nfts {
   upgraded       Boolean @default(false)
   lastUpgradedBy String? @map("last_upgraded_by")
   owner          User?   @relation(fields: [userId], references: [id], onDelete: SetNull)
-}
 
-// model User_NFTs {
-//   id        Int   @id @default(autoincrement())
-//   addressId Int   @map("address_id")
-//   tokenId   Int   @map("token_id")
-//   user      User @relation(fields: [addressId], references: [id])
-//   nft       NFTs @relation(fields: [tokenId], references: [tokenId])
-// }
+  @@map("Blast_Toon_NFTs")
+}

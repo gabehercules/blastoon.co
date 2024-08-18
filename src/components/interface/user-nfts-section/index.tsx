@@ -20,7 +20,7 @@ export default function UserNFTsList({ nfts }: UserNFTsListProps) {
             className="w-full h-auto rounded-t-lg"
           />
           <div className="p-3">
-            <p className="font-rowdies text-sm">Blast Toon #{item.tokenId}</p>
+            <p className="font-nicesugar text-sm">Blast Toon #{item.tokenId}</p>
           </div>
         </li>
       ))}

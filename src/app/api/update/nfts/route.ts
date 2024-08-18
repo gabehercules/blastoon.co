@@ -10,8 +10,8 @@ export async function POST(req: NextRequest, res: NextResponse) {
 
   const { id, address } = await req.json();
 
-  console.log("ID and address in request body", id, address);
-  console.log("ID and address in request body", typeof id, typeof address);
+  // console.log("ID and address in request body", id, address);
+  // console.log("ID and address in request body", typeof id, typeof address);
 
   if (!id || !address) {
     return NextResponse.json({
@@ -26,6 +26,7 @@ export async function POST(req: NextRequest, res: NextResponse) {
     const { data } = await getNFTsByAddress(address);
 
     const nfts = data.content;
+    const total = data.total;
 
     // return from the response only the tokenId and the timestamp when the user owned the NFT
     const nftsWithIdAndOwnershipTime = nfts.map((nft: any) => {
@@ -48,7 +49,7 @@ export async function POST(req: NextRequest, res: NextResponse) {
     );
 
     for (const nft of nftsWithIdAndOwnershipTime) {
-      await prisma.nfts.upsert({
+      await prisma.blastToonNfts.upsert({
         create: {
           tokenId: Number(nft.tokenId),
           userId: Number(id),
@@ -64,7 +65,7 @@ export async function POST(req: NextRequest, res: NextResponse) {
       });
     }
 
-    return NextResponse.json({ message: "Success" });
+    return NextResponse.json({ message: "Success", total }, { status: 200 });
   } catch (error) {
     return NextResponse.json({ message: "Failed to update NFTs", error });
   }

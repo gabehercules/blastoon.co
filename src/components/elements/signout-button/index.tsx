@@ -1,6 +1,5 @@
 "use client";
 
-import { useRouter } from "next/navigation";
 import { signOut } from "next-auth/react";
 
 interface ConnectButtonProps {
@@ -8,11 +7,8 @@ interface ConnectButtonProps {
 }
 
 export default function SignoutButton({ children }: ConnectButtonProps) {
-  const router = useRouter();
   const handleDisconnect = () => {
     signOut();
-
-    router.push("/login");
   };
 
   return (

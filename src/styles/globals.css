@@ -1,7 +1,6 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
-
 :root {
   --foreground-rgb: 0, 0, 0;
   --background-start-rgb: 214, 219, 220;
@@ -24,6 +23,10 @@ body.page-layout {
   grid-template-columns: 1fr;
   grid-template-rows: 6dvh 1fr 5dvh;
   overflow: hidden;
+}
+
+body {
+  @apply antialiased;
 }
 
 @layer utilities {

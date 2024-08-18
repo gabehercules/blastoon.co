@@ -28,13 +28,13 @@ export default function VerifyCheese({ address }: { address: string }) {
     <>
       <button
         onClick={verifyNfts}
-        className="bg-brand-yellow px-3 py-2 rounded-lg font-rowdies text-yellow-950"
+        className="bg-brand-yellow px-3 py-2 rounded-lg font-nicesugar text-yellow-950"
       >
         Verify your NFTs
       </button>
       <button
         onClick={verifyOwnership}
-        className="bg-orange-400 px-3 py-2 rounded-lg font-rowdies text-yellow-950"
+        className="bg-orange-400 px-3 py-2 rounded-lg font-nicesugar text-yellow-950"
       >
         Verify and Update NFTs
       </button>
