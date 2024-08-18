@@ -23,6 +23,8 @@ export default function VerifyOwnshipButton({
       ? process.env.NEXT_PUBLIC_BASE_URL
       : "http://localhost:3000";
 
+    console.log("NEXT_PUBLIC_BASE_URL:", process.env.NEXT_PUBLIC_BASE_URL);
+
     const response = await fetch(`${baseUrl}/api/update/nfts`, {
       method: "POST",
       headers: {
