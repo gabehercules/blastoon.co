@@ -29,24 +29,6 @@ export const authOptions = {
       name: "Credentials",
       credentials: {},
       async authorize(credentials: any): Promise<User | null> {
-        console.log("0 - #### CREDENTIAL NO AUTHORIZE", credentials);
-        console.log(
-          "0.1 - #### CREDENTIAL NO AUTHORIZE TYPEOF",
-          typeof credentials
-        );
-        console.log(
-          "0.2 - #### CREDENTIAL NO AUTHORIZE KEYS",
-          Object.keys(credentials)
-        );
-        console.log(
-          "0.3 - #### CREDENTIAL NO AUTHORIZE ADDRESS",
-          credentials.address
-        );
-        console.log(
-          "0.4 - #### CREDENTIAL NO AUTHORIZE ADDRESS TYPEOF",
-          typeof credentials.address
-        );
-
         if (
           !credentials ||
           !credentials.address ||
@@ -99,8 +81,6 @@ export const authOptions = {
               },
             });
 
-            console.log("USER CREATED?", user);
-
             // create a cheeseCoin record for the user and set to 0 (initialize)
             console.log("CREATING CHEESE RECORD FOR THE USER...");
             await prisma.userCheese.create({
@@ -113,10 +93,7 @@ export const authOptions = {
             // create a superCheese record for the user and set to 0 (initialize)
             await createUserSuperCheese(user.id);
 
-            console.log(
-              "USER CREATED AFTER VALIDATE ITS ABSCENSE IN DATABASE",
-              user
-            );
+            console.log("USER CREATED AFTER VALIDATE ITS ABSCENSE IN DATABASE");
 
             const { data } = await getNFTsByAddress(user.address);
 
