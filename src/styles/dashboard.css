@@ -9,6 +9,14 @@
   padding: 2vh 0;
 }
 
+@media (max-width: 768px) {
+  .dashboard-layout {
+    grid-template-columns: 1fr;
+    grid-template-rows: auto;
+    grid-template-areas: "main" "sidebar";
+  }
+}
+
 .dashboard-main {
   grid-area: main;
 }

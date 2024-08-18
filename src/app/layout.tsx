@@ -24,7 +24,9 @@ export default function RootLayout({
           className={`${inter.className} ${barlowCondensed.variable} ${rowdies.variable} ${acme.variable} ${niceSugar.variable} page-layout`}
         >
           <Header />
-          <main className="main-layout overflow-hidden">{children}</main>
+          <main className="main-layout overflow-hidden sm:overflow-y-auto">
+            {children}
+          </main>
           <Footer />
         </body>
       </html>

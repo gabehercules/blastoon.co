@@ -41,7 +41,7 @@ export default function Header() {
         <Logo />
       </div>
 
-      <div className="flex">
+      <div className="flex sm:hidden">
         <ul className="flex items-center gap-3">
           <li>
             <Link href="/">Card Packs</Link>
@@ -55,7 +55,7 @@ export default function Header() {
         </ul>
       </div>
 
-      <div>
+      <div className="sm:hidden">
         <ul className="flex items-center gap-4 px-6">
           <li>
             <a

@@ -19,8 +19,8 @@ export default function VerifyOwnshipButton({
   const handleVerifyNFTs = async () => {
     setLoading(true);
 
-    const baseUrl = process.env.DEV_PREVIEW_URL
-      ? `https://${process.env.DEV_PREVIEW_URL}`
+    const baseUrl = process.env.BASE_URL
+      ? process.env.BASE_URL
       : "http://localhost:3000";
 
     const response = await fetch(`${baseUrl}/api/update/nfts`, {

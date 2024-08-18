@@ -10,7 +10,7 @@ import { FaEthereum } from "react-icons/fa";
 
 export default function CardPacks() {
   return (
-    <div className="flex gap-6">
+    <div className="flex gap-6 sm:flex-col sm:pb-6">
       {/* -- */}
       <div className="flex flex-col items-center rounded-lg">
         <div>

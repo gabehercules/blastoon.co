@@ -32,8 +32,8 @@ export async function firstVerify(id: number, address: string) {
 
     // STEP 2: ---------------------------------------------------------- //
     // Verify the NFTs ownership by calling the update NFTs endpoint
-    const baseUrl = process.env.DEV_PREVIEW_URL
-      ? `https://${process.env.DEV_PREVIEW_URL}`
+    const baseUrl = process.env.BASE_URL
+      ? process.env.BASE_URL
       : "http://localhost:3000";
 
     const nftsResult = await fetch(`${baseUrl}/api/update/nfts`, {

@@ -60,7 +60,7 @@ export default function CheeseBalance({
   }, []);
 
   return (
-    <div className="flex gap-4">
+    <div className="flex gap-4 sm:hidden">
       <TooltipProvider>
         <Tooltip>
           <TooltipTrigger className="flex items-center gap-3">
