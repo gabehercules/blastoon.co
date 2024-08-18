@@ -29,6 +29,24 @@ export const authOptions = {
       name: "Credentials",
       credentials: {},
       async authorize(credentials: any): Promise<User | null> {
+        console.log("0 - #### CREDENTIAL NO AUTHORIZE", credentials);
+        console.log(
+          "0.1 - #### CREDENTIAL NO AUTHORIZE TYPEOF",
+          typeof credentials
+        );
+        console.log(
+          "0.2 - #### CREDENTIAL NO AUTHORIZE KEYS",
+          Object.keys(credentials)
+        );
+        console.log(
+          "0.3 - #### CREDENTIAL NO AUTHORIZE ADDRESS",
+          credentials.address
+        );
+        console.log(
+          "0.4 - #### CREDENTIAL NO AUTHORIZE ADDRESS TYPEOF",
+          typeof credentials.address
+        );
+
         if (
           !credentials ||
           !credentials.address ||
