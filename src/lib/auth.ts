@@ -84,6 +84,8 @@ export const authOptions = {
               },
             });
 
+            console.log("USER CREATED?", user);
+
             // create a cheeseCoin record for the user and set to 0 (initialize)
             console.log("CREATING CHEESE RECORD FOR THE USER...");
             await prisma.userCheese.create({
