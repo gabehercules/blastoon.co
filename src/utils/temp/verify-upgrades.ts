@@ -6,6 +6,20 @@ import { upgrades } from "./address-upgrades";
 export async function verifyUpgrades(address: string, id: number) {
   console.log("VERIFY UPGRADES", address, id);
 
+  const hasVerifiedUpgrade = await prisma.user.findFirst({
+    where: {
+      id: Number(id),
+    },
+    select: {
+      verifiedUpgrade: true,
+    },
+  });
+
+  console.log("HAS VERIFIED UPGRADE", hasVerifiedUpgrade);
+
+  if (hasVerifiedUpgrade?.verifiedUpgrade === true) {
+    return "User Already Verified";
+  }
   const hasUpgraded = upgrades.find(
     (upgrade) => upgrade.upgradedBy.toLocaleLowerCase() == address
   );
@@ -42,6 +56,7 @@ export async function verifyUpgrades(address: string, id: number) {
       },
       data: {
         upgradedNFTs: hasUpgraded.tokensUpgraded,
+        verifiedUpgrade: true,
         superCheese: {
           update: {
             amount: updatedSuperCheese,
