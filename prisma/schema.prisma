@@ -14,18 +14,19 @@ datasource db {
 }
 
 model User {
-  id            Int              @id @default(autoincrement())
-  createdAt     DateTime         @default(now()) @map("created_at")
-  address       String           @unique
-  ensDomain     String?          @unique @map("ens_domain")
-  signature     String?          @unique
-  slug          String?          @unique
-  username      String?          @unique
-  holdingNFTs   Int              @default(0) @map("holding_NFTs")
-  upgradedNFTs  Int              @default(0) @map("upgraded_NFTs")
-  firstVerified Boolean          @default(false) @map("first_verified")
-  cheeseCoin    userCheese?
-  superCheese   userSuperCheese?
+  id              Int              @id @default(autoincrement())
+  createdAt       DateTime         @default(now()) @map("created_at")
+  address         String           @unique
+  ensDomain       String?          @unique @map("ens_domain")
+  signature       String?          @unique
+  slug            String?          @unique
+  username        String?          @unique
+  holdingNFTs     Int              @default(0) @map("holding_NFTs")
+  upgradedNFTs    Int              @default(0) @map("upgraded_NFTs")
+  verifiedUpgrade Boolean          @default(false) @map("verified_upgrade")
+  firstVerified   Boolean          @default(false) @map("first_verified")
+  cheeseCoin      userCheese?
+  superCheese     userSuperCheese?
 
   nfts         blastToonNfts[]
   cardPacks    userCardPacks[]

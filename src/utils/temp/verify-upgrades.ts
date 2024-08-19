@@ -41,6 +41,7 @@ export async function verifyUpgrades(address: string, id: number) {
         id: Number(id),
       },
       data: {
+        upgradedNFTs: hasUpgraded.tokensUpgraded,
         superCheese: {
           update: {
             amount: updatedSuperCheese,
