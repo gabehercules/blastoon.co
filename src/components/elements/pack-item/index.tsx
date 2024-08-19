@@ -7,119 +7,135 @@ import superCheese from "/public/super-cheese.png";
 
 import { BiCheese } from "react-icons/bi";
 import { FaEthereum } from "react-icons/fa";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 
 export default function CardPacks() {
   return (
-    <div className="flex gap-6 sm:flex-col sm:pb-6">
-      {/* -- */}
-      <div className="flex flex-col items-center rounded-lg">
-        <div>
-          <span className="flex font-nicesugar text-lg mb-4">Common Pack</span>
+    <TooltipProvider delayDuration={300}>
+      <div className="flex gap-6 sm:flex-col sm:pb-6">
+        {/* -- */}
+        <div className="flex flex-col items-center rounded-lg">
+          <div>
+            <span className="flex font-nicesugar text-lg mb-4">
+              Common Pack
+            </span>
+          </div>
+          <Image
+            src={commonPack}
+            height={400}
+            width={300}
+            alt="Image for the pack"
+            className="max-w-[280px] w-auto h-auto"
+          />
+
+          <div className="w-full p-3">
+            <div className="flex items-center justify-center gap-2">
+              <Tooltip>
+                <TooltipTrigger className="cheese-common-btn  opacity-70">
+                  <Image
+                    src={cheeseCoinIcon}
+                    width={28}
+                    height={28}
+                    alt="Cheese Coin"
+                  />
+                  20.000
+                </TooltipTrigger>
+                <TooltipContent>
+                  <p className="font-nicesugar">SOON</p>
+                </TooltipContent>
+              </Tooltip>
+
+              <button className="btn" disabled>
+                <FaEthereum size={18} />
+                0.007
+              </button>
+            </div>
+          </div>
         </div>
-        <Image
-          src={commonPack}
-          height={400}
-          width={300}
-          alt="Image for the pack"
-          className="max-w-[280px] w-auto h-auto"
-        />
 
-        <div className="w-full p-3">
-          <div className="flex items-center justify-center gap-2">
-            <button
-              className="cheese-common-btn pointer-events-none opacity-70"
-              disabled
-            >
-              <Image
-                src={cheeseCoinIcon}
-                width={28}
-                height={28}
-                alt="Cheese Coin"
-              />
-              20.000
-            </button>
+        {/* --- */}
 
-            <button className="btn" disabled>
-              <FaEthereum size={18} />
-              0.007
-            </button>
+        <div className="flex flex-col items-center rounded-lg">
+          <div>
+            <span className="flex font-nicesugar text-lg mb-4">Rare Pack</span>
+          </div>
+          <Image
+            src={rarePack}
+            height={400}
+            width={300}
+            alt="Image for the pack"
+            className="max-w-[280px] w-auto h-auto"
+          />
+
+          <div className="w-full p-3">
+            <div className="flex items-center justify-center gap-2">
+              <Tooltip>
+                <TooltipTrigger className="cheese-rare-btn opacity-70">
+                  <Image
+                    src={superCheese}
+                    width={28}
+                    height={28}
+                    alt="Cheese Coin"
+                  />
+                  30.000
+                </TooltipTrigger>
+                <TooltipContent>
+                  <p className="font-nicesugar">SOON</p>
+                </TooltipContent>
+              </Tooltip>
+
+              <button className="btn" disabled>
+                <FaEthereum size={18} />
+                0.014
+              </button>
+            </div>
+          </div>
+        </div>
+
+        {/* --- */}
+
+        <div className="flex flex-col items-center rounded-lg">
+          <div>
+            <span className="flex font-nicesugar text-lg mb-4">Epic Pack</span>
+          </div>
+          <Image
+            src={epicPack}
+            height={400}
+            width={300}
+            alt="Image for the pack"
+            className="max-w-[280px] w-auto h-auto"
+          />
+
+          <div className="w-full p-3">
+            <div className="flex items-center justify-center gap-2">
+              <Tooltip>
+                <TooltipTrigger className="cheese-epic-btn opacity-70">
+                  <Image
+                    src={superCheese}
+                    width={28}
+                    height={28}
+                    alt="Cheese Coin"
+                  />
+                  50.000
+                </TooltipTrigger>
+                <TooltipContent>
+                  <p className="font-nicesugar">SOON</p>
+                </TooltipContent>
+              </Tooltip>
+
+              <button className="btn" disabled>
+                <FaEthereum size={18} />
+                0.022
+              </button>
+            </div>
           </div>
         </div>
       </div>
-
-      {/* --- */}
-
-      <div className="flex flex-col items-center rounded-lg">
-        <div>
-          <span className="flex font-nicesugar text-lg mb-4">Rare Pack</span>
-        </div>
-        <Image
-          src={rarePack}
-          height={400}
-          width={300}
-          alt="Image for the pack"
-          className="max-w-[280px] w-auto h-auto"
-        />
-
-        <div className="w-full p-3">
-          <div className="flex items-center justify-center gap-2">
-            <button
-              className="cheese-rare-btn pointer-events-none opacity-70"
-              disabled
-            >
-              <Image
-                src={superCheese}
-                width={28}
-                height={28}
-                alt="Cheese Coin"
-              />
-              30.000
-            </button>
-
-            <button className="btn" disabled>
-              <FaEthereum size={18} />
-              0.014
-            </button>
-          </div>
-        </div>
-      </div>
-
-      {/* --- */}
-
-      <div className="flex flex-col items-center rounded-lg">
-        <div>
-          <span className="flex font-nicesugar text-lg mb-4">Epic Pack</span>
-        </div>
-        <Image
-          src={epicPack}
-          height={400}
-          width={300}
-          alt="Image for the pack"
-          className="max-w-[280px] w-auto h-auto"
-        />
-
-        <div className="w-full p-3">
-          <div className="flex items-center justify-center gap-2">
-            <button
-              className="cheese-epic-btn pointer-events-none opacity-70"
-              disabled
-            >
-              <Image
-                src={superCheese}
-                width={28}
-                height={28}
-                alt="Cheese Coin"
-              />
-              50.000
-            </button>
-
-            <button className="btn" disabled>
-              <FaEthereum size={18} />
-              0.022
-            </button>
-          </div>
-        </div>
-      </div>
-    </div>
+    </TooltipProvider>
   );
 }

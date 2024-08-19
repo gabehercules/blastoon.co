@@ -60,8 +60,8 @@ export default function CheeseBalance({
   }, []);
 
   return (
-    <div className="flex gap-4 sm:hidden">
-      <TooltipProvider>
+    <TooltipProvider delayDuration={300}>
+      <div className="flex gap-4 sm:hidden">
         <Tooltip>
           <TooltipTrigger className="flex items-center gap-3">
             <Image src={cardIcon} width={22} height={22} alt={"Cheese Coin"} />
@@ -79,11 +79,9 @@ export default function CheeseBalance({
             </p>
           </TooltipContent>
         </Tooltip>
-      </TooltipProvider>
 
-      {/* SEPARATOR */}
+        {/* SEPARATOR */}
 
-      <TooltipProvider>
         <Tooltip>
           <TooltipTrigger className="flex items-center gap-3">
             <Image
@@ -107,11 +105,9 @@ export default function CheeseBalance({
             </p>
           </TooltipContent>
         </Tooltip>
-      </TooltipProvider>
 
-      {/* SEPARATOR */}
+        {/* SEPARATOR */}
 
-      <TooltipProvider>
         <Tooltip>
           <TooltipTrigger className="flex items-center gap-3">
             <Image
@@ -135,7 +131,7 @@ export default function CheeseBalance({
             </p>
           </TooltipContent>
         </Tooltip>
-      </TooltipProvider>
-    </div>
+      </div>
+    </TooltipProvider>
   );
 }

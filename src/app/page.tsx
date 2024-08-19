@@ -5,9 +5,9 @@ import { BiLogoDiscordAlt } from "react-icons/bi";
 
 export default function Home() {
   return (
-    <div className="w-full h-full flex flex-col items-center justify-center gap-12 sm:justify-start sm:py-4">
+    <div className="w-full h-full flex flex-col items-center justify-start py-6 gap-12 sm:justify-start sm:py-4">
       <div className="flex flex-col gap-8 items-center">
-        <h1 className="font-nicesugar font-bold text-6xl text-center sm:text-5xl sm:px-6 sm:leading-tight">
+        <h1 className="font-nicesugar font-bold text-5xl text-center md:text-4xl sm:text-3xl sm:px-6 sm:leading-tight">
           The war for{" "}
           <span className="inline-block text-brand-yellow">$CHEESE</span> is
           coming
