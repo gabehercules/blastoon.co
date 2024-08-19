@@ -17,6 +17,7 @@ import { getUserCardPacks } from "@/utils/cardPacks";
 import { getUserSuperCheese } from "@/utils/superCheese";
 import { BiLogoDiscordAlt } from "react-icons/bi";
 import VerifyOwnshipButton from "@/components/elements/verify-ownship";
+import VerifyUpgradeButton from "@/components/elements/verify-upgrade-btn";
 
 export default async function Dashboard() {
   const session = await getServerSession(authOptions);
@@ -69,6 +70,8 @@ export default async function Dashboard() {
                 </h1>
               </div>
               <div className="flex items-center gap-3">
+                <VerifyUpgradeButton />
+
                 <div className="flex items-center gap-4">
                   <Image
                     src={cheesePointsIcon}

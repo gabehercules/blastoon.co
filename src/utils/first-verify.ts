@@ -2,6 +2,7 @@
 
 import prisma from "@/database/prisma";
 import { calculateCheese, updateCheese } from "./cheese";
+import { verifyUpgrades } from "./temp/verify-upgrades";
 
 export async function firstVerify(id: number, address: string) {
   try {
@@ -65,6 +66,8 @@ export async function firstVerify(id: number, address: string) {
     // STEP 3.1: ---------------------------------------------------------- //
     // Update the user's cheese in the database
     await updateCheese(Number(id), cheese);
+
+    await verifyUpgrades(address, id);
 
     await prisma.user.update({
       where: {
