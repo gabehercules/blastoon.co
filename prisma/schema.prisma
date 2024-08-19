@@ -63,7 +63,7 @@ model userCardPacks {
   addressId Int      @map("address_id")
   packId    Int      @map("pack_id")
   packType  PackType
-  user      User     @relation(fields: [addressId], references: [id])
+  user      User     @relation(fields: [addressId], references: [id], onDelete: Cascade)
 
   @@map("User_Card_Packs")
 }

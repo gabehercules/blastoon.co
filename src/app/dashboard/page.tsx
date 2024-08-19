@@ -70,8 +70,6 @@ export default async function Dashboard() {
                 </h1>
               </div>
               <div className="flex items-center gap-3">
-                <VerifyUpgradeButton />
-
                 <div className="flex items-center gap-4">
                   <Image
                     src={cheesePointsIcon}
@@ -107,6 +105,8 @@ export default async function Dashboard() {
                     {userCardPacks}
                   </span>
                 </div>
+
+                <VerifyUpgradeButton address={address} id={id} />
               </div>
             </div>
           </div>

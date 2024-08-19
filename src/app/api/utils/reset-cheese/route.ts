@@ -3,8 +3,11 @@ import { NextRequest, NextResponse } from "next/server";
 
 export async function GET(req: NextRequest, res: NextResponse) {
   const resetSequence = await prisma.$executeRaw`
-    ALTER SEQUENCE "User_id_seq" RESTART WITH 1;
+    ALTER SEQUENCE "User_Cheese_id_seq" RESTART WITH 1;
   `;
 
-  return NextResponse.json({ message: "Table truncated", resetSequence });
+  return NextResponse.json({
+    message: "Cheese Table Ids Reseted successfully",
+    resetSequence,
+  });
 }
