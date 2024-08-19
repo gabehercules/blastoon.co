@@ -31,7 +31,8 @@ export default function ConnectButton({ children }: ConnectButtonProps) {
 
     if (!address) {
       setLoading(false);
-      console.log("NO ACCOUNTS WERE ALLOWED");
+      // console.log("NO ACCOUNTS WERE ALLOWED. STOPED HERE");
+      return;
     }
 
     // console.log("ACCOUNT NO CLICK", address);
@@ -39,10 +40,10 @@ export default function ConnectButton({ children }: ConnectButtonProps) {
 
     await signIn("credentials", {
       address,
-      callbackUrl: "/dashboard",
+      redirect: false,
     });
     setLoading(false);
-    // router.push("/dashboard");
+    router.push("/dashboard");
   };
 
   return (

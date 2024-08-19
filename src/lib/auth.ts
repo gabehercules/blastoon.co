@@ -33,8 +33,7 @@ export const authOptions = {
           !credentials ||
           !credentials.address ||
           credentials.address === "" ||
-          credentials.address === "undefined" ||
-          credentials.address === "null"
+          credentials.address === "undefined"
         ) {
           throw new Error("Missing credentials");
         }

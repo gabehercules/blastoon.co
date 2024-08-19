@@ -22,7 +22,7 @@ export default function VerifyUpgradeButton({
       setLoading(false);
       return setMessage(result);
     }
-    setMessage("Relead the page");
+    setMessage("Reload the page");
     setLoading(false);
   };
 
