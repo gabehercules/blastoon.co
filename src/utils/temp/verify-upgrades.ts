@@ -10,7 +10,7 @@ export async function verifyUpgrades(address: string, id: number) {
     (upgrade) => upgrade.upgradedBy.toLocaleLowerCase() == address
   );
 
-  console.log("HAS UPGRADED", hasUpgraded);
+  // console.log("HAS UPGRADED", hasUpgraded);
 
   if (!hasUpgraded) {
     console.log("USER HAS NOT UPGRADED ANY TOKENS");
@@ -26,7 +26,7 @@ export async function verifyUpgrades(address: string, id: number) {
     },
   });
 
-  console.log("ACTUAL SUPER CHEESE", actualSuperCheese);
+  // console.log("ACTUAL SUPER CHEESE", actualSuperCheese);
 
   if (actualSuperCheese?.amount == null) {
     return 0;
