@@ -46,7 +46,7 @@ export default function CardPacks() {
                   20.000
                 </TooltipTrigger>
                 <TooltipContent>
-                  <p className="font-nicesugar">SOON</p>
+                  <p className="font-nicesugar text-lg">SOON</p>
                 </TooltipContent>
               </Tooltip>
 
@@ -85,7 +85,7 @@ export default function CardPacks() {
                   30.000
                 </TooltipTrigger>
                 <TooltipContent>
-                  <p className="font-nicesugar">SOON</p>
+                  <p className="font-nicesugar text-lg">SOON</p>
                 </TooltipContent>
               </Tooltip>
 
@@ -124,7 +124,7 @@ export default function CardPacks() {
                   50.000
                 </TooltipTrigger>
                 <TooltipContent>
-                  <p className="font-nicesugar">SOON</p>
+                  <p className="font-nicesugar text-lg">SOON</p>
                 </TooltipContent>
               </Tooltip>
 
