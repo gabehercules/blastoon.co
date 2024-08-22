@@ -124,11 +124,14 @@ export default async function Dashboard() {
 
         {/* some content */}
         {nfts && nfts.length > 0 ? (
-          <div className="flex-1 flex flex-col rounded-lg bg-neutral-950/50 p-6 border border-b-4 border-white/10 border-b-white/5 overflow-hidden">
-            <h1 className="font-nicesugar text-lg font-bold mb-4">
-              My Blast Toons
-            </h1>
-            <div className="overflow-y-auto">
+          <div className="flex-1 flex flex-col rounded-lg border border-b-4 bg-neutral-950/50 border-white/10 border-b-white/5 overflow-hidden">
+            <div className="flex items-center justify-between gap-4 py-2 px-4 border-b border-white/10">
+              <h1 className="font-nicesugar text-lg font-bold">
+                My Blast Toons
+              </h1>
+              <VerifyOwnshipButton id={id} address={address} />
+            </div>
+            <div className="overflow-y-auto p-6">
               <UserNFTsList nfts={nfts} />
             </div>
           </div>

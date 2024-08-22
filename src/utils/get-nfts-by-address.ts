@@ -42,3 +42,36 @@ export async function getNFTsByUserId(userId: number) {
     console.error(error);
   }
 }
+
+export async function reverifyNfts(address: string, id: number) {
+  const baseUrl = process.env.NEXT_PUBLIC_BASE_URL
+    ? process.env.NEXT_PUBLIC_BASE_URL
+    : "http://localhost:3000";
+
+  console.log("NEXT_PUBLIC_BASE_URL:", process.env.NEXT_PUBLIC_BASE_URL);
+
+  const response = await fetch(`${baseUrl}/api/update/nfts`, {
+    cache: "no-cache",
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      id: Number(id),
+      address,
+    }),
+  });
+
+  if (!response.ok) {
+    console.error("Failed to verify ownership. Response NOT OK");
+    throw new Error("Failed to verify ownership. Response NOT OK");
+  }
+
+  const data = await response.json();
+
+  const { message, total } = data;
+
+  console.log("DATA", data);
+
+  return { message, total };
+}

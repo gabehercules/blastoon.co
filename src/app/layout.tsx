@@ -5,6 +5,8 @@ import Header from "@/components/interface/header";
 import Footer from "@/components/interface/footer";
 import { acme, barlowCondensed, niceSugar, rowdies } from "@/fonts";
 import AuthProvider from "@/contexts/auth-provider";
+import { Toaster } from "@/components/ui/sonner";
+
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
@@ -28,6 +30,10 @@ export default function RootLayout({
             {children}
           </main>
           <Footer />
+          <Toaster
+            position={"bottom-center"}
+            className="bg-neutral-800 rounded-lg text-white font-nicesugar border-white/5"
+          />
         </body>
       </html>
     </AuthProvider>

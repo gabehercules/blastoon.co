@@ -2,7 +2,10 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { BiX } from "react-icons/bi";
+import { LuRefreshCw } from "react-icons/lu";
+
+import { reverifyNfts } from "@/utils/get-nfts-by-address";
+import { toast } from "sonner";
 
 export default function VerifyOwnshipButton({
   id,
@@ -11,7 +14,6 @@ export default function VerifyOwnshipButton({
   id: number;
   address: string;
 }) {
-  const [message, setMessage] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
 
   const router = useRouter();
@@ -19,37 +21,21 @@ export default function VerifyOwnshipButton({
   const handleVerifyNFTs = async () => {
     setLoading(true);
 
-    const baseUrl = process.env.NEXT_PUBLIC_BASE_URL
-      ? process.env.NEXT_PUBLIC_BASE_URL
-      : "http://localhost:3000";
+    const reverify = await reverifyNfts(address, id);
 
-    console.log("NEXT_PUBLIC_BASE_URL:", process.env.NEXT_PUBLIC_BASE_URL);
-
-    const response = await fetch(`${baseUrl}/api/update/nfts`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        id: Number(id),
-        address,
-      }),
-    });
-
-    const data = await response.json();
-
-    if (!response.ok) {
-      console.error("Failed to verify ownership");
-      return setMessage(
-        "Failed to verify ownership. Maybe you do not own any NFTs"
-      );
-    }
-    if (data.total < 1) {
+    if (!reverify) {
       setLoading(false);
-      setMessage(`Apparently you don't own a Blast Toon PASS :(`);
+      toast("Error verifying ownership");
     }
 
-    if (data.total >= 1) {
+    if (reverify.total === 0) {
+      setLoading(false);
+      toast("No NFTs found for this address");
+    }
+
+    if (reverify.total > 0) {
+      setLoading(false);
+      toast(`Successfully verified ${reverify.total} NFTs`);
       router.replace("/dashboard");
     }
   };
@@ -58,21 +44,12 @@ export default function VerifyOwnshipButton({
     <>
       <button
         onClick={handleVerifyNFTs}
-        className="flex border-brand-yellow border-2 text-brand-yellow font-bold px-4 py-2 rounded-lg"
+        className="min-w-[200px] flex items-center gap-3 text-brand-yellow font-bold px-4 py-2 rounded-lg hover:bg-white/5 transition-colors duration-300"
       >
+        <LuRefreshCw className={loading ? "animate-spin" : ""} />
+
         {loading ? "Verifying..." : "Re-verify Ownership"}
       </button>
-      {message ? (
-        <div className="flex items-center gap-2 mt-5">
-          <p className="leading-none">{message}</p>
-          <button
-            onClick={() => setMessage(null)}
-            className="flex p-1 rounded-full bg-neutral-900 text-neutral-400 hover:bg-neutral-800"
-          >
-            <BiX size={14} />
-          </button>
-        </div>
-      ) : null}
     </>
   );
 }

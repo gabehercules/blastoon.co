@@ -1,8 +1,6 @@
 import { BLASTTOON_LAUNCH_DATE } from "@/constants";
 import prisma from "@/database/prisma";
-import { authOptions } from "@/lib/auth";
 import { getNFTsByAddress } from "@/utils/get-nfts-by-address";
-import { getServerSession } from "next-auth";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function POST(req: NextRequest, res: NextResponse) {
