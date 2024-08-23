@@ -2,12 +2,16 @@ import prisma from "@/database/prisma";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function GET(req: NextRequest, res: NextResponse) {
-  const resetSequence = await prisma.$executeRaw`
-    ALTER SEQUENCE "User_id_seq" RESTART WITH 1;
-  `;
+  // const resetSequence = await prisma.$executeRaw`
+  //   ALTER SEQUENCE "User_id_seq" RESTART WITH 62;
+  // `;
+
+  // return NextResponse.json({
+  //   message: "User Table Ids Reseted successfully",
+  //   resetSequence,
+  // });
 
   return NextResponse.json({
-    message: "User Table Ids Reseted successfully",
-    resetSequence,
+    message: "Disabled",
   });
 }
