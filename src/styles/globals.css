@@ -16,9 +16,6 @@
 }
 
 body.page-layout {
-  height: 100dvh;
-  background: #010101;
-  color: #ffffff;
   display: grid;
   grid-template-columns: 1fr;
   grid-template-rows: 6dvh 1fr 5dvh;
@@ -26,7 +23,7 @@ body.page-layout {
 }
 
 body {
-  @apply antialiased;
+  @apply antialiased h-dvh bg-[#010101] text-white;
 }
 
 @layer utilities {

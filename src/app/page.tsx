@@ -4,6 +4,16 @@ import Link from "next/link";
 import { BiLogoDiscordAlt } from "react-icons/bi";
 
 export default function Home() {
+  const maintenance = true;
+
+  if (maintenance) {
+    return (
+      <div className="h-full flex items-center justify-center">
+        <h1 className="text-2xl font-nicesugar">Under maintenance</h1>
+      </div>
+    );
+  }
+
   return (
     <div className="w-full h-full flex flex-col items-center justify-start py-6 gap-12 overflow-y-auto sm:justify-start sm:py-4">
       <div className="flex flex-col gap-8 items-center">
