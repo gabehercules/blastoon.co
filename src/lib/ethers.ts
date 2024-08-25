@@ -17,6 +17,7 @@ export async function getProvider() {
     alert("No ethereum provider found");
     return false;
   }
+
   const provider = new ethers.BrowserProvider(window.ethereum, "any");
 
   // console.log("CURRENT NETWORK", await provider.getNetwork());
@@ -61,4 +62,26 @@ export async function getAccount() {
     console.log("ERROR - User denied account access", { error });
     return null;
   }
+}
+
+export async function getUpgrades() {
+  const provider = await getProvider();
+
+  if (!provider) {
+    console.log("NO PROVIDER FOUND");
+    return;
+  }
+
+  const lastestBlock = await provider.getBlockNumber();
+
+  const btoonContract = "0x36af682901Dcb86D9Cff0D0e602857E3e07aA80D";
+
+  const abi = [
+    "event Upgrade(uint256 tokenId, address indexed by, uint256 value)",
+    "function name() external view returns (string)",
+  ];
+
+  const topic = [
+    "0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef",
+  ];
 }
