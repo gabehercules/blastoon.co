@@ -4,6 +4,11 @@ export async function POST(req: Request) {
   const body = await req.json();
 
   const { block } = body.event.data;
+
+  if (!block.logs.length) {
+    return NextResponse.json({ message: "No logs found" });
+  }
+
   const log = block.logs[0];
 
   const tx = log.transaction;
