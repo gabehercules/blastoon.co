@@ -1,5 +1,4 @@
 import CardPacks from "@/components/elements/pack-item";
-import { acme } from "@/fonts";
 import Link from "next/link";
 import { BiLogoDiscordAlt } from "react-icons/bi";
 
