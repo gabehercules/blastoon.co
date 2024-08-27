@@ -6,7 +6,7 @@ export async function POST(req: Request) {
   const { block } = body.event.data;
 
   if (!block.logs.length) {
-    return NextResponse.json({ message: "No logs found" });
+    return NextResponse.json({ message: "No logs found in this run" });
   }
 
   const log = block.logs[0];
