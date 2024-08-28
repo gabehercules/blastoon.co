@@ -19,20 +19,6 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const maintenance = true;
-
-  if (maintenance) {
-    return (
-      <html lang="en">
-        <body
-          className={`${inter.className} ${niceSugar.variable} w-full flex items-center justify-center`}
-        >
-          {children}
-        </body>
-      </html>
-    );
-  }
-
   return (
     <AuthProvider>
       <html lang="en">

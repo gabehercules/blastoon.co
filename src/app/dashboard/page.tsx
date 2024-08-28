@@ -19,15 +19,7 @@ import { BiLogoDiscordAlt } from "react-icons/bi";
 import VerifyOwnshipButton from "@/components/elements/verify-ownship";
 import VerifyUpgradeButton from "@/components/elements/verify-upgrade-btn";
 
-import { redirect } from "next/navigation";
-
 export default async function Dashboard() {
-  const maintenance = true;
-
-  if (maintenance) {
-    return redirect("/");
-  }
-
   const session = await getServerSession(authOptions);
 
   if (!session) {
@@ -47,7 +39,7 @@ export default async function Dashboard() {
 
   const superCheese = await getUserSuperCheese(id);
 
-  const userCardPacks = await getUserCardPacks(id);
+  const superCheese = await getUserCardPacks(id);
 
   if (cheese === null) {
     return <div>Failed to fetch user cheese</div>;
@@ -110,7 +102,7 @@ export default async function Dashboard() {
                     alt="Card Pack Icon"
                   />
                   <span className="text-xl font-nicesugar font-bold underline decoration-dotted underline-offset-4">
-                    {userCardPacks}
+                    {superCheese}
                   </span>
                 </div>
 

@@ -31,7 +31,7 @@ export async function verifyUpgrades(address: string, id: number) {
     return "No Upgrades Found";
   }
 
-  const actualSuperCheese = await prisma.userSuperCheese.findFirst({
+  const actualSuperCheese = await prisma.superCheese.findFirst({
     where: {
       addressId: Number(id),
     },

@@ -4,7 +4,7 @@ import prisma from "@/database/prisma";
 
 export async function getUserCardPacks(id: number) {
   try {
-    const cardPacks = await prisma.userCardPacks.findMany({
+    const cardPacks = await prisma.superCheese.findMany({
       where: {
         user: {
           id: Number(id),

@@ -36,7 +36,7 @@ export async function calculateCheese(id: number) {
 }
 
 export async function updateCheese(id: number, amount: number) {
-  const updateCheese = await prisma.userCheese.update({
+  const updateCheese = await prisma.cheese.update({
     where: {
       addressId: id,
     },

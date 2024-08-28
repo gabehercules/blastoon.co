@@ -3,16 +3,6 @@ import Link from "next/link";
 import { BiLogoDiscordAlt } from "react-icons/bi";
 
 export default async function Home() {
-  const maintenance = true;
-
-  if (maintenance) {
-    return (
-      <p className="text-lg font-nicesugar">
-        Under maintenance. Check back later!
-      </p>
-    );
-  }
-
   return (
     <div className="w-full h-full flex flex-col items-center justify-start py-6 gap-12 overflow-y-auto sm:justify-start sm:py-4">
       <div className="flex flex-col gap-8 items-center">

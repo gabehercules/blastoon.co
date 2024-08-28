@@ -31,7 +31,7 @@ export async function POST(req: NextRequest, res: NextResponse) {
     const updatedCheese = cheeseCoin + user.holdingNFTs * 1000;
     console.log(updatedCheese);
 
-    await prisma.userCheese.upsert({
+    await prisma.cheese.upsert({
       create: {
         amount: updatedCheese,
         id: Number(user.id),

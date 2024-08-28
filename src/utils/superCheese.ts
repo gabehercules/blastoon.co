@@ -4,7 +4,7 @@ import prisma from "@/database/prisma";
 
 export async function createUserSuperCheese(id: number) {
   try {
-    await prisma.userSuperCheese.create({
+    await prisma.superCheese.create({
       data: {
         amount: 0,
         addressId: id,
@@ -20,7 +20,7 @@ export async function createUserSuperCheese(id: number) {
 
 export async function getUserSuperCheese(id: number) {
   try {
-    const superCheese = await prisma.userSuperCheese.findFirst({
+    const superCheese = await prisma.superCheese.findFirst({
       where: {
         addressId: Number(id),
       },
