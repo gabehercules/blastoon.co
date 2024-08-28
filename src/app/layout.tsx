@@ -27,9 +27,7 @@ export default function RootLayout({
         <body
           className={`${inter.className} ${niceSugar.variable} w-full flex items-center justify-center`}
         >
-          <p className="text-lg font-nicesugar">
-            Under maintencance. Check back later!
-          </p>
+          {children}
         </body>
       </html>
     );
