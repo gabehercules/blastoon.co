@@ -19,7 +19,15 @@ import { BiLogoDiscordAlt } from "react-icons/bi";
 import VerifyOwnshipButton from "@/components/elements/verify-ownship";
 import VerifyUpgradeButton from "@/components/elements/verify-upgrade-btn";
 
+import { redirect } from "next/navigation";
+
 export default async function Dashboard() {
+  const maintenance = true;
+
+  if (maintenance) {
+    return redirect("/");
+  }
+
   const session = await getServerSession(authOptions);
 
   if (!session) {
