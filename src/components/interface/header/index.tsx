@@ -3,7 +3,6 @@
 import Logo from "@/components/elements/logo";
 
 import ConnectButton from "@/components/elements/connect-button";
-import SignoutButton from "@/components/elements/signout-button";
 import { useSession } from "next-auth/react";
 import UserWidget from "@/components/elements/user/user-widget";
 import CheeseBalance from "@/components/elements/user/cheese-balance";

@@ -13,7 +13,6 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
-import { get } from "http";
 import { getUserSuperCheese } from "@/utils/superCheese";
 import { getUserCardPacks } from "@/utils/cardPacks";
 

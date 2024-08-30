@@ -5,7 +5,6 @@ import epicPack from "/public/pack-epic.png";
 import cheeseCoinIcon from "/public/cheese-coin.png";
 import superCheese from "/public/super-cheese.png";
 
-import { BiCheese } from "react-icons/bi";
 import { FaEthereum } from "react-icons/fa";
 import {
   Tooltip,
