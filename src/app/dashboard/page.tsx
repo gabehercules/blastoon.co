@@ -18,7 +18,6 @@ import VerifyOwnshipButton from "@/components/elements/verify-ownship";
 import cheesePointsIcon from "/public/cheese-coin.png";
 import superCheeseIcon from "/public/super-cheese.png";
 import cardPackIcon from "/public/card-icon.png";
-import superCheeseMultiplier from "/public/sc-multiplier.png";
 
 export default async function Dashboard() {
   const session = await getServerSession(authOptions);

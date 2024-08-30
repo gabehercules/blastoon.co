@@ -4,14 +4,15 @@ import prisma from "@/database/prisma";
 import { calculateCheese, updateCheese } from "./cheese";
 import { verifyUpgrades } from "./temp/verify-upgrades";
 
-export async function firstVerify(addressId: string, address: string) {
+export async function firstVerify(id: string, address: string) {
+  console.log("ID :", id);
   try {
     console.log("VERIFYING USER FOR THE FIRST TIME...");
     // STEP 1: ---------------------------------------------------------- //
     // Verify if the user has already verified their NFTs/account
     const isFirstVerified = await prisma.user.findUnique({
       where: {
-        addressId: addressId,
+        addressId: id,
       },
       select: {
         firstVerified: true,
@@ -43,7 +44,7 @@ export async function firstVerify(addressId: string, address: string) {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        addressId,
+        id,
         address,
       }),
     });
@@ -59,19 +60,19 @@ export async function firstVerify(addressId: string, address: string) {
     // STEP 3: ---------------------------------------------------------- //
     // Calculate the cheese for the user based on the NFTs they own and the
     // time they have owned them
-    const cheese = await calculateCheese(addressId);
+    const cheese = await calculateCheese(id);
 
     console.log("CALCULATED CHEESE: ", cheese);
 
     // STEP 3.1: ---------------------------------------------------------- //
     // Update the user's cheese in the database
-    await updateCheese(addressId, cheese);
+    await updateCheese(id, cheese);
 
-    await verifyUpgrades(address, addressId);
+    await verifyUpgrades(address, id);
 
     await prisma.user.update({
       where: {
-        addressId: addressId,
+        addressId: id,
       },
       data: {
         firstVerified: true,
