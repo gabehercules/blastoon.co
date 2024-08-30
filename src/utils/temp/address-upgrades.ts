@@ -65,7 +65,7 @@ export const upgrades = [
   },
   //... TESTE --- ME
   {
-    upgradedBy: "0x97A3dB86574A8Ab10A8c141f3f6b7Dc34cB3ade5",
-    tokensUpgraded: 1,
+    upgradedBy: "0x97a3db86574a8ab10a8c141f3f6b7dc34cb3ade5",
+    tokensUpgraded: 2,
   },
 ];

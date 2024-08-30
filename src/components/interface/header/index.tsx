@@ -15,7 +15,7 @@ import { BsDiscord, BsTwitterX } from "react-icons/bs";
 
 interface ExtendedUser {
   address: string;
-  id: number;
+  id: string;
 }
 
 export default function Header() {

@@ -3,12 +3,12 @@
 import prisma from "@/database/prisma";
 import { upgrades } from "./address-upgrades";
 
-export async function verifyUpgrades(address: string, id: number) {
-  console.log("VERIFY UPGRADES", address, id);
+export async function verifyUpgrades(address: string, addressId: string) {
+  console.log("VERIFY UPGRADES", address, addressId);
 
   const hasVerifiedUpgrade = await prisma.user.findFirst({
     where: {
-      id: Number(id),
+      addressId: addressId,
     },
     select: {
       verifiedUpgrade: true,
@@ -33,7 +33,7 @@ export async function verifyUpgrades(address: string, id: number) {
 
   const actualSuperCheese = await prisma.superCheese.findFirst({
     where: {
-      addressId: Number(id),
+      addressId: addressId,
     },
     select: {
       amount: true,
@@ -52,7 +52,7 @@ export async function verifyUpgrades(address: string, id: number) {
   try {
     const user = await prisma.user.update({
       where: {
-        id: Number(id),
+        addressId: addressId,
       },
       data: {
         upgradedNFTs: hasUpgraded.tokensUpgraded,

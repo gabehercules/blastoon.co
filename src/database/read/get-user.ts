@@ -10,7 +10,5 @@ export async function getUser(address: string): Promise<User | null> {
     },
   });
 
-  console.log("User", user);
-
   return user;
 }

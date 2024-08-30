@@ -26,16 +26,14 @@ export async function getProvider() {
   return provider;
 }
 
-export async function getAccount() {
+export async function getAccount(): Promise<string | null> {
   try {
     const provider = await getProvider();
 
-    // console.log("PROVIDER", provider);
     if (!provider) {
       console.log("NO PROVIDER FOUND");
       throw new Error("No provider found. Please install a wallet");
     }
-    // console.log("REQ ACCOUNTS", await provider.send("eth_requestAccounts", []));
 
     const accounts = await provider.send("eth_requestAccounts", []);
 
@@ -44,6 +42,9 @@ export async function getAccount() {
       return null;
       // throw new Error("No accounts found or user denied account access");
     }
+
+    console.log("ACCOUNTS: ", accounts);
+
     const newtwork = await provider.getNetwork();
 
     // Check if the user is connected to the Blast Network
@@ -56,32 +57,12 @@ export async function getAccount() {
       ]);
     }
 
+    console.log("ADDRESS: ", accounts[0]);
+
     const address = accounts[0];
     return address;
   } catch (error) {
     console.log("ERROR - User denied account access", { error });
     return null;
   }
-}
-
-export async function getUpgrades() {
-  const provider = await getProvider();
-
-  if (!provider) {
-    console.log("NO PROVIDER FOUND");
-    return;
-  }
-
-  const lastestBlock = await provider.getBlockNumber();
-
-  const btoonContract = "0x36af682901Dcb86D9Cff0D0e602857E3e07aA80D";
-
-  const abi = [
-    "event Upgrade(uint256 tokenId, address indexed by, uint256 value)",
-    "function name() external view returns (string)",
-  ];
-
-  const topic = [
-    "0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef",
-  ];
 }

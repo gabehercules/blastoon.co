@@ -3,7 +3,8 @@
 import { BLASTTOON_CONTRACT_ADDRESS } from "@/constants";
 import prisma from "@/database/prisma";
 
-export async function getNFTsByAddress(address: string) {
+// this function fetches the NFTs the user own in the NFTScan API
+export async function fetchNFTsByAddress(address: string) {
   const limit = 100; // make this a parameter later
 
   try {
@@ -27,11 +28,12 @@ export async function getNFTsByAddress(address: string) {
   }
 }
 
-export async function getNFTsByUserId(userId: number) {
+// this function looks into our database to see if the user has any NFTs associated with
+export async function getNFTsByAddressId(addressId: string) {
   try {
     const nfts = await prisma.blastToonNfts.findMany({
       where: {
-        userId: userId,
+        addressId: addressId,
       },
     });
 
@@ -43,7 +45,7 @@ export async function getNFTsByUserId(userId: number) {
   }
 }
 
-export async function reverifyNfts(address: string, id: number) {
+export async function reverifyNfts(address: string, id: string) {
   const baseUrl = process.env.NEXT_PUBLIC_BASE_URL
     ? process.env.NEXT_PUBLIC_BASE_URL
     : "http://localhost:3000";
@@ -57,7 +59,7 @@ export async function reverifyNfts(address: string, id: number) {
       "Content-Type": "application/json",
     },
     body: JSON.stringify({
-      id: Number(id),
+      id,
       address,
     }),
   });

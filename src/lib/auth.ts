@@ -2,7 +2,7 @@ import CredentialsProvider from "next-auth/providers/credentials";
 import type { Awaitable, NextAuthOptions, User } from "next-auth";
 import { getUser } from "@/database/read/get-user";
 import prisma from "@/database/prisma";
-import { getNFTsByAddress } from "@/utils/get-nfts-by-address";
+import { fetchNFTsByAddress } from "@/utils/get-nfts-by-address";
 import { createUserSuperCheese } from "@/utils/superCheese";
 // import Discord from "next-auth/providers/discord";
 
@@ -41,12 +41,9 @@ export const authOptions = {
         console.log("1 - #### CREDENTIAL PASSADA NO AUTH", credentials);
 
         // the credentials argument is an object with the user input in the signIn method
-        // now we are passing just the address, but we can pass anything since the credentials
-        // do not have a type definition in the library
-
-        // IDEA: check if the address is a holder of an NFT, if not, return null (fail the login / return a message)
-        // IDEA: if the address is not a holder of an NFT, sign up the user with the address and in the
-        // dashboard, show a message to the user to buy an NFT to access the platform - PROMOTE BLUR hehe boi
+        // plus other attributes that next-ayth pass to this function (redirect, csrfToken, etc)
+        // now we are passing just the address (in the signIn() in the connect button component)
+        // but we can pass anything since the credentials do not have a type definition in the library
 
         // Destructure the address from the credentials object
         const { address: accountAddress } = credentials;
@@ -54,6 +51,8 @@ export const authOptions = {
         try {
           // look in the database if the user exists
           let user = await getUser(accountAddress);
+
+          console.log("USER FOUND IN DATABASE", user);
 
           // if the user does not exist, create it
           // IDEA: maybe create a helper function to create the user and return it
@@ -65,10 +64,10 @@ export const authOptions = {
             // ========================= IMPORTANTE ============================= //
             // =========================            ============================= //
             // ================================================================== //
-            // === QUALQUER MERDA QUE RETORNE **NULL** OU LANCE UM ERRO AQUI ==== //
-            // === NO AUTHORIZE, VAI CAIR NO CATCH E O SISTEMA DE LOGIN VAI ===== //
-            // === FALHAR MISERAVELMENTE TORNANDO MINHA VIDA UMA COMPLETA ======= //
-            // === MERDA ======================================================== //
+            // ==== QUALQUER MERDA QUE RETORNE *NULL* OU LANCE UM ERRO AQUI ===== //
+            // ==== NO AUTHORIZE, VAI CAIR NO CATCH E O SISTEMA DE LOGIN VAI ==== //
+            // ==== FALHAR MISERAVELMENTE TORNANDO MINHA VIDA UMA COMPLETA ====== //
+            // ==== MERDA ======================================================= //
             // ================================================================== //
             // ================================================================== //
 
@@ -80,27 +79,26 @@ export const authOptions = {
               },
             });
 
-            console.log("2 - #### USER", user);
+            console.log("USER CREATED", user);
 
-            // create a cheeseCoin record for the user and set to 0 (initialize)
             console.log("CREATING CHEESE RECORD FOR THE USER...");
             await prisma.cheese.create({
               data: {
-                addressId: user.id,
-                amount: 0,
+                addressId: user.addressId,
               },
             });
 
+            console.log("CREATING SUPER CHEESE RECORD FOR THE USER...");
             // create a superCheese record for the user and set to 0 (initialize)
-            await createUserSuperCheese(user.id);
+            await createUserSuperCheese(user.addressId);
 
-            console.log("USER CREATED AFTER VALIDATE ITS ABSCENSE IN DATABASE");
+            console.log("USER, CHEESE AND SUPER CHEESE CREATED FOR USER");
 
-            const { data } = await getNFTsByAddress(user.address);
+            const { data } = await fetchNFTsByAddress(user.address);
 
             // ---------------------------------------------------
             // Move this piece of code that validate the amount of NFTs
-            // user has to a helper function inside getNFTsByAddress() or similiar
+            // user has to a helper function inside fetchNFTsByAddress() or similiar
             // retorns an array of NFTs [{...}, {...}, ...]
             const { content: nfts } = data;
 
@@ -113,26 +111,26 @@ export const authOptions = {
             // save the amount of NFTs in the users table `holdingNFTs`
             await prisma.user.update({
               where: {
-                id: user.id,
+                addressId: user.addressId,
               },
               data: {
                 holdingNFTs: nftsCount,
               },
             });
-            // ---------------------------------------------------
           }
 
           // console.log("3 - #### USER DO STRAPI", user);
-          const { id, address } = user;
+          const { addressId, address, username } = user;
 
-          if (!id || !address) {
+          if (!addressId || !address) {
             console.log("Missing data from user");
             return null;
           }
 
           return {
-            id: id.toString(),
+            id: addressId,
             address, // Pensar em padronizar depois para 'username' como no strapi
+            username: username,
           } as User;
         } catch (error) {
           console.log("SOMETHING RETURNED NULL OR THROWN AN ERROR", error);
@@ -181,7 +179,6 @@ export const authOptions = {
         return null;
       }
 
-      // @ts-ignore
       // session.accessToken = token.jwt;
       session.user = {
         // @ts-ignore

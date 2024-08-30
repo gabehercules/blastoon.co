@@ -2,12 +2,12 @@
 
 import prisma from "@/database/prisma";
 
-export async function getUserCardPacks(id: number) {
+export async function getUserCardPacks(addressId: string) {
   try {
-    const cardPacks = await prisma.superCheese.findMany({
+    const cardPacks = await prisma.cardPacks.findMany({
       where: {
         user: {
-          id: Number(id),
+          addressId: addressId,
         },
       },
     });

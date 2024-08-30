@@ -1,6 +1,6 @@
 import { BLASTTOON_LAUNCH_DATE } from "@/constants";
 import prisma from "@/database/prisma";
-import { getNFTsByAddress } from "@/utils/get-nfts-by-address";
+import { fetchNFTsByAddress } from "@/utils/get-nfts-by-address";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function POST(req: NextRequest, res: NextResponse) {
@@ -8,8 +8,8 @@ export async function POST(req: NextRequest, res: NextResponse) {
 
   const { id, address } = await req.json();
 
-  // console.log("ID and address in request body", id, address);
-  // console.log("ID and address in request body", typeof id, typeof address);
+  console.log("############## ID and address in request body", id, address);
+  console.log("ID and address in request body", typeof id, typeof address);
 
   if (!id || !address) {
     return NextResponse.json({
@@ -21,7 +21,7 @@ export async function POST(req: NextRequest, res: NextResponse) {
 
   try {
     // get all NFTs from the given address in NFT Scan API
-    const { data } = await getNFTsByAddress(address);
+    const { data } = await fetchNFTsByAddress(address);
 
     const nfts = data.content;
     const total = data.total;
@@ -50,11 +50,11 @@ export async function POST(req: NextRequest, res: NextResponse) {
       await prisma.blastToonNfts.upsert({
         create: {
           tokenId: Number(nft.tokenId),
-          userId: Number(id),
+          addressId: id,
           ownerSince: nft.ownerSince,
         },
         update: {
-          userId: Number(id),
+          addressId: id,
           ownerSince: nft.ownerSince,
         },
         where: {

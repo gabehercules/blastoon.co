@@ -1,5 +1,5 @@
 import prisma from "@/database/prisma";
-import { getNFTsByAddress } from "@/utils/get-nfts-by-address";
+import { fetchNFTsByAddress } from "@/utils/get-nfts-by-address";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function POST(req: NextRequest, res: NextResponse) {
@@ -11,7 +11,7 @@ export async function POST(req: NextRequest, res: NextResponse) {
 
   console.log("ADDRESS", address);
 
-  const { data } = await getNFTsByAddress(address);
+  const { data } = await fetchNFTsByAddress(address);
 
   const { total, content } = data;
 

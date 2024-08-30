@@ -1,12 +1,9 @@
 import "@/styles/dashboard.css";
 
-import cheesePointsIcon from "/public/cheese-coin.png";
-import superCheeseIcon from "/public/super-cheese.png";
-import cardPackIcon from "/public/card-icon.png";
 import Image from "next/image";
 
 import UserAvatar from "@/components/elements/user/user-avatar";
-import { getNFTsByUserId } from "@/utils/get-nfts-by-address";
+import { getNFTsByAddressId } from "@/utils/get-nfts-by-address";
 import UserNFTsList from "@/components/interface/user-nfts-section";
 import { getUserCheese } from "@/database/read/get-user-cheese";
 
@@ -17,7 +14,10 @@ import { getUserCardPacks } from "@/utils/cardPacks";
 import { getUserSuperCheese } from "@/utils/superCheese";
 import { BiLogoDiscordAlt } from "react-icons/bi";
 import VerifyOwnshipButton from "@/components/elements/verify-ownship";
-import VerifyUpgradeButton from "@/components/elements/verify-upgrade-btn";
+
+import cheesePointsIcon from "/public/cheese-coin.png";
+import superCheeseIcon from "/public/super-cheese.png";
+import cardPackIcon from "/public/card-icon.png";
 
 export default async function Dashboard() {
   const session = await getServerSession(authOptions);
@@ -32,14 +32,14 @@ export default async function Dashboard() {
 
   console.log("First verified", firstVerified);
 
-  const nfts = await getNFTsByUserId(Number(id));
+  const nfts = await getNFTsByAddressId(id);
   // const nfts = await getNFTsByUserId(21);
 
   const cheese = await getUserCheese(address);
 
   const superCheese = await getUserSuperCheese(id);
 
-  const superCheese = await getUserCardPacks(id);
+  const userCardPacks = await getUserCardPacks(id);
 
   if (cheese === null) {
     return <div>Failed to fetch user cheese</div>;
@@ -102,11 +102,9 @@ export default async function Dashboard() {
                     alt="Card Pack Icon"
                   />
                   <span className="text-xl font-nicesugar font-bold underline decoration-dotted underline-offset-4">
-                    {superCheese}
+                    {userCardPacks}
                   </span>
                 </div>
-
-                <VerifyUpgradeButton address={address} id={id} />
               </div>
             </div>
           </div>

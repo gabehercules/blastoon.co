@@ -11,7 +11,7 @@ export default function VerifyOwnshipButton({
   id,
   address,
 }: {
-  id: number;
+  id: string;
   address: string;
 }) {
   const [loading, setLoading] = useState(false);

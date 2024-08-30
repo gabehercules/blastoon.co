@@ -15,7 +15,7 @@ export async function POST(req: NextRequest, res: NextResponse) {
 
   const users = await prisma.user.findMany({
     select: {
-      id: true,
+      addressId: true,
       holdingNFTs: true,
       cheeseCoin: {
         select: {
@@ -28,22 +28,24 @@ export async function POST(req: NextRequest, res: NextResponse) {
   for (const user of users) {
     let cheeseCoin = user.cheeseCoin?.amount || 0;
 
+    console.log("ACTUAL USER CHEESE: ", cheeseCoin);
+
     const updatedCheese = cheeseCoin + user.holdingNFTs * 1000;
     console.log(updatedCheese);
 
     await prisma.cheese.upsert({
       create: {
         amount: updatedCheese,
-        id: Number(user.id),
-        addressId: Number(user.id),
+        addressId: user.addressId,
       },
       update: {
         amount: updatedCheese,
       },
       where: {
-        id: Number(user.id),
+        addressId: user.addressId,
       },
     });
+    console.log("USER CHEESE AFTER UPDATE: ", user.cheeseCoin?.amount);
   }
 
   return NextResponse.json({ Message: "Cheese Updated Successfully" });

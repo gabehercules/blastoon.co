@@ -8,7 +8,7 @@ datasource db {
 }
 
 model User {
-  userId          String          @id @unique @default(uuid()) @map("user_id")
+  addressId       String          @id @unique @default(uuid()) @map("address_id")
   address         String          @unique
   ensDomain       String?         @unique @map("ens_domain")
   signature       String?         @unique
@@ -27,41 +27,41 @@ model User {
 }
 
 model Cheese {
-  id        Int    @id @default(autoincrement())
+  id        String @id @unique @default(uuid())
   addressId String @unique @map("address_id")
   amount    Int    @default(0)
-  user      User   @relation(fields: [addressId], references: [userId], onDelete: Cascade)
+  user      User   @relation(fields: [addressId], references: [addressId], onDelete: Cascade)
 
   @@map("Cheese")
 }
 
 model SuperCheese {
-  id        Int    @id @default(autoincrement())
+  id        String @id @unique @default(uuid())
   addressId String @unique @map("address_id")
   amount    Int    @default(0)
-  user      User   @relation(fields: [addressId], references: [userId], onDelete: Cascade)
+  user      User   @relation(fields: [addressId], references: [addressId], onDelete: Cascade)
 
   @@map("Super_Cheese")
 }
 
 model CardPacks {
-  id        Int      @id @default(autoincrement())
+  id        String   @id @unique @default(uuid())
   addressId String   @map("address_id")
   packId    Int      @map("pack_id")
   packType  PackType
-  user      User     @relation(fields: [addressId], references: [userId], onDelete: Cascade)
+  user      User     @relation(fields: [addressId], references: [addressId], onDelete: Cascade)
 
   @@map("Card_Packs")
 }
 
 model userCheeseTx {
-  id           Int      @id @default(autoincrement())
+  id           String   @id @unique @default(uuid())
   addressId    String   @map("address_id")
   operation    Int
   cheeseAmount Int      @map("cheese_amount")
   cheeseType   String   @map("cheese_type")
   timestamp    DateTime @default(now())
-  user         User     @relation(fields: [addressId], references: [userId])
+  user         User     @relation(fields: [addressId], references: [addressId])
 
   @@map("User_Cheese_Tx")
 }
@@ -73,7 +73,7 @@ model BlastToonNfts {
   ownerSince     BigInt? @map("owner_since")
   upgraded       Boolean @default(false)
   lastUpgradedBy String? @map("last_upgraded_by")
-  owner          User?   @relation(fields: [addressId], references: [userId])
+  owner          User?   @relation(fields: [addressId], references: [addressId])
 
   @@map("Blast_Toon_NFTs")
 }

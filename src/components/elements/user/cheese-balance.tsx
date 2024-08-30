@@ -22,7 +22,7 @@ export default function CheeseBalance({
   id,
 }: {
   address: string;
-  id: number;
+  id: string;
 }) {
   const [cheese, setCheese] = useState(0);
   const [superCheese, setSuperCheese] = useState(0);

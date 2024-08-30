@@ -1,11 +1,11 @@
 "use client";
 
-import { getNFTsByAddress } from "@/utils/get-nfts-by-address";
+import { fetchNFTsByAddress } from "@/utils/get-nfts-by-address";
 
 export default function VerifyCheese({ address }: { address: string }) {
   const verifyNfts = async () => {
     console.log("Verifying NFTs");
-    const nfts = await getNFTsByAddress(address);
+    const nfts = await fetchNFTsByAddress(address);
 
     console.log("NFTS FOUND", nfts);
   };

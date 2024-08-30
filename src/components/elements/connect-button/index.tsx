@@ -18,25 +18,14 @@ export default function ConnectButton({ children }: ConnectButtonProps) {
 
   const handleConnect = async () => {
     setLoading(true);
-    const provider = await getProvider();
-
-    if (!provider) {
-      setLoading(false);
-
-      // TODO: handle error - maybe a toast message saying that the user needs to install a wallet
-      return;
-    }
 
     const address = await getAccount();
 
     if (!address) {
       setLoading(false);
-      // console.log("NO ACCOUNTS WERE ALLOWED. STOPED HERE");
+      console.log("NO ACCOUNTS WERE ALLOWED");
       return;
     }
-
-    // console.log("ACCOUNT NO CLICK", address);
-    // console.log("ACCOUNT NO CLICK TYPEOF", typeof address);
 
     await signIn("credentials", {
       address,
