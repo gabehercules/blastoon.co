@@ -7,7 +7,6 @@ import { verifyUpgrades } from "./temp/verify-upgrades";
 export async function firstVerify(id: string, address: string) {
   console.log("ID :", id);
   try {
-    console.log("VERIFYING USER FOR THE FIRST TIME...");
     // STEP 1: ---------------------------------------------------------- //
     // Verify if the user has already verified their NFTs/account
     const isFirstVerified = await prisma.user.findUnique({
@@ -28,6 +27,7 @@ export async function firstVerify(id: string, address: string) {
     if (isFirstVerified?.firstVerified) {
       return true;
     }
+    console.log("VERIFYING USER FOR THE FIRST TIME...");
 
     // if the user *has not* verified (eg: false) then verify the NFTs
     console.log("USER HAS NOT VERIFIED NFTS OWNERSHIP, VERIFYING...");

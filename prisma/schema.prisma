@@ -58,7 +58,7 @@ model CheeseLogs {
   id           String         @id @unique @default(uuid())
   addressId    String         @map("address_id")
   cheeseAmount Int            @map("cheese_amount")
-  cheeseType   String         @map("cheese_type")
+  cheeseType   CheeseType     @map("cheese_type")
   timestamp    DateTime       @default(now())
   user         User           @relation(fields: [addressId], references: [addressId])
   event        CheeseLogEvent
@@ -92,4 +92,9 @@ enum CheeseLogEvent {
   sell
   gift
   dayli
+}
+
+enum CheeseType {
+  cheese
+  superCheese
 }

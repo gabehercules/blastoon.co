@@ -1,6 +1,13 @@
 "use client";
 
+import { useState } from "react";
+import { calculateCheese, updateCheese } from "@/utils/cheese";
+import { getUserCheese } from "@/database/read/get-user-cheese";
+
 export default function Page() {
+  const [cheese, setCheese] = useState(0);
+  const [loading, setLoading] = useState(false);
+
   //   const fakeUpgrade = async () => {
   //     const body = {
   //       event: {
@@ -29,16 +36,36 @@ export default function Page() {
   //     });
   //   };
 
+  const calculateUserCheese = async () => {
+    setLoading(true);
+
+    const actualCheese = await getUserCheese(
+      "0x97a3db86574a8ab10a8c141f3f6b7dc34cb3ade5"
+    );
+    setCheese(actualCheese as number);
+
+    const cheese = await calculateCheese(
+      "fe29c40c-446c-4daa-94ce-66bbf6fb5c89"
+    );
+
+    updateCheese("fe29c40c-446c-4daa-94ce-66bbf6fb5c89", cheese);
+
+    setCheese(cheese);
+
+    setLoading(false);
+  };
+
   return (
     <div className="p-6">
       <h1 className="mb-4">Test fake upgrade</h1>
       <div>
         <button
-          onClick={() => alert("Nada aqui")}
+          onClick={calculateUserCheese}
           className="p-3 rounded-lg bg-brand-yellow text-yellow-950 font-bold"
         >
-          Fake upgrade
+          {loading ? "Loading..." : "Calculate Cheese"}
         </button>
+        <div>$CHEESE: {cheese}</div>
       </div>
     </div>
   );
