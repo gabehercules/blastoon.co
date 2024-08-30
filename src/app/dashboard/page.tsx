@@ -18,6 +18,7 @@ import VerifyOwnshipButton from "@/components/elements/verify-ownship";
 import cheesePointsIcon from "/public/cheese-coin.png";
 import superCheeseIcon from "/public/super-cheese.png";
 import cardPackIcon from "/public/card-icon.png";
+import superCheeseMultiplier from "/public/sc-multiplier.png";
 
 export default async function Dashboard() {
   const session = await getServerSession(authOptions);
@@ -64,7 +65,7 @@ export default async function Dashboard() {
             <div className="flex-1">
               <div className="flex items-center gap-2">
                 <h1 className="text-white text-2xl font-nicesugar font-bold mb-3">
-                  {session.user.address.slice(0, 4) +
+                  {session.user.address.slice(0, 6) +
                     "..." +
                     session.user.address.slice(-4)}
                 </h1>

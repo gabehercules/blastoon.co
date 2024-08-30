@@ -22,7 +22,7 @@ model User {
   nfts            BlastToonNfts[]
   cardPacks       CardPacks[]
   cheeseCoin      Cheese?
-  userCheeseTx    userCheeseTx[]
+  userCheeseLogs  CheeseLogs[]
   superCheese     SuperCheese?
 }
 
@@ -54,22 +54,22 @@ model CardPacks {
   @@map("Card_Packs")
 }
 
-model userCheeseTx {
-  id           String   @id @unique @default(uuid())
-  addressId    String   @map("address_id")
-  operation    Int
-  cheeseAmount Int      @map("cheese_amount")
-  cheeseType   String   @map("cheese_type")
-  timestamp    DateTime @default(now())
-  user         User     @relation(fields: [addressId], references: [addressId])
+model CheeseLogs {
+  id           String         @id @unique @default(uuid())
+  addressId    String         @map("address_id")
+  cheeseAmount Int            @map("cheese_amount")
+  cheeseType   String         @map("cheese_type")
+  timestamp    DateTime       @default(now())
+  user         User           @relation(fields: [addressId], references: [addressId])
+  event        CheeseLogEvent
 
-  @@map("User_Cheese_Tx")
+  @@map("Cheese_Logs")
 }
 
 model BlastToonNfts {
   tokenId        Int     @id @map("token_id")
   imageUri       String? @map("image_uri")
-  addressId      String? @map("user_id")
+  addressId      String? @map("address_id")
   ownerSince     BigInt? @map("owner_since")
   upgraded       Boolean @default(false)
   lastUpgradedBy String? @map("last_upgraded_by")
@@ -82,4 +82,14 @@ enum PackType {
   commom
   rare
   epic
+}
+
+enum CheeseLogEvent {
+  deposit
+  withdraw
+  upgrade
+  buy
+  sell
+  gift
+  dayli
 }
