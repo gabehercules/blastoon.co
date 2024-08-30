@@ -1,13 +1,17 @@
-import CredentialsProvider from "next-auth/providers/credentials";
-import type { Awaitable, NextAuthOptions, User } from "next-auth";
+import CredentialsProvider, {
+  CredentialInput,
+} from "next-auth/providers/credentials";
+import type { NextAuthOptions, User } from "next-auth";
 import { getUser } from "@/database/read/get-user";
 import prisma from "@/database/prisma";
 import { fetchNFTsByAddress } from "@/utils/get-nfts-by-address";
 import { createUserSuperCheese } from "@/utils/superCheese";
+import { firstVerify } from "@/utils/first-verify";
+import { createUser } from "@/database/create/create-user";
+import { createUserCheese } from "@/database/create/user-cheese";
 // import Discord from "next-auth/providers/discord";
 
 const actualDateInSeconds = Math.floor(Date.now() / 1000);
-
 const tokenExpirationInSeconds = Math.floor(7 * 24 * 60 * 60);
 
 interface ExtendedUser extends User {
@@ -38,26 +42,21 @@ export const authOptions = {
           throw new Error("Missing credentials");
         }
 
-        console.log("1 - #### CREDENTIAL PASSADA NO AUTH", credentials);
+        console.log("[(✓)] ===> CREDENTIAL PASSADA NO AUTH", credentials);
 
         // the credentials argument is an object with the user input in the signIn method
-        // plus other attributes that next-ayth pass to this function (redirect, csrfToken, etc)
+        // plus other attributes that next-auth pass to this function (redirect, csrfToken, etc)
         // now we are passing just the address (in the signIn() in the connect button component)
         // but we can pass anything since the credentials do not have a type definition in the library
 
-        // Destructure the address from the credentials object
         const { address: accountAddress } = credentials;
 
         try {
           // look in the database if the user exists
           let user = await getUser(accountAddress);
 
-          console.log("USER FOUND IN DATABASE", user);
-
-          // if the user does not exist, create it
-          // IDEA: maybe create a helper function to create the user and return it
           if (!user) {
-            console.log("USER NOT FOUND IN DATABASE, CREATING...");
+            console.log("[(✓)] ===> USER NOT FOUND IN DATABASE, CREATING...");
 
             // ================================================================== //
             // =========================            ============================= //
@@ -71,28 +70,25 @@ export const authOptions = {
             // ================================================================== //
             // ================================================================== //
 
-            // essa porra ja deu merda, criar um helper function para criar o usuário e retonar mensagens
-            // adequadas para cada situação de erro
-            user = await prisma.user.create({
-              data: {
-                address: accountAddress,
-              },
-            });
+            // if the user does not exist, create it in the database passing the address
+            // from the credentials supplied
+            user = await createUser(accountAddress);
 
-            console.log("USER CREATED", user);
+            console.log("[(✓)] ===> USER CREATED SUCCESSFULLY");
 
-            console.log("CREATING CHEESE RECORD FOR THE USER...");
-            await prisma.cheese.create({
-              data: {
-                addressId: user.addressId,
-              },
-            });
+            console.log("[(✓)] ===> CREATING CHEESE RECORD FOR THE USER...");
+            // create a cheese record for the user and set to 0
+            await createUserCheese(user.addressId);
 
-            console.log("CREATING SUPER CHEESE RECORD FOR THE USER...");
-            // create a superCheese record for the user and set to 0 (initialize)
+            console.log(
+              "[(✓)] ===> CREATING SUPER CHEESE RECORD FOR THE USER..."
+            );
+            // create a superCheese record for the user and set to 0
             await createUserSuperCheese(user.addressId);
 
-            console.log("USER, CHEESE AND SUPER CHEESE CREATED FOR USER");
+            console.log(
+              "[(✓)] ===> CHEESE AND SUPER CHEESE CREATED FOR THE USER"
+            );
 
             const { data } = await fetchNFTsByAddress(user.address);
 
@@ -119,7 +115,8 @@ export const authOptions = {
             });
           }
 
-          // console.log("3 - #### USER DO STRAPI", user);
+          console.log("USER FOUND IN DATABASE", user);
+
           const { addressId, address, username } = user;
 
           if (!addressId || !address) {
@@ -131,7 +128,7 @@ export const authOptions = {
             id: addressId,
             address, // Pensar em padronizar depois para 'username' como no strapi
             username: username,
-          } as User;
+          } as ExtendedUser;
         } catch (error) {
           console.log("SOMETHING RETURNED NULL OR THROWN AN ERROR", error);
           return null;
@@ -144,6 +141,45 @@ export const authOptions = {
     // }),
   ],
   callbacks: {
+    // TESTING SIGN IN CALLBACK
+    //
+    //
+    //
+    signIn: async ({ user }) => {
+      console.log("1 - #### CREDENTIALS NO SIGNIN CALLBACK", user);
+
+      const customUser = user as ExtendedUser;
+
+      if (!customUser || !customUser.id || !customUser.address) {
+        return Promise.resolve(false);
+      }
+
+      const isFirstVerified = await prisma.user.findUnique({
+        where: {
+          addressId: user.id,
+        },
+        select: {
+          firstVerified: true,
+        },
+      });
+
+      console.log(
+        "2 - #### IS FIRST VERIFIED: ",
+        isFirstVerified?.firstVerified
+      );
+
+      if (isFirstVerified?.firstVerified) {
+        return Promise.resolve(true);
+      }
+
+      console.log("3 - #### USER IS NOT VERIFIED. VERIFYING...", customUser);
+      await firstVerify(customUser.id, customUser.address);
+
+      return Promise.resolve(true);
+    },
+    // TESTING SIGN IN CALLBACK
+    //
+    //
     jwt: async ({ token, user, account, profile, session }) => {
       // console.log("4 - #### TOKEN NO JWT CALLBACK", token);
       // console.log("5 - #### USER NO JWT CALLBACK", user);
@@ -197,19 +233,3 @@ export const authOptions = {
     signOut: "/",
   },
 } satisfies NextAuthOptions;
-
-// Data está tipado como 'any' mas seria o tipo do 'user' vindo do strapi - tipar depois
-// const setToken = (data: any) => {
-//   // console.log("8 - #### DATA NO SET TOKEN", data);
-//   if (!data || !data?.jwt || !data?.id || !data?.name || !data?.email)
-//     return {};
-
-//   return {
-//     jwt: data.jwt,
-//     id: data.id,
-//     name: data.name,
-//     email: data.email,
-//     picture: data.image,
-//     expiration: actualDateInSeconds + tokenExpirationInSeconds,
-//   };
-// };

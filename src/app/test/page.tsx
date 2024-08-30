@@ -31,15 +31,15 @@ export default function Page() {
 
   return (
     <div className="p-6">
-      {/* <h1 className="mb-4">Test fake upgrade</h1>
+      <h1 className="mb-4">Test fake upgrade</h1>
       <div>
         <button
-          onClick={fakeUpgrade}
+          onClick={() => alert("Nada aqui")}
           className="p-3 rounded-lg bg-brand-yellow text-yellow-950 font-bold"
         >
           Fake upgrade
         </button>
-      </div> */}
+      </div>
     </div>
   );
 }

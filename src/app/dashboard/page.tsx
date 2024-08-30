@@ -28,9 +28,9 @@ export default async function Dashboard() {
 
   const { id, address } = session.user;
 
-  const firstVerified = await firstVerify(id, address);
+  // const firstVerified = await firstVerify(id, address);
 
-  console.log("First verified", firstVerified);
+  // console.log("First verified", firstVerified);
 
   const nfts = await getNFTsByAddressId(id);
   // const nfts = await getNFTsByUserId(21);

@@ -2,12 +2,12 @@
 
 import prisma from "@/database/prisma";
 
-export async function createUserSuperCheese(addressId: string) {
+export async function createUserSuperCheese(address: string) {
   try {
     await prisma.superCheese.create({
       data: {
         amount: 0,
-        addressId: addressId,
+        addressId: address,
       },
     });
 

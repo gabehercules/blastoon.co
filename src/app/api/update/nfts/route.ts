@@ -26,6 +26,16 @@ export async function POST(req: NextRequest, res: NextResponse) {
     const nfts = data.content;
     const total = data.total;
 
+    // update the user's holdingNFTs count in the database
+    await prisma.user.update({
+      where: {
+        addressId: id,
+      },
+      data: {
+        holdingNFTs: total,
+      },
+    });
+
     // return from the response only the tokenId and the timestamp when the user owned the NFT
     const nftsWithIdAndOwnershipTime = nfts.map((nft: any) => {
       // if the user owned the NFT before the launch date, set the ownership timestamp to the launch date

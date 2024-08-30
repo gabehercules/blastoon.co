@@ -1,25 +1,22 @@
 "use server";
 
+import { User } from "@prisma/client";
 import prisma from "../prisma";
 
-export async function createUser(address: string, signature?: any) {
+export async function createUser(address: string): Promise<User> {
   try {
-    const result = await prisma.user.create({
+    const user = await prisma.user.create({
       data: {
         address: address,
-        signature: signature,
-
-        // create a new cheeseCoin record starting with 0 cheese
-        cheeseCoin: {
-          create: {
-            amount: 0,
-          },
-        },
       },
     });
 
-    return result;
+    if (!user) {
+      throw new Error("Error creating user");
+    }
+
+    return user;
   } catch (error) {
-    console.log(error);
+    throw new Error("Error creating user: " + error);
   }
 }
