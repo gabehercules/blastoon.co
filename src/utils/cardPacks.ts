@@ -4,7 +4,7 @@ import prisma from "@/database/prisma";
 
 export async function getUserCardPacks(addressId: string) {
   try {
-    const cardPacks = await prisma.cardPacks.findMany({
+    const cardPacks = await prisma.userCardPacks.findMany({
       where: {
         user: {
           addressId: addressId,

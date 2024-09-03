@@ -24,6 +24,7 @@ model User {
   cheeseCoin      Cheese?
   userCheeseLogs  CheeseLogs[]
   superCheese     SuperCheese?
+  cardPacks       UserCardPacks[]
 }
 
 // Cheese Model - Regular $Cheese Coin
@@ -50,13 +51,24 @@ model SuperCheese {
 // and also add more fields to the packs attributes and specifications or easylly change the price of the packs
 // or its attributes
 model CardPacks {
-  packId           String   @id @default(uuid()) @map("pack_id")
-  cheesePrice      Int      @default(0) @map("cheese_price")
-  superCheesePrice Int      @default(0) @map("super_cheese_price")
-  ethPrice         Decimal  @default(0) @map("eth_price")
-  packType         PackType @map("pack_type")
+  packId           String          @id @default(uuid()) @map("pack_id")
+  cheesePrice      Int             @default(0) @map("cheese_price")
+  superCheesePrice Int             @default(0) @map("super_cheese_price")
+  ethPrice         Decimal         @default(0) @map("eth_price")
+  packType         PackType        @map("pack_type")
+  UserCardPacks    UserCardPacks[]
 
   @@map("Card_Packs")
+}
+
+model UserCardPacks {
+  id        String    @id @unique @default(uuid())
+  addressId String    @map("address_id")
+  packId    String    @map("pack_id")
+  user      User      @relation(fields: [addressId], references: [addressId])
+  pack      CardPacks @relation(fields: [packId], references: [packId])
+
+  @@map("User_Card_Packs")
 }
 
 model CheeseLogs {
