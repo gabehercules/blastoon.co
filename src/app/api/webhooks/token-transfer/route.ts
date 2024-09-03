@@ -5,15 +5,20 @@ export async function POST(req: Request) {
   const body = await req.json();
 
   const { event } = body;
+  console.log("EVENT RECIEVED", event);
 
   if (!event || !event.activity) {
     return NextResponse.json({ message: "No event recieved" });
   }
 
+  await prisma.tokenTransfers.create({
+    data: {
+      data: JSON.stringify(event),
+    },
+  });
+
   const transferTopic =
     "0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef";
-
-  console.log("EVENT RECIEVED", event);
 
   // const txFrom = event.activity[0].fromAddress;
   // const txTo = event.activity[0].toAddress;

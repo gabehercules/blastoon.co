@@ -7,6 +7,7 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+// USER Model
 model User {
   addressId       String          @id @unique @default(uuid()) @map("address_id")
   address         String          @unique
@@ -20,12 +21,12 @@ model User {
   firstVerified   Boolean         @default(false) @map("first_verified")
   verifiedUpgrade Boolean         @default(false) @map("verified_upgrade")
   nfts            BlastToonNfts[]
-  cardPacks       CardPacks[]
   cheeseCoin      Cheese?
   userCheeseLogs  CheeseLogs[]
   superCheese     SuperCheese?
 }
 
+// Cheese Model - Regular $Cheese Coin
 model Cheese {
   id        String @id @unique @default(uuid())
   addressId String @unique @map("address_id")
@@ -35,6 +36,7 @@ model Cheese {
   @@map("Cheese")
 }
 
+// SuperCheese Model - Super $Cheese Coin
 model SuperCheese {
   id        String @id @unique @default(uuid())
   addressId String @unique @map("address_id")
@@ -44,12 +46,15 @@ model SuperCheese {
   @@map("Super_Cheese")
 }
 
+// Card Packs Model - this add flexibility to the packs as we can add more types of packs in the future
+// and also add more fields to the packs attributes and specifications or easylly change the price of the packs
+// or its attributes
 model CardPacks {
-  id        String   @id @unique @default(uuid())
-  addressId String   @map("address_id")
-  packId    Int      @map("pack_id")
-  packType  PackType
-  user      User     @relation(fields: [addressId], references: [addressId], onDelete: Cascade)
+  packId           String   @id @default(uuid()) @map("pack_id")
+  cheesePrice      Int      @default(0) @map("cheese_price")
+  superCheesePrice Int      @default(0) @map("super_cheese_price")
+  ethPrice         Decimal  @default(0) @map("eth_price")
+  packType         PackType @map("pack_type")
 
   @@map("Card_Packs")
 }
@@ -97,4 +102,11 @@ enum CheeseLogEvent {
 enum CheeseType {
   cheese
   superCheese
+}
+
+model TokenTransfers {
+  id   String @id @unique @default(uuid())
+  data Json   @map("data")
+
+  @@map("Token_Transfers")
 }
