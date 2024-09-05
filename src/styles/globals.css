@@ -17,8 +17,12 @@
 
 body.page-layout {
   display: grid;
-  grid-template-columns: 1fr;
+  grid-template-columns: 280px 1fr;
   grid-template-rows: 6dvh 1fr 5dvh;
+  grid-template-areas:
+    "sidebar header"
+    "sidebar main"
+    "footer footer";
   overflow: hidden;
 }
 

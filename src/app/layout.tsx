@@ -3,9 +3,10 @@ import { Inter } from "next/font/google";
 import "../styles/globals.css";
 import Header from "@/components/interface/header";
 import Footer from "@/components/interface/footer";
-import { acme, barlowCondensed, niceSugar, rowdies } from "@/fonts";
+import { niceSugar } from "@/fonts";
 import AuthProvider from "@/contexts/auth-provider";
 import { Toaster } from "@/components/ui/sonner";
+import Sidebar from "@/components/interface/sidebar";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -23,8 +24,9 @@ export default function RootLayout({
     <AuthProvider>
       <html lang="en">
         <body
-          className={`${inter.className} ${barlowCondensed.variable} ${rowdies.variable} ${acme.variable} ${niceSugar.variable} page-layout`}
+          className={`${inter.className} ${niceSugar.variable} page-layout`}
         >
+          <Sidebar />
           <Header />
           <main className="main-layout overflow-hidden sm:overflow-y-auto">
             {children}
