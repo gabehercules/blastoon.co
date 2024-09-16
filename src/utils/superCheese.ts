@@ -19,21 +19,16 @@ export async function createUserSuperCheese(address: string) {
 }
 
 export async function getUserSuperCheese(addressId: string) {
-  try {
-    const superCheese = await prisma.superCheese.findFirst({
-      where: {
-        addressId: addressId,
-      },
-      select: {
-        amount: true,
-      },
-    });
+  const superCheese = await prisma.superCheese.findFirst({
+    where: {
+      addressId: addressId,
+    },
+    select: {
+      amount: true,
+    },
+  });
 
-    if (!superCheese) return 0;
+  if (!superCheese) return 0;
 
-    return superCheese.amount;
-  } catch (error) {
-    console.error(error);
-    return 0;
-  }
+  return superCheese.amount;
 }

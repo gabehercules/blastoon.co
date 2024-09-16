@@ -52,10 +52,12 @@ model SuperCheese {
 // or its attributes
 model CardPacks {
   packId           String          @id @default(uuid()) @map("pack_id")
+  slug             String          @default("")
   cheesePrice      Int             @default(0) @map("cheese_price")
   superCheesePrice Int             @default(0) @map("super_cheese_price")
-  ethPrice         Decimal         @default(0) @map("eth_price")
+  ethPrice         Float           @default(0) @map("eth_price")
   packType         PackType        @map("pack_type")
+  description      String          @default("")
   UserCardPacks    UserCardPacks[]
 
   @@map("Card_Packs")
@@ -70,6 +72,41 @@ model UserCardPacks {
 
   @@map("User_Card_Packs")
 }
+
+// ======== BEGIN: MARKETPLACE TABLES ======== //
+model MarketItems {
+  id          String      @id @unique @default(uuid())
+  name        String
+  slug        String      @unique
+  description String
+  image       String
+  isAsset     Boolean     @default(true) @map("is_asset")
+  categoryId  String      @map("category_id")
+  itemPrice   ItemPrice[]
+  category    Categories  @relation(fields: [categoryId], references: [id])
+
+  @@map("Market_Items")
+}
+
+model Categories {
+  id          String        @id @unique @default(uuid())
+  name        String
+  slug        String        @unique
+  description String
+  marketItems MarketItems[]
+}
+
+model ItemPrice {
+  id           String       @id @unique @default(uuid())
+  itemId       String       @map("item_id")
+  item         MarketItems  @relation(fields: [itemId], references: [id])
+  currencyType CurrencyType
+  price        Float
+
+  @@map("Item_Price")
+}
+
+// ======== END: MARKETPLACE TABLES ======== //
 
 model CheeseLogs {
   id           String         @id @unique @default(uuid())
@@ -96,7 +133,7 @@ model BlastToonNfts {
 }
 
 enum PackType {
-  commom
+  common
   rare
   epic
 }
@@ -114,6 +151,12 @@ enum CheeseLogEvent {
 enum CheeseType {
   cheese
   superCheese
+}
+
+enum CurrencyType {
+  CHEESE
+  SUPER_CHEESE
+  ETH
 }
 
 model TokenTransfers {

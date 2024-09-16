@@ -18,9 +18,10 @@
 body.page-layout {
   display: grid;
   grid-template-columns: 280px 1fr;
-  grid-template-rows: 6dvh 1fr 5dvh;
+  grid-template-rows: 4dvh 5dvh 1fr 5dvh;
   grid-template-areas:
     "sidebar header"
+    "sidebar topbar"
     "sidebar main"
     "footer footer";
   overflow: hidden;
@@ -28,6 +29,22 @@ body.page-layout {
 
 body {
   @apply antialiased h-dvh bg-[#010101] text-white;
+}
+
+.page-layout .sidebar {
+  grid-area: sidebar;
+}
+
+.page-layout .header {
+  grid-area: header;
+}
+
+.page-layout .main {
+  grid-area: main;
+}
+
+.page-layout .footer {
+  grid-area: footer;
 }
 
 @layer utilities {

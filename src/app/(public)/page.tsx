@@ -1,4 +1,4 @@
-import CardPacks from "@/components/elements/pack-item";
+import PackItem from "@/components/elements/pack-item";
 import Link from "next/link";
 import { BiLogoDiscordAlt } from "react-icons/bi";
 
@@ -22,7 +22,7 @@ export default async function Home() {
           </Link>
         </div>
       </div>
-      <CardPacks />
+      <PackItem />
     </div>
   );
 }

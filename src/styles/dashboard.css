@@ -1,10 +1,10 @@
 .dashboard-layout {
   height: 100%;
   display: grid;
-  grid-template-columns: 1fr minmax(300px, 360px);
+  grid-template-columns: 1fr minmax(100px, 360px);
   grid-template-areas: "main sidebar";
   grid-gap: 1rem;
-  width: 96dvw;
+  width: 95%;
   margin: 0 auto;
   padding: 2vh 0;
 }
