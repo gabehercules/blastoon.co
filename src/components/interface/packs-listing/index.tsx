@@ -1,7 +1,6 @@
 "use client";
 
 import CardPacks from "@/components/elements/card-packs";
-import commonPack from "/public/pack-common.png";
 import { useQuery } from "@tanstack/react-query";
 import { getCardPacks } from "@/database/read/get-cardpacks";
 
@@ -16,6 +15,8 @@ export default function PacksListing() {
     _optimisticResults: "optimistic",
   });
 
+  console.log(cardPacks);
+
   if (isError) {
     return <div>Error...</div>;
   }
@@ -29,12 +30,10 @@ export default function PacksListing() {
       {cardPacks.map((pack, i) => (
         <CardPacks
           key={i}
-          packImg={commonPack}
+          packImg={pack.image}
           slug={pack.slug}
-          packCheesePrice={pack.cheesePrice}
-          packEthPrice={pack.ethPrice}
-          packSuperCheesePrice={pack.superCheesePrice}
-          packTitle={pack.packType}
+          packTitle={pack.name}
+          itemPrice={pack.itemPrice}
         />
       ))}
     </div>

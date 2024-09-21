@@ -3,6 +3,11 @@
 import { usePathname } from "next/navigation";
 import Link from "next/link";
 import Logo from "@/components/elements/logo";
+import { GiMagicPortal, GiPortal } from "react-icons/gi";
+import ConnectButton from "@/components/elements/connect-button";
+import UserWidget from "@/components/elements/user/user-widget";
+import { useSession } from "next-auth/react";
+import { BiLogOut } from "react-icons/bi";
 import {
   TbLayoutGrid,
   TbCoins,
@@ -10,11 +15,6 @@ import {
   TbTrophy,
   TbSword,
 } from "react-icons/tb";
-import { GiMagicPortal, GiPortal } from "react-icons/gi";
-import ConnectButton from "@/components/elements/connect-button";
-import UserWidget from "@/components/elements/user/user-widget";
-import { useSession } from "next-auth/react";
-import { BiLogOut } from "react-icons/bi";
 
 export default function Sidebar() {
   const { data: session, status } = useSession();
@@ -40,7 +40,7 @@ export default function Sidebar() {
           <span className="flex text-xs text-neutral-400 mb-3">Navigate</span>
           <ul className="flex flex-col gap-1">
             {navigate.map((item, i) => {
-              const currentPath = item.href === pathname;
+              const currentPath = pathname.startsWith(item.href);
               return (
                 <li key={i}>
                   <Link
@@ -71,7 +71,7 @@ export default function Sidebar() {
           <span className="flex text-xs text-neutral-400 mb-3">Navigate</span>
           <ul className="flex flex-col gap-1">
             {explore.map((item, i) => {
-              const currentPath = item.href === pathname;
+              const currentPath = pathname.startsWith(item.href);
               return (
                 <li key={i}>
                   <Link

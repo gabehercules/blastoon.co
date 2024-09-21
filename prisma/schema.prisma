@@ -10,8 +10,8 @@ datasource db {
 // USER Model
 model User {
   addressId       String          @id @unique @default(uuid()) @map("address_id")
+  id              String?         @unique
   address         String          @unique
-  ensDomain       String?         @unique @map("ens_domain")
   signature       String?         @unique
   slug            String?         @unique
   username        String?         @unique
@@ -25,6 +25,9 @@ model User {
   userCheeseLogs  CheeseLogs[]
   superCheese     SuperCheese?
   cardPacks       UserCardPacks[]
+
+  UserInventory PlayerInventory[]
+  Player        Player?
 }
 
 // Cheese Model - Regular $Cheese Coin
@@ -75,33 +78,43 @@ model UserCardPacks {
 
 // ======== BEGIN: MARKETPLACE TABLES ======== //
 model MarketItems {
-  id          String      @id @unique @default(uuid())
+  id          String            @id @unique @default(uuid())
   name        String
-  slug        String      @unique
+  slug        String            @unique
   description String
   image       String
-  isAsset     Boolean     @default(true) @map("is_asset")
-  categoryId  String      @map("category_id")
-  itemPrice   ItemPrice[]
-  category    Categories  @relation(fields: [categoryId], references: [id])
+  isAsset     Boolean           @default(true) @map("is_asset")
+  categoryId  String            @map("category_id")
+  createdAt   DateTime          @default(now()) @map("created_at")
+  publishedAt DateTime?         @map("published_at")
+  cheesePrice Int?              @map("cheese_price")
+  superCheese Int?              @map("supercheese_price")
+  ethPrice    Float?            @map("eth_price")
+  status      DraftAndPublished @default(DRAFT)
+
+  itemPrice     ItemPrice[]
+  category      Categories        @relation(fields: [categoryId], references: [id])
+  UserInventory PlayerInventory[]
 
   @@map("Market_Items")
 }
 
 model Categories {
-  id          String        @id @unique @default(uuid())
+  id          String   @id @unique @default(uuid())
   name        String
-  slug        String        @unique
+  slug        String   @unique
   description String
+  createdAt   DateTime @default(now()) @map("created_at")
+
   marketItems MarketItems[]
 }
 
 model ItemPrice {
   id           String       @id @unique @default(uuid())
   itemId       String       @map("item_id")
-  item         MarketItems  @relation(fields: [itemId], references: [id])
   currencyType CurrencyType
   price        Float
+  item         MarketItems  @relation(fields: [itemId], references: [id])
 
   @@map("Item_Price")
 }
@@ -132,6 +145,60 @@ model BlastToonNfts {
   @@map("Blast_Toon_NFTs")
 }
 
+// ======== GAMEFICATION TABLES ======== //
+
+model Player {
+  id          String @id @unique @default(uuid())
+  addressId   String @unique @map("address_id")
+  username    String @unique
+  level       Int    @default(1)
+  xp          Int    @default(0)
+  cheese      Int    @default(0) @map("cheese")
+  superCheese Int    @default(0) @map("super_cheese")
+  badge       Badge?
+  user        User   @relation(fields: [addressId], references: [addressId])
+
+  PlayerAchievements PlayerAchievements[]
+
+  @@map("Player")
+}
+
+model PlayerInventory {
+  id        String      @id @unique @default(uuid())
+  addressId String      @map("address_id")
+  itemId    String      @map("item_id")
+  quantity  Int         @default(1)
+  aquiredAt DateTime    @default(now()) @map("aquired_at")
+  isListed  Boolean     @default(false) @map("is_listed")
+  user      User        @relation(fields: [addressId], references: [addressId])
+  item      MarketItems @relation(fields: [itemId], references: [id])
+
+  @@map("Player_Inventory")
+}
+
+model PlayerAchievements {
+  id            String       @id @unique @default(uuid())
+  addressId     String       @map("address_id")
+  achievementId String       @map("achievement_id")
+  player        Player       @relation(fields: [addressId], references: [addressId])
+  achievement   Achievements @relation(fields: [achievementId], references: [id])
+
+  @@map("User_Achievements")
+}
+
+model Achievements {
+  id          String   @id @unique @default(uuid())
+  name        String
+  description String
+  xpReward    Int      @map("xp_reward")
+  levelReward Int      @map("level_reward")
+  createdAt   DateTime @default(now()) @map("created_at")
+
+  userAchievements PlayerAchievements[]
+}
+
+// =============== ENUMS =============== //
+
 enum PackType {
   common
   rare
@@ -157,6 +224,17 @@ enum CurrencyType {
   CHEESE
   SUPER_CHEESE
   ETH
+}
+
+enum Badge {
+  PLAYER
+  INFLUENCER
+  TOON_FRIEND
+}
+
+enum DraftAndPublished {
+  DRAFT
+  PUBLISHED
 }
 
 model TokenTransfers {

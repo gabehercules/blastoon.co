@@ -3,9 +3,22 @@
 import prisma from "../prisma";
 
 export async function getCardPacks() {
-  const cardPacks = await prisma.cardPacks.findMany({
-    orderBy: {
-      packType: "asc",
+  const cardPacks = await prisma.marketItems.findMany({
+    where: {
+      category: {
+        slug: "card-packs",
+      },
+    },
+    include: {
+      itemPrice: {
+        select: {
+          currencyType: true,
+          price: true,
+        },
+        orderBy: {
+          currencyType: "asc",
+        },
+      },
     },
   });
 

@@ -1,4 +1,5 @@
 import PacksListing from "@/components/interface/packs-listing";
+import { BiStoreAlt } from "react-icons/bi";
 
 export default function Marketplace() {
   return (
@@ -10,8 +11,9 @@ export default function Marketplace() {
       </div>
 
       {/* more soon */}
-      <div className="flex items-center justify-center flex-1 space-y-4 text-lg  text-neutral-500">
-        We are working on lot more to be in the marketplace soon!
+      <div className="flex items-center gap-2 p-3 rounded-lg bg-brand-green/10 border border-b-2 border-brand-green/50 border-b-brand-green/60 text-neutral-100">
+        <BiStoreAlt size={18} />
+        <p>More will come to the marketplace soon!</p>
       </div>
     </div>
   );
