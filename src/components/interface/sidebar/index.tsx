@@ -6,8 +6,8 @@ import Logo from "@/components/elements/logo";
 import { GiMagicPortal, GiPortal } from "react-icons/gi";
 import ConnectButton from "@/components/elements/connect-button";
 import UserWidget from "@/components/elements/user/user-widget";
-import { useSession } from "next-auth/react";
-import { BiLogOut } from "react-icons/bi";
+import { signOut, useSession } from "next-auth/react";
+import { BiGridAlt, BiLogOut, BiSliderAlt, BiUserCircle } from "react-icons/bi";
 import {
   TbLayoutGrid,
   TbCoins,
@@ -21,23 +21,21 @@ export default function Sidebar() {
   const pathname = usePathname();
 
   return (
-    <aside className="sidebar flex flex-col bg-gray-background border-r border-border-gray">
+    <aside className="sidebar flex flex-col bg-gray-foreground border-r border-border-gray">
       <div className="p-4 border-b border-border-gray">
         <Logo />
       </div>
 
       {/* user widget */}
       <div className="flex items-center justify-end gap-4">
-        {status !== "authenticated" ? (
-          <ConnectButton>Connect</ConnectButton>
-        ) : (
-          <UserWidget />
-        )}
+        {!status && <ConnectButton>Connect</ConnectButton>}
       </div>
 
       <div className="p-4 border-b border-border-gray">
         <div>
-          <span className="flex text-xs text-neutral-400 mb-3">Navigate</span>
+          <span className="flex text-xs text-neutral-400 mb-3 px-3">
+            Navigate
+          </span>
           <ul className="flex flex-col gap-1">
             {navigate.map((item, i) => {
               const currentPath = pathname.startsWith(item.href);
@@ -68,9 +66,39 @@ export default function Sidebar() {
 
       <div className="p-4 border-b border-border-gray">
         <div>
-          <span className="flex text-xs text-neutral-400 mb-3">Navigate</span>
+          <span className="flex text-xs text-neutral-400 mb-3 px-3">
+            Explore
+          </span>
           <ul className="flex flex-col gap-1">
             {explore.map((item, i) => {
+              const currentPath = pathname.startsWith(item.href);
+              return (
+                <li key={i}>
+                  <Link
+                    href={item.href}
+                    className={`${
+                      currentPath && "text-brand-yellow bg-brand-yellow/5"
+                    } flex gap-2 items-center text-sm p-3 rounded-lg hover:bg-gray-foreground hover:text-brand-yellow transition-all duration-200`}
+                  >
+                    <item.Icon size={20} />
+                    {item.label}
+                  </Link>
+                </li>
+              );
+            })}
+          </ul>
+        </div>
+      </div>
+
+      {/* divider */}
+
+      <div className="p-4 border-b border-border-gray">
+        <div>
+          <span className="flex text-xs text-neutral-400 mb-3 px-3">
+            Menage
+          </span>
+          <ul className="flex flex-col gap-1">
+            {manage.map((item, i) => {
               const currentPath = pathname.startsWith(item.href);
               return (
                 <li key={i}>
@@ -93,7 +121,10 @@ export default function Sidebar() {
       {/* sign out */}
 
       <div className="flex-1 content-end p-4">
-        <button className="w-full flex items-center gap-2 p-3 text-sm rounded-lg bg-red-500/5 text-red-500 hover:bg-red-500/10">
+        <button
+          onClick={() => signOut()}
+          className="w-full flex items-center gap-2 p-3 text-sm rounded-lg bg-red-500/5 text-red-500 hover:bg-red-500/10"
+        >
           <BiLogOut size={20} />
           Disconnect
         </button>
@@ -143,16 +174,26 @@ const manage = [
   {
     label: "Profile",
     href: "/profile",
-    Icon: TbSword,
+    Icon: BiUserCircle,
   },
   {
-    label: "Docs",
-    href: "/docs",
-    Icon: TbSword,
+    label: "Inventory",
+    href: "/inventory",
+    Icon: BiGridAlt,
   },
   {
-    label: "Help",
-    href: "/help",
-    Icon: TbSword,
+    label: "Settings",
+    href: "/settings",
+    Icon: BiSliderAlt,
   },
+  // {
+  //   label: "Docs",
+  //   href: "/docs",
+  //   Icon: TbSword,
+  // },
+  // {
+  //   label: "Help",
+  //   href: "/help",
+  //   Icon: TbSword,
+  // },
 ];

@@ -28,7 +28,7 @@ body.page-layout {
 }
 
 body {
-  @apply antialiased h-dvh bg-[#010101] text-white;
+  @apply antialiased h-dvh bg-gray-background text-white;
 }
 
 .page-layout .sidebar {
@@ -45,6 +45,26 @@ body {
 
 .page-layout .footer {
   grid-area: footer;
+}
+
+/* HOMEPAGE GLOBALS */
+
+body.home-layout {
+  display: grid;
+  grid-template-columns: 1fr;
+  grid-template-rows: 6dvh 1fr;
+  grid-template-areas:
+    "header"
+    "main";
+  overflow: hidden;
+}
+
+.home-layout .header {
+  grid-area: header;
+}
+
+.home-layout .home-main {
+  grid-area: main;
 }
 
 @layer utilities {

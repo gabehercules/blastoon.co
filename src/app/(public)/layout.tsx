@@ -4,6 +4,7 @@ import { niceSugar } from "@/fonts";
 import AuthProvider from "@/contexts/auth-provider";
 import { Toaster } from "@/components/ui/sonner";
 import "../../styles/globals.css";
+import HomeHeader from "@/components/interface/home-header";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -20,8 +21,11 @@ export default function RootLayout({
   return (
     <AuthProvider>
       <html lang="en">
-        <body className={`${inter.className} ${niceSugar.variable}`}>
-          <main className="main-layout overflow-hidden sm:overflow-y-auto">
+        <body
+          className={`${inter.className} ${niceSugar.variable} home-layout`}
+        >
+          <HomeHeader />
+          <main className="home-main overflow-hidden sm:overflow-y-auto">
             {children}
           </main>
           <Toaster

@@ -148,15 +148,15 @@ model BlastToonNfts {
 // ======== GAMEFICATION TABLES ======== //
 
 model Player {
-  id          String @id @unique @default(uuid())
-  addressId   String @unique @map("address_id")
-  username    String @unique
-  level       Int    @default(1)
-  xp          Int    @default(0)
-  cheese      Int    @default(0) @map("cheese")
-  superCheese Int    @default(0) @map("super_cheese")
+  id          String  @id @unique @default(uuid())
+  addressId   String  @unique @map("address_id")
+  username    String? @unique
+  level       Int     @default(1)
+  xp          Int     @default(0)
+  cheese      Int     @default(0) @map("cheese")
+  superCheese Int     @default(0) @map("super_cheese")
   badge       Badge?
-  user        User   @relation(fields: [addressId], references: [addressId])
+  user        User    @relation(fields: [addressId], references: [addressId])
 
   PlayerAchievements PlayerAchievements[]
 
