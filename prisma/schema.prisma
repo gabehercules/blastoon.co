@@ -78,19 +78,19 @@ model UserCardPacks {
 
 // ======== BEGIN: MARKETPLACE TABLES ======== //
 model MarketItems {
-  id          String            @id @unique @default(uuid())
-  name        String
-  slug        String            @unique
-  description String
-  image       String
-  isAsset     Boolean           @default(true) @map("is_asset")
-  categoryId  String            @map("category_id")
-  createdAt   DateTime          @default(now()) @map("created_at")
-  publishedAt DateTime?         @map("published_at")
-  cheesePrice Int?              @map("cheese_price")
-  superCheese Int?              @map("supercheese_price")
-  ethPrice    Float?            @map("eth_price")
-  status      DraftAndPublished @default(DRAFT)
+  id               String            @id @unique @default(uuid())
+  name             String
+  slug             String            @unique
+  description      String
+  image            String
+  isAsset          Boolean           @default(true) @map("is_asset")
+  categoryId       String            @map("category_id")
+  createdAt        DateTime          @default(now()) @map("created_at")
+  publishedAt      DateTime?         @map("published_at")
+  cheesePrice      Int?              @map("cheese_price")
+  superCheesePrice Int?              @map("supercheese_price")
+  ethPrice         Float?            @map("eth_price")
+  status           DraftAndPublished @default(DRAFT)
 
   itemPrice     ItemPrice[]
   category      Categories        @relation(fields: [categoryId], references: [id])

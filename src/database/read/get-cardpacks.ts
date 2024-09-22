@@ -20,6 +20,9 @@ export async function getCardPacks() {
         },
       },
     },
+    orderBy: {
+      cheesePrice: "asc",
+    },
   });
 
   return cardPacks;

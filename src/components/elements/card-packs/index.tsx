@@ -6,29 +6,23 @@ import cheeseCoinIcon from "/public/cheese-coin.png";
 import superCheese from "/public/super-cheese.png";
 import { FaEthereum } from "react-icons/fa6";
 import Link from "next/link";
-import { CurrencyType, ItemPrice } from "@prisma/client";
 
 interface CardPacksProps {
   packImg: StaticImageData | string;
   slug: string;
   packTitle: string;
-  packCheesePrice?: number;
-  packSuperCheesePrice?: number;
-  packEthPrice?: number;
-  itemPrice?: {
-    price: number;
-    currencyType: CurrencyType;
-  }[];
+  cheesePrice?: number | null;
+  supercheesePrice?: number | null;
+  ethPrice?: number | null;
 }
 
 export default function CardPacks({
   packImg,
   slug,
   packTitle,
-  packCheesePrice,
-  packSuperCheesePrice,
-  packEthPrice,
-  itemPrice,
+  cheesePrice,
+  supercheesePrice,
+  ethPrice,
 }: CardPacksProps) {
   return (
     <Link
@@ -49,42 +43,38 @@ export default function CardPacks({
         <p className="text-left mb-3">{packTitle.toLocaleUpperCase()}</p>
         <div className="flex justify-between">
           {/* prices test*/}
-          {itemPrice?.map((item, i) => (
-            <div key={i}>
-              {item.currencyType === "CHEESE" && (
-                <div className="flex items-center gap-2 px-2 py-1 rounded-lg bg-brand-yellow/20 border border-b-2 border-brand-yellow/50">
-                  <Image
-                    src={cheeseCoinIcon}
-                    width={18}
-                    height={18}
-                    alt={"cheese-coin"}
-                  />
-                  <span className="text-sm font-bold text-brand-yellow">
-                    {item.price.toLocaleString("en-US")}
-                  </span>
-                </div>
-              )}
-              {item.currencyType === "SUPER_CHEESE" && (
-                <div className="flex items-center gap-2 px-2 py-1 rounded-lg bg-brand-green/20 border border-b-2 border-brand-green/50">
-                  <Image
-                    src={superCheese}
-                    width={18}
-                    height={18}
-                    alt={"super-cheese"}
-                  />
-                  <span className="text-sm font-bold text-brand-green">
-                    {item.price.toLocaleString("en-US")}
-                  </span>
-                </div>
-              )}
-              {item.currencyType === "ETH" && (
-                <div className="flex items-center gap-2 rounded-lg px-2 py-1 bg-[#627EEA]/20 text-[#627EEA] border border-b-2 border-[#627EEA]/50">
-                  <FaEthereum size={16} />
-                  <span className="text-sm font-bold">{item.price}</span>
-                </div>
-              )}
+          {cheesePrice && (
+            <div className="flex items-center gap-2 px-2 py-1 rounded-lg bg-brand-yellow/20 border border-b-2 border-brand-yellow/50">
+              <Image
+                src={cheeseCoinIcon}
+                width={18}
+                height={18}
+                alt={"cheese-coin"}
+              />
+              <span className="text-sm font-bold text-brand-yellow">
+                {cheesePrice.toLocaleString("en-US")}
+              </span>
             </div>
-          ))}
+          )}
+          {supercheesePrice && (
+            <div className="flex items-center gap-2 px-2 py-1 rounded-lg bg-brand-green/20 border border-b-2 border-brand-green/50">
+              <Image
+                src={superCheese}
+                width={18}
+                height={18}
+                alt={"super-cheese"}
+              />
+              <span className="text-sm font-bold text-brand-green">
+                {supercheesePrice.toLocaleString("en-US")}
+              </span>
+            </div>
+          )}
+          {ethPrice && (
+            <div className="flex items-center gap-2 rounded-lg px-2 py-1 bg-[#627EEA]/20 text-[#627EEA] border border-b-2 border-[#627EEA]/50">
+              <FaEthereum size={16} />
+              <span className="text-sm font-bold">{ethPrice}</span>
+            </div>
+          )}
           {/* prices test */}
         </div>
       </div>
