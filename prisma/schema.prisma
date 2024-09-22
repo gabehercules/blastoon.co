@@ -7,27 +7,27 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-// USER Model
 model User {
-  addressId       String          @id @unique @default(uuid()) @map("address_id")
-  address         String          @unique
-  ensDomain       String?         @unique @map("ens_domain")
-  signature       String?         @unique
-  slug            String?         @unique
-  username        String?         @unique
-  createdAt       DateTime        @default(now()) @map("created_at")
-  holdingNFTs     Int             @default(0) @map("holding_NFTs")
-  upgradedNFTs    Int             @default(0) @map("upgraded_NFTs")
-  firstVerified   Boolean         @default(false) @map("first_verified")
-  verifiedUpgrade Boolean         @default(false) @map("verified_upgrade")
-  nfts            BlastToonNfts[]
-  cheeseCoin      Cheese?
-  userCheeseLogs  CheeseLogs[]
-  superCheese     SuperCheese?
-  cardPacks       UserCardPacks[]
+  address          String             @unique
+  signature        String?            @unique
+  slug             String?            @unique
+  username         String?            @unique
+  createdAt        DateTime           @default(now()) @map("created_at")
+  holdingNFTs      Int                @default(0) @map("holding_NFTs")
+  upgradedNFTs     Int                @default(0) @map("upgraded_NFTs")
+  firstVerified    Boolean            @default(false) @map("first_verified")
+  verifiedUpgrade  Boolean            @default(false) @map("verified_upgrade")
+  addressId        String             @id @unique @default(uuid()) @map("address_id")
+  id               String?            @unique
+  nfts             BlastToonNfts[]
+  cheeseCoin       Cheese?
+  userCheeseLogs   CheeseLogs[]
+  Player           Player?
+  Player_Inventory Player_Inventory[]
+  superCheese      SuperCheese?
+  cardPacks        UserCardPacks[]
 }
 
-// Cheese Model - Regular $Cheese Coin
 model Cheese {
   id        String @id @unique @default(uuid())
   addressId String @unique @map("address_id")
@@ -37,7 +37,6 @@ model Cheese {
   @@map("Cheese")
 }
 
-// SuperCheese Model - Super $Cheese Coin
 model SuperCheese {
   id        String @id @unique @default(uuid())
   addressId String @unique @map("address_id")
@@ -47,15 +46,14 @@ model SuperCheese {
   @@map("Super_Cheese")
 }
 
-// Card Packs Model - this add flexibility to the packs as we can add more types of packs in the future
-// and also add more fields to the packs attributes and specifications or easylly change the price of the packs
-// or its attributes
 model CardPacks {
   packId           String          @id @default(uuid()) @map("pack_id")
   cheesePrice      Int             @default(0) @map("cheese_price")
+  ethPrice         Float           @default(0) @map("eth_price")
   superCheesePrice Int             @default(0) @map("super_cheese_price")
-  ethPrice         Decimal         @default(0) @map("eth_price")
   packType         PackType        @map("pack_type")
+  description      String          @default("")
+  slug             String          @default("")
   UserCardPacks    UserCardPacks[]
 
   @@map("Card_Packs")
@@ -75,10 +73,10 @@ model CheeseLogs {
   id           String         @id @unique @default(uuid())
   addressId    String         @map("address_id")
   cheeseAmount Int            @map("cheese_amount")
-  cheeseType   CheeseType     @map("cheese_type")
   timestamp    DateTime       @default(now())
-  user         User           @relation(fields: [addressId], references: [addressId])
   event        CheeseLogEvent
+  cheeseType   CheeseType     @map("cheese_type")
+  user         User           @relation(fields: [addressId], references: [addressId])
 
   @@map("Cheese_Logs")
 }
@@ -86,17 +84,102 @@ model CheeseLogs {
 model BlastToonNfts {
   tokenId        Int     @id @map("token_id")
   imageUri       String? @map("image_uri")
-  addressId      String? @map("address_id")
   ownerSince     BigInt? @map("owner_since")
   upgraded       Boolean @default(false)
   lastUpgradedBy String? @map("last_upgraded_by")
+  addressId      String? @map("address_id")
   owner          User?   @relation(fields: [addressId], references: [addressId])
 
   @@map("Blast_Toon_NFTs")
 }
 
+model TokenTransfers {
+  id   String @id @unique @default(uuid())
+  data Json   @map("data")
+
+  @@map("Token_Transfers")
+}
+
+model Achievements {
+  id                String              @id @unique
+  name              String
+  description       String
+  xp_reward         Int
+  level_reward      Int
+  created_at        DateTime            @default(now())
+  User_Achievements User_Achievements[]
+}
+
+model Categories {
+  id           String         @id @unique
+  name         String
+  slug         String         @unique
+  description  String
+  created_at   DateTime       @default(now())
+  Market_Items Market_Items[]
+}
+
+model Item_Price {
+  id           String       @id @unique
+  item_id      String
+  currencyType CurrencyType
+  price        Float
+  Market_Items Market_Items @relation(fields: [item_id], references: [id])
+}
+
+model Market_Items {
+  id                String             @id @unique
+  name              String
+  slug              String             @unique
+  description       String
+  image             String
+  is_asset          Boolean            @default(true)
+  category_id       String
+  created_at        DateTime           @default(now())
+  published_at      DateTime?
+  cheese_price      Int?
+  eth_price         Float?
+  status            DraftAndPublished  @default(DRAFT)
+  supercheese_price Int?
+  Item_Price        Item_Price[]
+  Categories        Categories         @relation(fields: [category_id], references: [id])
+  Player_Inventory  Player_Inventory[]
+}
+
+model Player {
+  id                String              @id @unique
+  address_id        String              @unique
+  username          String              @unique
+  level             Int                 @default(1)
+  xp                Int                 @default(0)
+  cheese            Int                 @default(0)
+  super_cheese      Int                 @default(0)
+  badge             Badge?
+  User              User                @relation(fields: [address_id], references: [addressId])
+  User_Achievements User_Achievements[]
+}
+
+model Player_Inventory {
+  id           String       @id @unique
+  address_id   String
+  item_id      String
+  quantity     Int          @default(1)
+  aquired_at   DateTime     @default(now())
+  is_listed    Boolean      @default(false)
+  User         User         @relation(fields: [address_id], references: [addressId])
+  Market_Items Market_Items @relation(fields: [item_id], references: [id])
+}
+
+model User_Achievements {
+  id             String       @id @unique
+  address_id     String
+  achievement_id String
+  Achievements   Achievements @relation(fields: [achievement_id], references: [id])
+  Player         Player       @relation(fields: [address_id], references: [address_id])
+}
+
 enum PackType {
-  commom
+  common
   rare
   epic
 }
@@ -116,9 +199,19 @@ enum CheeseType {
   superCheese
 }
 
-model TokenTransfers {
-  id   String @id @unique @default(uuid())
-  data Json   @map("data")
+enum Badge {
+  PLAYER
+  INFLUENCER
+  TOON_FRIEND
+}
 
-  @@map("Token_Transfers")
+enum CurrencyType {
+  CHEESE
+  SUPER_CHEESE
+  ETH
+}
+
+enum DraftAndPublished {
+  DRAFT
+  PUBLISHED
 }
