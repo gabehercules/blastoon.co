@@ -1,5 +1,13 @@
 .marketplace-layout {
   display: grid;
-  grid-template-columns: 1fr minmax(0px, 450px);
+  grid-template-columns: 1fr minmax(0px, 610px);
   grid-template-areas: "content product-info";
+}
+
+.marketplace-content {
+  grid-area: content;
+}
+
+.product-info {
+  grid-area: product-info;
 }

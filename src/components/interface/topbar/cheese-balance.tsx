@@ -22,7 +22,7 @@ export default function CheeseBalance() {
     isLoading,
   } = useQuery({
     queryKey: ["user-cheese"],
-    queryFn: async () => getUserCheese(user.address),
+    queryFn: async () => getUserCheese(user.id),
     staleTime: 1000 * 6, // 6 seconds
   });
 

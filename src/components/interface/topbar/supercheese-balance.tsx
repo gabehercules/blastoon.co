@@ -5,8 +5,8 @@ import superCheeseCoin from "/public/super-cheese.png";
 import { BiPlus } from "react-icons/bi";
 import { CustomUser } from "./cheese-balance";
 import { useSession } from "next-auth/react";
-import { getUserSuperCheese } from "@/utils/superCheese";
 import { useQuery } from "@tanstack/react-query";
+import { getUserSuperCheese } from "@/database/read/get-user-supercheese";
 
 export default function SuperCheeseBalance() {
   const { data: session, status } = useSession();

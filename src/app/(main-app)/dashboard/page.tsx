@@ -11,13 +11,13 @@ import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 import { firstVerify } from "@/utils/first-verify";
 import { getUserCardPacks } from "@/utils/cardPacks";
-import { getUserSuperCheese } from "@/utils/superCheese";
 import { BiLogoDiscordAlt } from "react-icons/bi";
 import VerifyOwnshipButton from "@/components/elements/verify-ownship";
 
 import cheesePointsIcon from "/public/cheese-coin.png";
 import superCheeseIcon from "/public/super-cheese.png";
 import cardPackIcon from "/public/card-icon.png";
+import { getUserSuperCheese } from "@/database/read/get-user-supercheese";
 
 export default async function Dashboard() {
   const session = await getServerSession(authOptions);
@@ -35,7 +35,7 @@ export default async function Dashboard() {
   const nfts = await getNFTsByAddressId(id);
   // const nfts = await getNFTsByUserId(21);
 
-  const cheese = await getUserCheese(address);
+  const cheese = await getUserCheese(id);
 
   const superCheese = await getUserSuperCheese(id);
 

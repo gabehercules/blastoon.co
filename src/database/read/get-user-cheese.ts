@@ -3,13 +3,13 @@
 import prisma from "../prisma";
 import { revalidatePath } from "next/cache";
 
-export async function getUserCheese(address: string) {
-  const user = await prisma.user.findUnique({
+export async function getUserCheese(addressId: string) {
+  const user = await prisma.player.findUnique({
     where: {
-      address: address,
+      addressId: addressId,
     },
-    include: {
-      cheeseCoin: true,
+    select: {
+      cheese: true,
     },
   });
 
@@ -17,9 +17,9 @@ export async function getUserCheese(address: string) {
 
   if (!user) throw Error("No user found");
 
-  if (!user.cheeseCoin) return 0;
+  if (!user.cheese) return 0;
 
-  const cheese = user.cheeseCoin.amount;
+  const cheese = user.cheese;
 
   // console.log("Cheese amount", cheese);
 

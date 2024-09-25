@@ -26,8 +26,9 @@ model User {
   superCheese     SuperCheese?
   cardPacks       UserCardPacks[]
 
-  UserInventory PlayerInventory[]
-  Player        Player?
+  Player          Player?
+  UserInventory   PlayerInventory[]
+  MarketplaceCart MarketplaceCart[]
 }
 
 // Cheese Model - Regular $Cheese Coin
@@ -92,9 +93,11 @@ model MarketItems {
   ethPrice         Float?            @map("eth_price")
   status           DraftAndPublished @default(DRAFT)
 
-  itemPrice     ItemPrice[]
-  category      Categories        @relation(fields: [categoryId], references: [id])
-  UserInventory PlayerInventory[]
+  itemPrice              ItemPrice[]
+  category               Categories           @relation(fields: [categoryId], references: [id])
+  UserInventory          PlayerInventory[]
+  MarketplaceCart        MarketplaceCart[]
+  PlayerItemTransactions PlayerTransactions[]
 
   @@map("Market_Items")
 }
@@ -107,6 +110,17 @@ model Categories {
   createdAt   DateTime @default(now()) @map("created_at")
 
   marketItems MarketItems[]
+}
+
+model MarketplaceCart {
+  id       String      @id @unique @default(uuid())
+  userId   String      @map("user_id")
+  itemId   String      @map("item_id")
+  quantity Int         @default(1)
+  user     User        @relation(fields: [userId], references: [addressId])
+  item     MarketItems @relation(fields: [itemId], references: [id])
+
+  @@map("Marketplace_Cart")
 }
 
 model ItemPrice {
@@ -159,6 +173,7 @@ model Player {
   user        User    @relation(fields: [addressId], references: [addressId])
 
   PlayerAchievements PlayerAchievements[]
+  PlayerTransactions PlayerTransactions[]
 
   @@map("Player")
 }
@@ -173,6 +188,7 @@ model PlayerInventory {
   user      User        @relation(fields: [addressId], references: [addressId])
   item      MarketItems @relation(fields: [itemId], references: [id])
 
+  @@unique([addressId, itemId])
   @@map("Player_Inventory")
 }
 
@@ -184,6 +200,19 @@ model PlayerAchievements {
   achievement   Achievements @relation(fields: [achievementId], references: [id])
 
   @@map("User_Achievements")
+}
+
+model PlayerTransactions {
+  id        String      @id @unique @default(uuid())
+  playerId  String      @map("address_id")
+  itemId    String      @map("item_id")
+  quantity  Int
+  value     Int
+  timestamp DateTime    @default(now())
+  player    Player      @relation(fields: [playerId], references: [id])
+  item      MarketItems @relation(fields: [itemId], references: [id])
+
+  @@map("Player_Item_Transactions")
 }
 
 model Achievements {

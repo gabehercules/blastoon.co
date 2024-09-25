@@ -1,6 +1,5 @@
 "use client";
 
-import { useState } from "react";
 import Image from "next/image";
 
 import Link from "next/link";
@@ -10,13 +9,13 @@ import { getMarketItem } from "@/database/read/get-market-item";
 import { useSession } from "next-auth/react";
 import { CustomUser } from "@/components/interface/topbar/cheese-balance";
 import BuyItemForm from "@/components/elements/forms/buy-item-form";
+import { MarketItems } from "@prisma/client";
 
 export default function MarketplaceItem({
   params,
 }: {
   params: { slug: string };
 }) {
-  const [loading, setLoading] = useState(false);
   const { data: session } = useSession();
 
   const user = session?.user as CustomUser;
@@ -25,14 +24,12 @@ export default function MarketplaceItem({
 
   console.log(params.slug);
 
-  const {
-    data: marketItem,
-    isLoading,
-    error,
-  } = useQuery({
+  const { data, isLoading, error } = useQuery({
     queryKey: ["market-item", params.slug],
     queryFn: async () => getMarketItem(params.slug),
   });
+
+  const marketItem = data as MarketItems;
 
   if (isLoading) return <div>Loading...</div>;
 
@@ -54,22 +51,23 @@ export default function MarketplaceItem({
 
       {/* pack details */}
 
-      <div className="flex gap-8">
-        <div className="w-[720px] bg-black/50 border border-border-gray rounded-lg">
+      <div className="flex items-start gap-8">
+        <div className="w-[365px] bg-black/50 border border-border-gray rounded-lg">
           <Image
             src={marketItem.image}
             width={512}
             height={512}
             alt="Image Card Pack"
-            className="w-full h-full p-4 m-auto object-contain"
+            className="w-full p-4 m-auto object-contain"
           />
         </div>
 
         {/* details */}
-        <div className="w-full">
-          <div className="flex-1 space-y-4 mb-6">
+
+        <div className="flex-1">
+          <div className="space-y-4 mb-6">
             <h2 className="text-xl font-bold">{marketItem.name}</h2>
-            <p>{marketItem.description}</p>
+            <p className="text-neutral-400">{marketItem.description}</p>
           </div>
           <div className="">
             <BuyItemForm marketItem={marketItem} user={user} />

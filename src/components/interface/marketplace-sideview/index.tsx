@@ -6,7 +6,7 @@ import ethIcon from "/public/eth-icon.png";
 
 export default function MarketplaceSideview() {
   return (
-    <div className="flex flex-col flex-1 bg-gray-foreground border border-border-gray rounded-lg overflow-hidden">
+    <div className="product-info flex flex-col flex-1 bg-gray-foreground border border-border-gray rounded-lg overflow-hidden">
       <div className="bg-black/50 border-b border-border-gray">
         <Image
           src={packRare}

@@ -3,7 +3,7 @@ import { BiStoreAlt } from "react-icons/bi";
 
 export default function Marketplace() {
   return (
-    <div className="flex flex-col flex-1 space-y-6">
+    <div className="space-y-6">
       {/* packs */}
       <div className="space-y-6">
         <h1 className="text-xl font-bold">Card Packs</h1>

@@ -1,24 +1,34 @@
 "use client";
 
-import Image from "next/image";
 import React, { useState } from "react";
+import { useRouter } from "next/navigation";
+import ItemInfoStep from "./step-item-details";
+import CartConfirmStep from "./step-cart-confirm";
+import { MarketItems } from "@prisma/client";
+import { CustomUser } from "@/components/interface/topbar/cheese-balance";
 
-import cheeseIcon from "/public/cheese-coin.png";
-import superCheeseIcon from "/public/super-cheese.png";
-import ethIcon from "/public/eth-icon.png";
-import { BiLoaderAlt } from "react-icons/bi";
+export interface PurchaseDetails {
+  userId: string;
+  itemId: string;
+  checkoutMode: string;
+  price: number;
+  totalPrice: number;
+  amount: number;
+}
 
 export default function BuyItemForm({
   marketItem,
   user,
 }: {
-  marketItem: any;
-  user: any;
+  marketItem: MarketItems;
+  user: CustomUser;
 }) {
+  const router = useRouter();
+  const [puchaseDetails, setPurchaseDetails] = useState<PurchaseDetails>();
   const [loading, setLoading] = useState(false);
+  const [status, setStatus] = useState<"success" | "failed">();
 
   const handleBuyItem = async (e: React.FormEvent<HTMLFormElement>) => {
-    setLoading(true);
     e.preventDefault();
 
     const eventSubmitter = e.nativeEvent as SubmitEvent;
@@ -27,6 +37,8 @@ export default function BuyItemForm({
 
     const quantity = formData.get("quantity");
     let price;
+
+    console.log("price", price);
 
     switch (eventSubmitter.submitter?.id) {
       case "cheese-checkout":
@@ -43,118 +55,70 @@ export default function BuyItemForm({
     }
     let totalPrice = Number(price) * Number(quantity);
 
+    console.log("price 2", price);
     // const data = Object.fromEntries(formData.entries());
 
     // console.log("Form Data", data);
 
     console.log("Event Submitter", eventSubmitter);
 
+    const submitterId = eventSubmitter.submitter?.id;
+
     const data = {
       userId: user.id,
-      cardPackId: marketItem.id,
-      checkoutMode: eventSubmitter.submitter?.id,
-      price: price,
+      itemId: marketItem.id,
+      checkoutMode: submitterId as string,
+      price: price as number,
       totalPrice: totalPrice,
       amount: Number(quantity),
     };
 
-    const response = await fetch("/api/marketplace/buy-cardpack", {
-      method: "POST",
-      body: JSON.stringify(data),
-    });
+    console.log("Data", data);
 
-    const responseData = await response.json();
+    setPurchaseDetails(data);
 
-    setLoading(false);
-    console.log("Response Data", responseData);
+    if (puchaseDetails) {
+      setLoading(true);
+
+      const response = await fetch("/api/marketplace/buy-cardpack", {
+        method: "POST",
+        body: JSON.stringify(puchaseDetails),
+      });
+      const responseData = await response.json();
+      console.log("Response Data", responseData);
+
+      setLoading(false);
+      setStatus("success");
+      // router.push("/marketplace");
+    }
   };
+
+  const handleReset = () => {
+    setPurchaseDetails(undefined);
+  };
+
+  if (status === "success") {
+    return (
+      <button
+        onClick={() => router.push("/marketplace")}
+        className="w-full text-center p-3 font-bold rounded-xl bg-brand-yellow/20 border-2 border-brand-yellow/50 text-brand-yellow hover:bg-brand-yellow/30 transition-all duration-200"
+      >
+        Success! Go Back to Marketplace
+      </button>
+    );
+  }
+
   return (
-    <form onSubmit={handleBuyItem}>
-      <div className="flex border border-border-gray rounded-xl mb-4 divide-x divide divide-border-gray">
-        <button
-          type="button"
-          className="flex items-center justify-center w-[46px] p-3"
-        >
-          -
-        </button>
-        <input
-          name="quantity"
-          id="quantity"
-          type="number"
-          className="flex-1 p-3 bg-gray-background focus-visible:outline-none font-bold text-center"
-          defaultValue="01"
-          min={1}
-        />
-        <button
-          type="button"
-          className="flex items-center justify-center w-[46px] p-3"
-        >
-          +
-        </button>
-      </div>
-
-      {/* button division */}
-
-      <div className="flex flex-col gap-4">
-        {marketItem.cheesePrice && (
-          <button
-            type="submit"
-            id="cheese-checkout"
-            className="flex items-center justify-between text-start p-3 font-bold rounded-xl bg-brand-yellow/20 border-2 border-brand-yellow"
-          >
-            Buy with Super Cheese
-            <span className="flex items-center gap-2 text-brand-yellow">
-              <Image
-                src={cheeseIcon}
-                width={18}
-                height={18}
-                alt="cheese icon"
-              />
-              {marketItem.cheesePrice.toLocaleString("en-US")}
-            </span>
-          </button>
-        )}
-        {marketItem.superCheesePrice && (
-          <button
-            type="submit"
-            id="supercheese-checkout"
-            className="flex items-center justify-between text-start p-3 font-bold rounded-xl bg-brand-green/20 border-2 border-brand-green"
-          >
-            Buy with Super Cheese
-            <span className="flex items-center gap-2 text-brand-green">
-              <Image
-                src={superCheeseIcon}
-                width={18}
-                height={18}
-                alt="cheese icon"
-              />
-              {!loading ? (
-                marketItem.superCheesePrice.toLocaleString("en-US")
-              ) : (
-                <BiLoaderAlt size={18} className="animate-spin" />
-              )}
-            </span>
-          </button>
-        )}
-        {marketItem.ethPrice && (
-          <button
-            disabled
-            id="eth-checkout"
-            className="flex items-center justify-between text-start p-3 font-bold rounded-xl bg-[#627EEA]/20 border-2 border-[#627EEA] disabled:opacity-30 pointer-events-none"
-          >
-            <div className="flex items-center gap-2">
-              Buy with ETH{" "}
-              <span className="bg-[#627EEA] text-xs font-normal rounded py-[2px] px-1">
-                soon
-              </span>
-            </div>
-            <span className="flex items-center gap-2 text-[#627EEA]">
-              <Image src={ethIcon} width={18} height={18} alt="cheese icon" />
-              {marketItem.ethPrice}
-            </span>
-          </button>
-        )}
-      </div>
+    <form onSubmit={handleBuyItem} onReset={handleReset}>
+      {!puchaseDetails ? (
+        <ItemInfoStep marketItem={marketItem} />
+      ) : (
+        <CartConfirmStep purchaseDetails={puchaseDetails} isLoading={loading} />
+      )}
     </form>
   );
 }
+
+// improvements:
+// - use zod for form validation
+// - use jotai for state management across steps

@@ -2,12 +2,12 @@
 
 import prisma from "@/database/prisma";
 
-export async function createUserSuperCheese(address: string) {
+export async function createUserSuperCheese(addressId: string) {
   try {
     await prisma.superCheese.create({
       data: {
         amount: 0,
-        addressId: address,
+        addressId: addressId,
       },
     });
 
@@ -19,16 +19,16 @@ export async function createUserSuperCheese(address: string) {
 }
 
 export async function getUserSuperCheese(addressId: string) {
-  const superCheese = await prisma.superCheese.findFirst({
+  const superCheese = await prisma.player.findFirst({
     where: {
       addressId: addressId,
     },
     select: {
-      amount: true,
+      superCheese: true,
     },
   });
 
   if (!superCheese) return 0;
 
-  return superCheese.amount;
+  return superCheese.superCheese;
 }

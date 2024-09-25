@@ -6,42 +6,91 @@ export async function POST(req: Request) {
 
   console.log("REQ BODY", reqBody);
 
-  // const transaction = prisma.$transaction(async (tx) => {
-  //   if (reqBody.currency === "SUPER_CHEESE") {
-  //     const userCheese = await tx.superCheese.findUnique({
-  //       where: {
-  //         addressId: reqBody.userId,
-  //       },
-  //     });
+  const { userId, itemId, checkoutMode, price, totalPrice, amount } = reqBody;
 
-  //     const finalPrice = reqBody.price * reqBody.amount;
+  // Initiate transaction
+  const transaction = prisma.$transaction(async (tx) => {
+    // Check if user and item exists in the request body
+    if (!userId || !itemId) {
+      return NextResponse.json({ message: "Wrong body. No user or items" });
+    }
 
-  //     const updateCheese = await tx.superCheese.update({
-  //       data: {
-  //         amount: {
-  //           decrement: finalPrice,
-  //         },
-  //       },
-  //       where: {
-  //         addressId: reqBody.userId,
-  //       },
-  //     });
+    // retrieve player details
+    const player = await tx.player.findUniqueOrThrow({
+      where: {
+        addressId: userId,
+      },
+      select: {
+        id: true,
+        superCheese: true,
+        cheese: true,
+      },
+    });
 
-  //     const updateInventory = await tx.userInventory.create({
-  //       data: {
-  //         addressId: reqBody.userId,
-  //         itemId: reqBody.cardPackId,
-  //         quantity: reqBody.amount,
-  //       },
-  //     });
+    if (checkoutMode === "supercheese-checkout") {
+      if ((player?.superCheese as number) < totalPrice) {
+        return NextResponse.json({ message: "Not enough super cheese" });
+      }
 
-  //     console.log("USER", userCheese);
-  //   }
-  // });
+      await tx.player.update({
+        where: {
+          addressId: userId,
+        },
+        data: {
+          superCheese: {
+            decrement: totalPrice,
+          },
+        },
+      });
+    } else {
+      if ((player?.cheese as number) < totalPrice) {
+        return NextResponse.json({ message: "Not enough cheese" });
+      }
 
-  // if (!transaction) {
-  //   return NextResponse.json({ message: "Failed" });
-  // }
+      await tx.player.update({
+        where: {
+          addressId: userId,
+        },
+        data: {
+          cheese: {
+            decrement: totalPrice,
+          },
+        },
+      });
+    }
+
+    await tx.playerInventory.upsert({
+      where: {
+        addressId_itemId: {
+          addressId: userId,
+          itemId: itemId,
+        },
+      },
+      create: {
+        addressId: userId,
+        itemId: itemId,
+        quantity: amount,
+      },
+      update: {
+        quantity: {
+          increment: amount,
+        },
+      },
+    });
+
+    await tx.playerTransactions.create({
+      data: {
+        playerId: player.id,
+        quantity: amount,
+        itemId: itemId,
+        value: totalPrice,
+      },
+    });
+  });
+
+  if (!transaction) {
+    return NextResponse.json({ message: "Failed" });
+  }
 
   return NextResponse.json({ message: "Success" });
 }

@@ -5,10 +5,10 @@ import type { NextAuthOptions, User } from "next-auth";
 import { getUser } from "@/database/read/get-user";
 import prisma from "@/database/prisma";
 import { fetchNFTsByAddress } from "@/utils/get-nfts-by-address";
-import { createUserSuperCheese } from "@/utils/superCheese";
 import { firstVerify } from "@/utils/first-verify";
 import { createUser } from "@/database/create/create-user";
 import { createUserCheese } from "@/database/create/user-cheese";
+import { createUserSuperCheese } from "@/database/read/get-user-supercheese";
 // import Discord from "next-auth/providers/discord";
 
 const actualDateInSeconds = Math.floor(Date.now() / 1000);

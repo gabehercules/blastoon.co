@@ -32,7 +32,7 @@ export default function RootLayout({
             <Sidebar />
             <Header />
             <Topbar />
-            <main className="main-layout overflow-hidden sm:overflow-y-auto">
+            <main className="main-layout overflow-auto sm:overflow-y-auto p-8">
               {children}
             </main>
             <Footer />
