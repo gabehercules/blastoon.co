@@ -25,8 +25,13 @@ export default function InventoryPage() {
 
   return (
     <div className="">
-      <h1 className="font-bold mb-4">Your Card Packs</h1>
-      <div className="grid grid-cols-6 gap-4">
+      <h1 className="font-bold mb-2">Your Card Packs</h1>
+
+      <div className="flex items-center gap-2 p-3 mb-4 rounded-lg bg-brand-green/10 border border-b-2 border-brand-green/50 border-b-brand-green/60 text-neutral-100">
+        <p>The card packs will be available to open soon!</p>
+      </div>
+
+      <div className="grid grid-cols-6 gap-4 xl:grid-cols-4 lg:grid-cols-3">
         {inventory?.map((item, i) => (
           <div
             key={i}

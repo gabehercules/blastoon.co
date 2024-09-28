@@ -4,9 +4,7 @@
   grid-template-columns: 1fr minmax(100px, 360px);
   grid-template-areas: "main sidebar";
   grid-gap: 1rem;
-  width: 95%;
   margin: 0 auto;
-  padding: 2vh 0;
 }
 
 @media (max-width: 768px) {

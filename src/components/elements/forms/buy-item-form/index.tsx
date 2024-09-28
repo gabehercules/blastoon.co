@@ -38,7 +38,7 @@ export default function BuyItemForm({
     const quantity = formData.get("quantity");
     let price;
 
-    console.log("price", price);
+    // console.log("price", price);
 
     switch (eventSubmitter.submitter?.id) {
       case "cheese-checkout":
@@ -55,12 +55,12 @@ export default function BuyItemForm({
     }
     let totalPrice = Number(price) * Number(quantity);
 
-    console.log("price 2", price);
+    // console.log("price 2", price);
     // const data = Object.fromEntries(formData.entries());
 
     // console.log("Form Data", data);
 
-    console.log("Event Submitter", eventSubmitter);
+    // console.log("Event Submitter", eventSubmitter);
 
     const submitterId = eventSubmitter.submitter?.id;
 
@@ -73,7 +73,7 @@ export default function BuyItemForm({
       amount: Number(quantity),
     };
 
-    console.log("Data", data);
+    // console.log("Data", data);
 
     setPurchaseDetails(data);
 
@@ -85,7 +85,7 @@ export default function BuyItemForm({
         body: JSON.stringify(puchaseDetails),
       });
       const responseData = await response.json();
-      console.log("Response Data", responseData);
+      // console.log("Response Data", responseData);
 
       setLoading(false);
       setStatus("success");

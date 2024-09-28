@@ -32,7 +32,7 @@ export default function PlayerLevelAndXp() {
     );
   }
 
-  console.log("PLAYER INFO", playerInfo);
+  // console.log("PLAYER INFO", playerInfo);
 
   return (
     <div className="flex items-center gap-2 px-4">

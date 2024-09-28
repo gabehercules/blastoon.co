@@ -22,7 +22,7 @@ export default function MarketplaceItem({
 
   // ================== Fetch Card Pack Details ==================
 
-  console.log(params.slug);
+  // console.log(params.slug);
 
   const { data, isLoading, error } = useQuery({
     queryKey: ["market-item", params.slug],

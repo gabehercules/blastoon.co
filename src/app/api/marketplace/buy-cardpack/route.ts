@@ -4,7 +4,7 @@ import { NextResponse } from "next/server";
 export async function POST(req: Request) {
   const reqBody = await req.json();
 
-  console.log("REQ BODY", reqBody);
+  // console.log("REQ BODY", reqBody);
 
   const { userId, itemId, checkoutMode, price, totalPrice, amount } = reqBody;
 

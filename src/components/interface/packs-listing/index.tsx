@@ -15,7 +15,7 @@ export default function PacksListing() {
     _optimisticResults: "optimistic",
   });
 
-  console.log("CARD PACKS", cardPacks);
+  // console.log("CARD PACKS", cardPacks);
 
   if (isError) {
     return <div>Error...</div>;

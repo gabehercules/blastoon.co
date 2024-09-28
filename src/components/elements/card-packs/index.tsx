@@ -27,7 +27,7 @@ export default function CardPacks({
   return (
     <Link
       href={`/marketplace/${slug}`}
-      className="min-w-[250px] bg-gray-foreground border border-border-gray rounded-lg
+      className="w-[250px] bg-gray-foreground border border-border-gray rounded-lg
             hover:border-brand-yellow/80 hover:ring-inset hover:ring-2 hover:ring-brand-yellow/40 transition-all"
     >
       <div className="w-full size-56">
