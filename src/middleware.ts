@@ -5,6 +5,7 @@ export const config = {
     "/dashboard",
     "/marketplace",
     "/marketplace/:path*",
+    "/inventory",
     "/guilds",
     "/settings",
     "/profile",

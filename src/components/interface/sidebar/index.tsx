@@ -124,6 +124,7 @@ export default function Sidebar() {
         <button
           onClick={() =>
             signOut({
+              callbackUrl: "/",
               redirect: true,
             })
           }
