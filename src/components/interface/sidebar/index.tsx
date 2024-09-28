@@ -122,7 +122,11 @@ export default function Sidebar() {
 
       <div className="flex-1 content-end p-4">
         <button
-          onClick={() => signOut()}
+          onClick={() =>
+            signOut({
+              redirect: true,
+            })
+          }
           className="w-full flex items-center gap-2 p-3 text-sm rounded-lg bg-red-500/5 text-red-500 hover:bg-red-500/10"
         >
           <BiLogOut size={20} />
