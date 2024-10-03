@@ -7,10 +7,11 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+// USER Model
 model User {
   addressId       String          @id @unique @default(uuid()) @map("address_id")
+  id              String?         @unique
   address         String          @unique
-  ensDomain       String?         @unique @map("ens_domain")
   signature       String?         @unique
   slug            String?         @unique
   username        String?         @unique
@@ -24,8 +25,13 @@ model User {
   userCheeseLogs  CheeseLogs[]
   superCheese     SuperCheese?
   cardPacks       UserCardPacks[]
+
+  Player          Player?
+  UserInventory   PlayerInventory[]
+  MarketplaceCart MarketplaceCart[]
 }
 
+// Cheese Model - Regular $Cheese Coin
 model Cheese {
   id        String @id @unique @default(uuid())
   addressId String @unique @map("address_id")
@@ -35,6 +41,7 @@ model Cheese {
   @@map("Cheese")
 }
 
+// SuperCheese Model - Super $Cheese Coin
 model SuperCheese {
   id        String @id @unique @default(uuid())
   addressId String @unique @map("address_id")
@@ -44,14 +51,17 @@ model SuperCheese {
   @@map("Super_Cheese")
 }
 
+// Card Packs Model - this add flexibility to the packs as we can add more types of packs in the future
+// and also add more fields to the packs attributes and specifications or easylly change the price of the packs
+// or its attributes
 model CardPacks {
   packId           String          @id @default(uuid()) @map("pack_id")
   slug             String          @default("")
   cheesePrice      Int             @default(0) @map("cheese_price")
-  ethPrice         Float           @default(0) @map("eth_price")
   superCheesePrice Int             @default(0) @map("super_cheese_price")
-  ethPrice         Decimal         @default(0) @map("eth_price")
+  ethPrice         Float           @default(0) @map("eth_price")
   packType         PackType        @map("pack_type")
+  description      String          @default("")
   UserCardPacks    UserCardPacks[]
 
   @@map("Card_Packs")
@@ -129,10 +139,10 @@ model CheeseLogs {
   id           String         @id @unique @default(uuid())
   addressId    String         @map("address_id")
   cheeseAmount Int            @map("cheese_amount")
-  timestamp    DateTime       @default(now())
-  event        CheeseLogEvent
   cheeseType   CheeseType     @map("cheese_type")
+  timestamp    DateTime       @default(now())
   user         User           @relation(fields: [addressId], references: [addressId])
+  event        CheeseLogEvent
 
   @@map("Cheese_Logs")
 }
@@ -140,14 +150,83 @@ model CheeseLogs {
 model BlastToonNfts {
   tokenId        Int     @id @map("token_id")
   imageUri       String? @map("image_uri")
+  addressId      String? @map("address_id")
   ownerSince     BigInt? @map("owner_since")
   upgraded       Boolean @default(false)
   lastUpgradedBy String? @map("last_upgraded_by")
-  addressId      String? @map("address_id")
   owner          User?   @relation(fields: [addressId], references: [addressId])
 
   @@map("Blast_Toon_NFTs")
 }
+
+// ======== GAMEFICATION TABLES ======== //
+
+model Player {
+  id          String  @id @unique @default(uuid())
+  addressId   String  @unique @map("address_id")
+  username    String? @unique
+  level       Int     @default(1)
+  xp          Int     @default(0)
+  cheese      Int     @default(0) @map("cheese")
+  superCheese Int     @default(0) @map("super_cheese")
+  badge       Badge?
+  user        User    @relation(fields: [addressId], references: [addressId])
+
+  PlayerAchievements PlayerAchievements[]
+  PlayerTransactions PlayerTransactions[]
+
+  @@map("Player")
+}
+
+model PlayerInventory {
+  id        String      @id @unique @default(uuid())
+  addressId String      @map("address_id")
+  itemId    String      @map("item_id")
+  quantity  Int         @default(1)
+  aquiredAt DateTime    @default(now()) @map("aquired_at")
+  isListed  Boolean     @default(false) @map("is_listed")
+  user      User        @relation(fields: [addressId], references: [addressId])
+  item      MarketItems @relation(fields: [itemId], references: [id])
+
+  @@unique([addressId, itemId])
+  @@map("Player_Inventory")
+}
+
+model PlayerAchievements {
+  id            String       @id @unique @default(uuid())
+  addressId     String       @map("address_id")
+  achievementId String       @map("achievement_id")
+  player        Player       @relation(fields: [addressId], references: [addressId])
+  achievement   Achievements @relation(fields: [achievementId], references: [id])
+
+  @@map("User_Achievements")
+}
+
+model PlayerTransactions {
+  id        String      @id @unique @default(uuid())
+  playerId  String      @map("address_id")
+  itemId    String      @map("item_id")
+  quantity  Int
+  value     Int
+  timestamp DateTime    @default(now())
+  player    Player      @relation(fields: [playerId], references: [id])
+  item      MarketItems @relation(fields: [itemId], references: [id])
+
+  @@map("Player_Item_Transactions")
+}
+
+model Achievements {
+  id          String   @id @unique @default(uuid())
+  name        String
+  description String
+  xpReward    Int      @map("xp_reward")
+  levelReward Int      @map("level_reward")
+  createdAt   DateTime @default(now()) @map("created_at")
+
+  userAchievements PlayerAchievements[]
+}
+
+// =============== ENUMS =============== //
 
 enum PackType {
   common
@@ -187,19 +266,9 @@ enum DraftAndPublished {
   PUBLISHED
 }
 
-enum Badge {
-  PLAYER
-  INFLUENCER
-  TOON_FRIEND
-}
+model TokenTransfers {
+  id   String @id @unique @default(uuid())
+  data Json   @map("data")
 
-enum CurrencyType {
-  CHEESE
-  SUPER_CHEESE
-  ETH
-}
-
-enum DraftAndPublished {
-  DRAFT
-  PUBLISHED
+  @@map("Token_Transfers")
 }
