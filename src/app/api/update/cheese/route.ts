@@ -45,16 +45,6 @@ export async function POST(req: NextRequest, res: NextResponse) {
         addressId: user.addressId,
       },
     });
-
-    await prisma.cheeseLogs.create({
-      data: {
-        addressId: user.addressId,
-        cheeseAmount: user.holdingNFTs * 1000,
-        cheeseType: "cheese",
-        event: "dayli",
-      },
-    });
-    console.log("USER CHEESE AFTER UPDATE: ", user.cheeseCoin?.amount);
   }
 
   return NextResponse.json({ Message: "Cheese Updated Successfully" });

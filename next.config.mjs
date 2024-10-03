@@ -19,11 +19,15 @@ const nextConfig = {
                 hostname: 'i.seadn.io',
                 port: '',
                 pathname: '/**',
+            },
+            {
+                protocol: 'https',
+                hostname: 'res.cloudinary.com',
+                port: '',
+                pathname: '/btoon-api/image/**',
             }
         ]
     }
 };
 
 export default nextConfig;
-
-"https://i.seadn.io/s/raw/files/ccc65818847fecdf5038fcb56ae915d6.png"

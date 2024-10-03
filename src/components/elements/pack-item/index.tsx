@@ -13,7 +13,7 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 
-export default function CardPacks() {
+export default function PackItem() {
   return (
     <TooltipProvider delayDuration={300}>
       <div className="flex gap-6 sm:flex-col sm:pb-6">

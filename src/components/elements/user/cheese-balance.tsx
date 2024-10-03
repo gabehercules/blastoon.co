@@ -13,7 +13,7 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
-import { getUserSuperCheese } from "@/utils/superCheese";
+import { getUserSuperCheese } from "@/database/read/get-user-supercheese";
 import { getUserCardPacks } from "@/utils/cardPacks";
 
 export default function CheeseBalance({

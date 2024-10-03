@@ -8,24 +8,22 @@ datasource db {
 }
 
 model User {
-  address          String             @unique
-  signature        String?            @unique
-  slug             String?            @unique
-  username         String?            @unique
-  createdAt        DateTime           @default(now()) @map("created_at")
-  holdingNFTs      Int                @default(0) @map("holding_NFTs")
-  upgradedNFTs     Int                @default(0) @map("upgraded_NFTs")
-  firstVerified    Boolean            @default(false) @map("first_verified")
-  verifiedUpgrade  Boolean            @default(false) @map("verified_upgrade")
-  addressId        String             @id @unique @default(uuid()) @map("address_id")
-  id               String?            @unique
-  nfts             BlastToonNfts[]
-  cheeseCoin       Cheese?
-  userCheeseLogs   CheeseLogs[]
-  Player           Player?
-  Player_Inventory Player_Inventory[]
-  superCheese      SuperCheese?
-  cardPacks        UserCardPacks[]
+  addressId       String          @id @unique @default(uuid()) @map("address_id")
+  address         String          @unique
+  ensDomain       String?         @unique @map("ens_domain")
+  signature       String?         @unique
+  slug            String?         @unique
+  username        String?         @unique
+  createdAt       DateTime        @default(now()) @map("created_at")
+  holdingNFTs     Int             @default(0) @map("holding_NFTs")
+  upgradedNFTs    Int             @default(0) @map("upgraded_NFTs")
+  firstVerified   Boolean         @default(false) @map("first_verified")
+  verifiedUpgrade Boolean         @default(false) @map("verified_upgrade")
+  nfts            BlastToonNfts[]
+  cheeseCoin      Cheese?
+  userCheeseLogs  CheeseLogs[]
+  superCheese     SuperCheese?
+  cardPacks       UserCardPacks[]
 }
 
 model Cheese {
@@ -48,12 +46,12 @@ model SuperCheese {
 
 model CardPacks {
   packId           String          @id @default(uuid()) @map("pack_id")
+  slug             String          @default("")
   cheesePrice      Int             @default(0) @map("cheese_price")
   ethPrice         Float           @default(0) @map("eth_price")
   superCheesePrice Int             @default(0) @map("super_cheese_price")
+  ethPrice         Decimal         @default(0) @map("eth_price")
   packType         PackType        @map("pack_type")
-  description      String          @default("")
-  slug             String          @default("")
   UserCardPacks    UserCardPacks[]
 
   @@map("Card_Packs")
@@ -68,6 +66,64 @@ model UserCardPacks {
 
   @@map("User_Card_Packs")
 }
+
+// ======== BEGIN: MARKETPLACE TABLES ======== //
+model MarketItems {
+  id               String            @id @unique @default(uuid())
+  name             String
+  slug             String            @unique
+  description      String
+  image            String
+  isAsset          Boolean           @default(true) @map("is_asset")
+  categoryId       String            @map("category_id")
+  createdAt        DateTime          @default(now()) @map("created_at")
+  publishedAt      DateTime?         @map("published_at")
+  cheesePrice      Int?              @map("cheese_price")
+  superCheesePrice Int?              @map("supercheese_price")
+  ethPrice         Float?            @map("eth_price")
+  status           DraftAndPublished @default(DRAFT)
+
+  itemPrice              ItemPrice[]
+  category               Categories           @relation(fields: [categoryId], references: [id])
+  UserInventory          PlayerInventory[]
+  MarketplaceCart        MarketplaceCart[]
+  PlayerItemTransactions PlayerTransactions[]
+
+  @@map("Market_Items")
+}
+
+model Categories {
+  id          String   @id @unique @default(uuid())
+  name        String
+  slug        String   @unique
+  description String
+  createdAt   DateTime @default(now()) @map("created_at")
+
+  marketItems MarketItems[]
+}
+
+model MarketplaceCart {
+  id       String      @id @unique @default(uuid())
+  userId   String      @map("user_id")
+  itemId   String      @map("item_id")
+  quantity Int         @default(1)
+  user     User        @relation(fields: [userId], references: [addressId])
+  item     MarketItems @relation(fields: [itemId], references: [id])
+
+  @@map("Marketplace_Cart")
+}
+
+model ItemPrice {
+  id           String       @id @unique @default(uuid())
+  itemId       String       @map("item_id")
+  currencyType CurrencyType
+  price        Float
+  item         MarketItems  @relation(fields: [itemId], references: [id])
+
+  @@map("Item_Price")
+}
+
+// ======== END: MARKETPLACE TABLES ======== //
 
 model CheeseLogs {
   id           String         @id @unique @default(uuid())
@@ -93,91 +149,6 @@ model BlastToonNfts {
   @@map("Blast_Toon_NFTs")
 }
 
-model TokenTransfers {
-  id   String @id @unique @default(uuid())
-  data Json   @map("data")
-
-  @@map("Token_Transfers")
-}
-
-model Achievements {
-  id                String              @id @unique
-  name              String
-  description       String
-  xp_reward         Int
-  level_reward      Int
-  created_at        DateTime            @default(now())
-  User_Achievements User_Achievements[]
-}
-
-model Categories {
-  id           String         @id @unique
-  name         String
-  slug         String         @unique
-  description  String
-  created_at   DateTime       @default(now())
-  Market_Items Market_Items[]
-}
-
-model Item_Price {
-  id           String       @id @unique
-  item_id      String
-  currencyType CurrencyType
-  price        Float
-  Market_Items Market_Items @relation(fields: [item_id], references: [id])
-}
-
-model Market_Items {
-  id                String             @id @unique
-  name              String
-  slug              String             @unique
-  description       String
-  image             String
-  is_asset          Boolean            @default(true)
-  category_id       String
-  created_at        DateTime           @default(now())
-  published_at      DateTime?
-  cheese_price      Int?
-  eth_price         Float?
-  status            DraftAndPublished  @default(DRAFT)
-  supercheese_price Int?
-  Item_Price        Item_Price[]
-  Categories        Categories         @relation(fields: [category_id], references: [id])
-  Player_Inventory  Player_Inventory[]
-}
-
-model Player {
-  id                String              @id @unique
-  address_id        String              @unique
-  username          String              @unique
-  level             Int                 @default(1)
-  xp                Int                 @default(0)
-  cheese            Int                 @default(0)
-  super_cheese      Int                 @default(0)
-  badge             Badge?
-  User              User                @relation(fields: [address_id], references: [addressId])
-  User_Achievements User_Achievements[]
-}
-
-model Player_Inventory {
-  id           String       @id @unique
-  address_id   String
-  item_id      String
-  quantity     Int          @default(1)
-  aquired_at   DateTime     @default(now())
-  is_listed    Boolean      @default(false)
-  User         User         @relation(fields: [address_id], references: [addressId])
-  Market_Items Market_Items @relation(fields: [item_id], references: [id])
-}
-
-model User_Achievements {
-  id             String       @id @unique
-  address_id     String
-  achievement_id String
-  Achievements   Achievements @relation(fields: [achievement_id], references: [id])
-  Player         Player       @relation(fields: [address_id], references: [address_id])
-}
-
 enum PackType {
   common
   rare
@@ -197,6 +168,23 @@ enum CheeseLogEvent {
 enum CheeseType {
   cheese
   superCheese
+}
+
+enum CurrencyType {
+  CHEESE
+  SUPER_CHEESE
+  ETH
+}
+
+enum Badge {
+  PLAYER
+  INFLUENCER
+  TOON_FRIEND
+}
+
+enum DraftAndPublished {
+  DRAFT
+  PUBLISHED
 }
 
 enum Badge {

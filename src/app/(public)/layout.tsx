@@ -1,11 +1,10 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
-import "../styles/globals.css";
-import Header from "@/components/interface/header";
-import Footer from "@/components/interface/footer";
-import { acme, barlowCondensed, niceSugar, rowdies } from "@/fonts";
+import { niceSugar } from "@/fonts";
 import AuthProvider from "@/contexts/auth-provider";
 import { Toaster } from "@/components/ui/sonner";
+import "../../styles/globals.css";
+import HomeHeader from "@/components/interface/home-header";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -23,13 +22,12 @@ export default function RootLayout({
     <AuthProvider>
       <html lang="en">
         <body
-          className={`${inter.className} ${barlowCondensed.variable} ${rowdies.variable} ${acme.variable} ${niceSugar.variable} page-layout`}
+          className={`${inter.className} ${niceSugar.variable} home-layout`}
         >
-          <Header />
-          <main className="main-layout overflow-hidden sm:overflow-y-auto">
+          <HomeHeader />
+          <main className="home-main overflow-hidden sm:overflow-y-auto">
             {children}
           </main>
-          <Footer />
           <Toaster
             position={"bottom-center"}
             className="bg-neutral-800 rounded-lg text-white font-nicesugar border-white/5"

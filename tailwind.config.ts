@@ -26,13 +26,16 @@ const config = {
       sm: { max: "639px" },
     },
     extend: {
+      colors: {
+        "brand-yellow": "#FFD647",
+        "brand-green": "#8DDB08",
+        "gray-background": "#0A0A0A",
+        "gray-foreground": "#0F0F0F",
+        "border-gray": "#222222",
+      },
       fontFamily: {
         nicesugar: ["var(--font-nicesugar)"],
         rowdies: ["var(--font-rowdies)"],
-      },
-      colors: {
-        "brand-yellow": "#FFD700",
-        "brand-green": "#8ddb08",
       },
       keyframes: {
         "accordion-down": {
