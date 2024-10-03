@@ -10,6 +10,8 @@ export async function POST(req: Request) {
 
   // Initiate transaction
   const transaction = prisma.$transaction(async (tx) => {
+    console.log("TRANSACTION INITIATED");
+
     // Check if user and item exists in the request body
     if (!userId || !itemId) {
       return NextResponse.json({ message: "Wrong body. No user or items" });
@@ -26,6 +28,8 @@ export async function POST(req: Request) {
         cheese: true,
       },
     });
+
+    console.log("PLAYER", player);
 
     if (checkoutMode === "supercheese-checkout") {
       if ((player?.superCheese as number) < totalPrice) {
@@ -59,7 +63,7 @@ export async function POST(req: Request) {
       });
     }
 
-    await tx.playerInventory.upsert({
+    const playerInventory = await tx.playerInventory.upsert({
       where: {
         addressId_itemId: {
           addressId: userId,
@@ -78,7 +82,9 @@ export async function POST(req: Request) {
       },
     });
 
-    await tx.playerTransactions.create({
+    console.log("PLAYER INVENTORY", playerInventory);
+
+    const playerTxs = await tx.playerTransactions.create({
       data: {
         playerId: player.id,
         quantity: amount,
@@ -86,11 +92,15 @@ export async function POST(req: Request) {
         value: totalPrice,
       },
     });
+
+    console.log("PLAYER TRANSACTIONS", playerTxs);
   });
 
   if (!transaction) {
     return NextResponse.json({ message: "Failed" });
   }
+
+  console.log("TRANSACTION", await transaction);
 
   return NextResponse.json({ message: "Success" });
 }
