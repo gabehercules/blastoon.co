@@ -33,6 +33,7 @@ export default function PacksListing() {
           packImg={pack.image}
           slug={pack.slug}
           packTitle={pack.name}
+          supply={pack.supply}
           cheesePrice={pack.cheesePrice}
           supercheesePrice={pack.superCheesePrice}
           ethPrice={pack.ethPrice}

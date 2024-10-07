@@ -11,6 +11,7 @@ interface CardPacksProps {
   packImg: StaticImageData | string;
   slug: string;
   packTitle: string;
+  supply: number;
   cheesePrice?: number | null;
   supercheesePrice?: number | null;
   ethPrice?: number | null;
@@ -20,6 +21,7 @@ export default function CardPacks({
   packImg,
   slug,
   packTitle,
+  supply,
   cheesePrice,
   supercheesePrice,
   ethPrice,
@@ -40,7 +42,10 @@ export default function CardPacks({
         />
       </div>
       <div className="border-t border-border-gray p-3">
-        <p className="text-left mb-3">{packTitle.toLocaleUpperCase()}</p>
+        <p className="text-left mb-1">{packTitle.toLocaleUpperCase()}</p>
+        <p className="text-sm text-neutral-400 mb-3">
+          Supply left: <span className="text-neutral-200">{supply}</span>
+        </p>
         <div className="flex justify-between">
           {/* prices test*/}
           {cheesePrice && (
