@@ -63,6 +63,17 @@ export async function POST(req: Request) {
       });
     }
 
+    await tx.marketItems.update({
+      where: {
+        id: itemId,
+      },
+      data: {
+        supply: {
+          decrement: amount,
+        },
+      },
+    });
+
     const playerInventory = await tx.playerInventory.upsert({
       where: {
         addressId_itemId: {

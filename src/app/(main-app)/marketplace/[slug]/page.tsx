@@ -68,6 +68,12 @@ export default function MarketplaceItem({
           <div className="space-y-4 mb-6">
             <h2 className="text-xl font-bold">{marketItem.name}</h2>
             <p className="text-neutral-400">{marketItem.description}</p>
+            <p className="text-neutral-200">
+              Supply:{" "}
+              <span className="text-brand-yellow font-semibold">
+                {marketItem.supply}
+              </span>
+            </p>
           </div>
           <div className="">
             <BuyItemForm marketItem={marketItem} user={user} />

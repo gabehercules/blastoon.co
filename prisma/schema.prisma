@@ -92,6 +92,7 @@ model MarketItems {
   superCheesePrice Int?              @map("supercheese_price")
   ethPrice         Float?            @map("eth_price")
   status           DraftAndPublished @default(DRAFT)
+  supply           Int               @default(1)
 
   itemPrice              ItemPrice[]
   category               Categories           @relation(fields: [categoryId], references: [id])
@@ -225,6 +226,10 @@ model Achievements {
 
   userAchievements PlayerAchievements[]
 }
+
+// ======== END: GAMEFICATION TABLES ======== //
+
+// ======== BEGIN: LOGS ======== //
 
 // =============== ENUMS =============== //
 
