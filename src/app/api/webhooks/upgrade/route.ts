@@ -12,7 +12,7 @@ export async function POST(req: Request) {
     return NextResponse.json({ message: "No logs found in this run" });
   }
 
-  const multiplier = 1.5;
+  const multiplier = 1;
 
   const log = block.logs[0];
 
