@@ -27,6 +27,7 @@ export default function BuyItemForm({
   const [puchaseDetails, setPurchaseDetails] = useState<PurchaseDetails>();
   const [loading, setLoading] = useState(false);
   const [status, setStatus] = useState<"success" | "failed">();
+  const [message, setMessage] = useState<string>();
 
   const handleBuyItem = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -85,7 +86,16 @@ export default function BuyItemForm({
         body: JSON.stringify(puchaseDetails),
       });
       const responseData = await response.json();
-      // console.log("Response Data", responseData);
+
+      if (!response.ok) {
+        console.error("Failed to buy item", responseData);
+        setLoading(false);
+        setStatus("failed");
+        setMessage(responseData.message);
+        return;
+      }
+
+      console.log("Response Data", responseData);
 
       setLoading(false);
       setStatus("success");
@@ -105,6 +115,22 @@ export default function BuyItemForm({
       >
         Success! Go Back to Marketplace
       </button>
+    );
+  }
+
+  if (status === "failed") {
+    return (
+      <>
+        <button
+          onClick={() => router.push("/marketplace")}
+          className="w-full text-center p-3 font-bold rounded-xl bg-red-500/20 border-2 border-red-500/50 text-red-500 hover:bg-red-500/30 transition-all duration-200"
+        >
+          Failed! Go Back to Marketplace
+        </button>
+        <p className="mt-2 bg-red-500/10 p-4 rounded-xl text-red-500 text-sm">
+          {message}
+        </p>
+      </>
     );
   }
 

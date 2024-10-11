@@ -2,116 +2,159 @@ import prisma from "@/database/prisma";
 import { NextResponse } from "next/server";
 
 export async function POST(req: Request) {
-  const reqBody = await req.json();
+  try {
+    const reqBody = await req.json();
 
-  // console.log("REQ BODY", reqBody);
+    // console.log("REQ BODY", reqBody);
 
-  const { userId, itemId, checkoutMode, price, totalPrice, amount } = reqBody;
+    const { userId, itemId, checkoutMode, price, totalPrice, amount } = reqBody;
 
-  // Initiate transaction
-  const transaction = prisma.$transaction(async (tx) => {
-    console.log("TRANSACTION INITIATED");
+    // Initiate transaction
+    const transaction = prisma.$transaction(async (tx) => {
+      console.log("TRANSACTION INITIATED");
 
-    // Check if user and item exists in the request body
-    if (!userId || !itemId) {
-      return NextResponse.json({ message: "Wrong body. No user or items" });
-    }
-
-    // retrieve player details
-    const player = await tx.player.findUniqueOrThrow({
-      where: {
-        addressId: userId,
-      },
-      select: {
-        id: true,
-        superCheese: true,
-        cheese: true,
-      },
-    });
-
-    console.log("PLAYER", player);
-
-    if (checkoutMode === "supercheese-checkout") {
-      if ((player?.superCheese as number) < totalPrice) {
-        return NextResponse.json({ message: "Not enough super cheese" });
+      // Check if user and item exists in the request body
+      if (!userId || !itemId) {
+        throw new Error("no_user_or_item_in_body");
       }
 
-      await tx.player.update({
+      // retrieve player details
+      const player = await tx.player.findUniqueOrThrow({
         where: {
           addressId: userId,
         },
-        data: {
-          superCheese: {
-            decrement: totalPrice,
-          },
+        select: {
+          id: true,
+          superCheese: true,
+          cheese: true,
         },
       });
-    } else {
-      if ((player?.cheese as number) < totalPrice) {
-        return NextResponse.json({ message: "Not enough cheese" });
+
+      // retrieve item details
+      const marketItem = await tx.marketItems.findUniqueOrThrow({
+        where: {
+          id: itemId,
+        },
+        select: {
+          id: true,
+          supply: true,
+        },
+      });
+
+      console.log("PLAYER", player);
+      console.log("MARKET ITEM", marketItem);
+
+      if (marketItem.supply === 0 || marketItem.supply < amount) {
+        console.log("ITEM IS OUT OF STOCK OR AMOUNT IS MORE THAN HAS IN STOCK");
+
+        throw new Error("item_out_of_stock");
       }
 
-      await tx.player.update({
+      if (checkoutMode === "supercheese-checkout") {
+        if ((player?.superCheese as number) < totalPrice) {
+          throw new Error("not_enough_supercheese");
+        }
+
+        await tx.player.update({
+          where: {
+            addressId: userId,
+          },
+          data: {
+            superCheese: {
+              decrement: totalPrice,
+            },
+          },
+        });
+      } else {
+        if ((player?.cheese as number) < totalPrice) {
+          throw new Error("not_enough_cheese");
+        }
+
+        await tx.player.update({
+          where: {
+            addressId: userId,
+          },
+          data: {
+            cheese: {
+              decrement: totalPrice,
+            },
+          },
+        });
+      }
+
+      await tx.marketItems.update({
         where: {
-          addressId: userId,
+          id: itemId,
         },
         data: {
-          cheese: {
-            decrement: totalPrice,
+          supply: {
+            decrement: amount,
           },
         },
       });
-    }
 
-    await tx.marketItems.update({
-      where: {
-        id: itemId,
-      },
-      data: {
-        supply: {
-          decrement: amount,
+      const playerInventory = await tx.playerInventory.upsert({
+        where: {
+          addressId_itemId: {
+            addressId: userId,
+            itemId: itemId,
+          },
         },
-      },
-    });
-
-    const playerInventory = await tx.playerInventory.upsert({
-      where: {
-        addressId_itemId: {
+        create: {
           addressId: userId,
           itemId: itemId,
+          quantity: amount,
         },
-      },
-      create: {
-        addressId: userId,
-        itemId: itemId,
-        quantity: amount,
-      },
-      update: {
-        quantity: {
-          increment: amount,
+        update: {
+          quantity: {
+            increment: amount,
+          },
         },
-      },
+      });
+
+      console.log("PLAYER INVENTORY", playerInventory);
+
+      const playerTxs = await tx.playerTransactions.create({
+        data: {
+          playerId: player.id,
+          quantity: amount,
+          itemId: itemId,
+          value: totalPrice,
+        },
+      });
+
+      console.log("PLAYER TRANSACTIONS", playerTxs);
     });
 
-    console.log("PLAYER INVENTORY", playerInventory);
+    if (!transaction) {
+      throw new Error("transaction_failed");
+    }
 
-    const playerTxs = await tx.playerTransactions.create({
-      data: {
-        playerId: player.id,
-        quantity: amount,
-        itemId: itemId,
-        value: totalPrice,
-      },
-    });
+    console.log("TRANSACTION", await transaction);
 
-    console.log("PLAYER TRANSACTIONS", playerTxs);
-  });
+    return NextResponse.json({ message: "Success" });
+  } catch (error: any) {
+    let message = "Internal Server Error";
+    let status = 500;
 
-  if (!transaction) {
-    return NextResponse.json({ message: "Failed" });
+    // custom error messages
+    if (error.message === "no_user_or_item_in_body") {
+      message = "No user or item in request body";
+      status = 400;
+    } else if (error.message === "item_out_of_stock") {
+      message = "Item is out of stock or amount is more than has in stock";
+      status = 400;
+    } else if (error.message === "not_enough_supercheese") {
+      message = "Not enough supercheese";
+      status = 400;
+    } else if (error.message === "not_enough_cheese") {
+      message = "Not enough cheese";
+      status = 400;
+    } else if (error.message === "transaction_failed") {
+      message = "Transaction failed";
+      status = 400;
+    }
+
+    return NextResponse.json({ status: "Error", message }, { status });
   }
-
-  console.log("TRANSACTION", await transaction);
-
-  return NextResponse.json({ message: "Success" });
 }
