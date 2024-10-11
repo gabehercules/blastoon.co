@@ -62,7 +62,7 @@ export default function ItemInfoStep({
             disabled={marketItem.supply === 0}
             className="flex items-center justify-between text-start p-3 font-bold rounded-xl bg-brand-yellow/20 border-2 border-brand-yellow disabled:opacity-30 pointer-events-none"
           >
-            Buy with Super Cheese
+            Buy with Cheese
             <span className="flex items-center gap-2 text-brand-yellow">
               <Image
                 src={cheeseIcon}
