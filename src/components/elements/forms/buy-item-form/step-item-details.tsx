@@ -60,7 +60,7 @@ export default function ItemInfoStep({
             type="submit"
             id="cheese-checkout"
             disabled={marketItem.supply === 0}
-            className="flex items-center justify-between text-start p-3 font-bold rounded-xl bg-brand-yellow/20 border-2 border-brand-yellow disabled:opacity-30 pointer-events-none"
+            className="flex items-center justify-between text-start p-3 font-bold rounded-xl bg-brand-yellow/20 border-2 border-brand-yellow disabled:opacity-30"
           >
             Buy with Cheese
             <span className="flex items-center gap-2 text-brand-yellow">
@@ -79,7 +79,7 @@ export default function ItemInfoStep({
             type="submit"
             id="supercheese-checkout"
             disabled={marketItem.supply === 0}
-            className="flex items-center justify-between text-start p-3 font-bold rounded-xl bg-brand-green/20 border-2 border-brand-green disabled:opacity-30 pointer-events-none"
+            className="flex items-center justify-between text-start p-3 font-bold rounded-xl bg-brand-green/20 border-2 border-brand-green disabled:opacity-30"
           >
             Buy with Super Cheese
             <span className="flex items-center gap-2 text-brand-green">
